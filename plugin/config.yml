@@ -6,11 +6,6 @@ package:
   type: iframe
 install:
   routes:
-    - path:
-        [
-          "taxonomy",
-          "view",
-          {type: rest, joinWith: "/", name: relationEngineID},
-        ]
-      view: view
+    - path: ["ontology", "term", {type: rest, joinWith: "/", name: rest}]
+      view: term
       authorization: true
