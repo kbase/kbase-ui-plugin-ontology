@@ -1,0 +1,50 @@
+Ontology Plugin Notes
+
+6/30/20 - 
+
+separated out from re-landing pages
+
+the design has shifted from re-centric to ontology-centric
+
+this greatly simplifies the design
+
+originally the request was for a "landing page" for any relation engine entity.
+
+but the concept of a relation engine entity has not really materialized as an architecturally recognized thing.
+
+lots of things are stuffed into the re db.
+
+so, rather, this repo is dedicated to ontology as a service, or area of knowledge and relationships.
+
+so, we start with the landing page at #ontology/term
+
+this gives us room for #ontology/search, etc. (if there are any ceteras!)
+
+Workwise, the steps look like:
+
+- create new repo
+- copy over the re landing pages code
+- remove the taxonomy bits
+- add new routing definitions
+- add the plugin to kbase-ui
+- refactor the routing to remove the "generic" re stuff, with knowledge that the only things we'll see (in #ontology/term) are ontology terms,.
+
+
+Navigation -- work with what is here now.
+
+need to finalize the navigation design for plugins, though ... 
+see sampleview for another approach.
+
+
+the typing needs a lot of cleanup to remove all the generic part of re identity...
+
+ontology boils down to:
+
+NAMESPACE/term
+
+go_ontology/GO:1234
+
+we call this the ontology reference, OntologyReference.
+
+this is different than the term as delivered from the service,
+which will have more info... we'll work on that later.

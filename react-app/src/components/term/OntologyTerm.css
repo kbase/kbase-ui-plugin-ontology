@@ -1,0 +1,63 @@
+.OntologyTerm {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
+}
+
+.OntologyTerm:hover {
+    background-color: rgba(199, 237, 255, 0.5);
+    /* cursor: pointer; */
+}
+
+.OntologyTerm-active:hover {
+    font-weight: bold;
+}
+
+.OntologyTerm-active,
+.OntologyTerm:active {
+    background-color: rgba(199, 237, 255, 1);
+    font-weight: bold;
+}
+
+.OntologyTerm-term {
+    padding: 8px;
+    flex: 1 1 0px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.OntologyTerm-term:hover {
+    background-color: rgba(199, 237, 255, 1);
+    cursor: pointer;
+}
+
+.OntologyTerm-name {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    /* overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none; */
+}
+
+/* .OntologyTerm-id {
+    font-style: italic;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none;
+} */
+
+
+.OntologyTerm-inspector {
+    padding: 8px;
+    flex: 0 0 3em;
+    text-align: center;
+    align-content: center;
+}
+
+.OntologyTerm-inspector:hover {
+    background-color: rgba(199, 237, 255, 1);
+    cursor: pointer;
+}

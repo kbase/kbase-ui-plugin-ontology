@@ -1,0 +1,18 @@
+.OntologyLandingPage-navCol {
+    flex: 0 0 20em;
+    /* background-color: silver; */
+}
+
+.OntologyLandingPage-detailCol {
+    /* background-color: aqua; */
+}
+
+.Ontology-summary-section {
+    /* background-color: rgba(200, 200, 200, 0.3); */
+    /* border-radius: 4px; */
+    margin-bottom: 10px;
+}
+
+.Ontology .ant-tabs-bar {
+    margin: 0;
+}

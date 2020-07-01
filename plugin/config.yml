@@ -1,0 +1,16 @@
+## Plugin Configuration
+---
+package:
+  name: ontology
+  description: A plugin providing landing page support for ontology via the relation engine
+  type: iframe
+install:
+  routes:
+    - path:
+        [
+          "taxonomy",
+          "view",
+          {type: rest, joinWith: "/", name: relationEngineID},
+        ]
+      view: view
+      authorization: true
