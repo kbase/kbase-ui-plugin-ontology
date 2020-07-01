@@ -1,0 +1,7 @@
+.Detail {
+    margin-top: 10px;
+}
+
+.DetailTable.InfoTable .InfoTable-labelCol:nth-child(1) {
+    flex: 0 0 7em;
+}
