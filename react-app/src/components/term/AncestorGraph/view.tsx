@@ -125,7 +125,6 @@ export default class AncestorGraph extends React.Component<AncestorGraphProps, A
             nodes,
             edges
         };
-        console.log('DATA', data);
         return (
             <div className="AncestorGraph">
                 <div className="AncestorGraph-graph">

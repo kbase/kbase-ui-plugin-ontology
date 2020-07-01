@@ -46,7 +46,6 @@ export default class NetworkGraph extends React.Component<NetworkGraphProps, Net
         if (this.graphNode.current === null) {
             return;
         }
-        console.log('mountGraph');
         const nodes = new DataSet<Node, 'id'>({});
         nodes.add(this.props.data.nodes.map((term) => {
             let color: string;
@@ -141,7 +140,6 @@ export default class NetworkGraph extends React.Component<NetworkGraphProps, Net
         } else {
             graphHeight = '400px';
         }
-        console.log('NETWORK', this.network);
         if (this.network) {
             this.network.setSize('100%', graphHeight);
             this.network.redraw();
