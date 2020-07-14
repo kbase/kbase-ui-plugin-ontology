@@ -25,7 +25,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
         this.props = props;
 
     }
-    async getLinkedObjects(termRef: OntologyReference) {
+    async getLinkedObjects(termRef: OntologyReference, offset: number, limit: number) {
         const client = new OntologyModel({
             url: this.props.config.services.ServiceWizard.url,
             relationEngineURL: this.props.config.services.RelationEngine.url,
@@ -43,66 +43,11 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
             const linkedObjects = await client.getRelatedFeatures({
                 ref: termRef,
                 // TODO: provided by table ui
-                offset: 0,
-                limit: 1000
+                offset,
+                limit
             });
 
             // do the call here when it is available
-
-            // const linkedObjects: Array<LinkedObject> = [
-            //     {
-            //         object: {
-            //             workspaceID: 43747,
-            //             id: 4,
-            //             version: 1
-            //         },
-            //         type: {
-            //             module: 'KBaseGenomes',
-            //             name: 'Genome'
-            //         },
-            //         scientificName: 'Escherichia coli',
-            //         feature: 'CF61_RS00005a'
-            //     },
-            //     {
-            //         object: {
-            //             workspaceID: 43747,
-            //             id: 4,
-            //             version: 1
-            //         },
-            //         type: {
-            //             module: 'KBaseGenomes',
-            //             name: 'Genome'
-            //         },
-            //         scientificName: 'Escherichia coli',
-            //         feature: 'CF61_RS00005b'
-            //     },
-            //     {
-            //         object: {
-            //             workspaceID: 43747,
-            //             id: 4,
-            //             version: 1
-            //         },
-            //         type: {
-            //             module: 'KBaseGenomes',
-            //             name: 'Genome'
-            //         },
-            //         scientificName: 'Escherichia coli',
-            //         feature: 'CF61_RS00005c'
-            //     },
-            //     {
-            //         object: {
-            //             workspaceID: 43747,
-            //             id: 4,
-            //             version: 1
-            //         },
-            //         type: {
-            //             module: 'KBaseGenomes',
-            //             name: 'Genome'
-            //         },
-            //         scientificName: 'Escherichia coli',
-            //         feature: 'CF61_RS00005d'
-            //     }
-            // ]
 
             this.set((state: LinkedObjectsDBState) => {
                 return {
