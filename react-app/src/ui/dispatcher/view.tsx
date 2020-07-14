@@ -5,6 +5,53 @@ import { Params } from '.';
 import TermView from '../../components/term';
 import { OntologyReference } from '../../types/ontology';
 import { Namespace } from '../../lib/OntologyAPIClient';
+import Navigation from '../navigation';
+import { RouteConfig, routeConfigToSpec } from '../navigation/RouteConfig';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
+
+const routes: Array<RouteConfig> = [
+    {
+        path: "ontology/term/:namespace/:term/:-timestamp?tab=:-tab",
+        // path: [{
+        //     type: 'literal',
+        //     value: 'ontology'
+        // }, {
+        //     type: 'literal',
+        //     value: 'term'
+        // }, {
+        //     type: 'param',
+        //     name: 'namespace'
+        // }, {
+        //     type: 'param',
+        //     name: 'term'
+        // }, {
+        //     type: 'param',
+        //     name: 'timestamp',
+        //     optional: true
+        // }],
+        view: 'term'
+    },
+    {
+        path: [{
+            type: 'literal',
+            value: 'ontology'
+        }, {
+            type: 'literal',
+            value: 'about'
+        }],
+        view: 'about'
+    },
+    {
+        path: [{
+            type: 'literal',
+            value: 'ontology'
+        }, {
+            type: 'literal',
+            value: 'help'
+        }],
+        view: 'help'
+    }
+];
 
 function stringToNamespace(s: string): Namespace {
     switch (s) {
@@ -17,13 +64,13 @@ function stringToNamespace(s: string): Namespace {
     }
 }
 
-export interface Route {
+export interface ViewRouter {
     view: string;
     router: (path: Array<string>, params: Params) => React.ReactNode;
 }
 
-export interface Routes {
-    [key: string]: Route;
+export interface ViewRouters {
+    [key: string]: ViewRouter;
 }
 
 export interface DispatcherProps {
@@ -38,26 +85,38 @@ interface DispatcherState {
     view: string | null;
     path: Array<string>;
     params: Params;
-    currentRoute: Route | null;
+    currentRoute: ViewRouter | null;
 }
 
 export class Dispatcher extends React.Component<DispatcherProps, DispatcherState> {
-    routes: Routes;
+    views: ViewRouters;
 
     constructor(props: DispatcherProps) {
         super(props);
 
-        this.routes = {
+        this.views = {
+            about: {
+                view: 'about',
+                router: (path: Array<string>, params: Params) => {
+                    return <div>About here...</div>;
+                }
+            },
+            help: {
+                view: 'help',
+                router: (path: Array<string>, params: Params) => {
+                    return <div>Help here...</div>;
+                }
+            },
             term: {
                 view: 'term',
                 router: (path: Array<string>, params: Params) => {
-                    const [namespace, term] = path;
-                    if (!term) {
+                    // const [namespace, term] = path;
+                    if (!params.term) {
                         throw new Error('No term!!');
                     }
                     const ref: OntologyReference = {
-                        namespace: stringToNamespace(namespace),
-                        term
+                        namespace: stringToNamespace(params.namespace),
+                        term: params.term
                     };
                     return <TermView termRef={ref} />;
                 }
@@ -96,21 +155,21 @@ export class Dispatcher extends React.Component<DispatcherProps, DispatcherState
         return <Alert type="error" message={message} />;
     }
 
-    componentDidMount() {
-        if (this.props.view === null) {
-            return;
-        }
+    // componentDidMount() {
+    //     if (this.props.view === null) {
+    //         return;
+    //     }
 
-        const route = this.routes[this.props.view];
+    //     const route = this.routes[this.props.view];
 
-        if (!route) {
-            return;
-        }
+    //     if (!route) {
+    //         return;
+    //     }
 
-        this.setState({
-            currentRoute: route
-        });
-    }
+    //     this.setState({
+    //         currentRoute: route
+    //     });
+    // }
 
     renderError(error: AppError) {
         return <Alert type="error" message={error.message} />;
@@ -127,16 +186,31 @@ export class Dispatcher extends React.Component<DispatcherProps, DispatcherState
     }
 
     renderRoute() {
-        if (this.state.currentRoute === null) {
+        if (!this.props.view) {
             return this.renderEmptyRoute();
         }
-        return this.state.currentRoute.router(this.props.path, this.props.params);
+        const route = this.views[this.props.view];
+        if (!route) {
+            return this.renderEmptyRoute();
+        }
+        return route.router(this.props.path, this.props.params);
     }
 
-    render() {
+    renderRouting() {
         if (!this.props.token) {
             return this.renderUnauthorized();
         }
         return this.renderRoute();
+    }
+
+    render() {
+        if (this.props.rootState === RootState.DEVELOP) {
+            const routeSpecs = routes.map(routeConfigToSpec);
+            return <Navigation routes={routeSpecs}>
+                {this.renderRouting()}
+            </Navigation>;
+        } else {
+            return this.renderRouting();
+        }
     }
 }

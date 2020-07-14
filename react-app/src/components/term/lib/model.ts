@@ -99,6 +99,7 @@ export interface RelatedFeature {
 
 export interface GetRelatedFeaturesResult {
     features: Array<RelatedFeature>;
+    totalCount: number;
 }
 
 export type NodeID = string;
@@ -370,7 +371,7 @@ export default class OntologyModel {
 
         const namespace = ontologyReferenceToNamespace(ref);
 
-        const result = await client.getTerms({
+        const result = await client.get_terms({
             ns: namespace,
             ids: [ref.term],
             ts: ref.timestamp || Date.now()
@@ -391,7 +392,7 @@ export default class OntologyModel {
 
         const namespace = ontologyReferenceToNamespace(ref);
 
-        const result = await client.getParents({
+        const result = await client.get_parents({
             ns: namespace,
             id: ref.term,
             ts: ref.timestamp || Date.now()
@@ -414,7 +415,7 @@ export default class OntologyModel {
 
         const namespace = ontologyReferenceToNamespace(ref);
 
-        const result = await client.getChildren({
+        const result = await client.get_children({
             ns: namespace,
             id: ref.term,
             ts: ref.timestamp || Date.now()
@@ -435,7 +436,7 @@ export default class OntologyModel {
             version: this.ontologyAPIConfig.version
         });
 
-        const result = await client.getAssociatedWSObjects({
+        const result = await client.get_associated_ws_objects({
             ns: ontologyReferenceToNamespace(ref),
             id: ref.term,
             ts: ref.timestamp || Date.now(),
@@ -460,7 +461,9 @@ export default class OntologyModel {
 
 
         const features: Array<RelatedFeature> = [];
-        result.results.forEach((genomeWithFeatures) => {
+        console.log('here 2', result.results);
+        result.results.results.forEach((genomeWithFeatures) => {
+            console.log('here', genomeWithFeatures);
             genomeWithFeatures.features.forEach((feature) => {
                 features.push({
                     featureID: feature.feature_id,
@@ -476,7 +479,8 @@ export default class OntologyModel {
         });
 
         return {
-            features
+            features,
+            totalCount: result.results.total_count
         };
     }
 
@@ -488,7 +492,7 @@ export default class OntologyModel {
             version: this.ontologyAPIConfig.version
         });
 
-        const result = await client.getHierarchicalAncestors({
+        const result = await client.get_hierarchical_ancestors({
             ns: ontologyReferenceToNamespace(ref),
             id: ref.term,
             ts: ref.timestamp || Date.now(),

@@ -6,6 +6,12 @@ package:
   type: iframe
 install:
   routes:
-    - path: ["ontology", "term", {type: rest, joinWith: "/", name: rest}]
+    - path: ontology/term/:namespace/:term/:-timestamp?tab=:-tab
       view: term
+      authorization: true
+    - path: ontology/about
+      view: about
+      authorization: true
+    - path: ontology/help
+      view: help
       authorization: true

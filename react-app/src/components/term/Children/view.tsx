@@ -26,6 +26,10 @@ export default class OntologyList extends React.Component<Props, State> {
                 return row.term.ref.term;
             }}
             scroll={{ y: '100%' }}
+            locale={{
+                emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No Children" >
+                </Empty>
+            }}
         >
             <Column
                 dataIndex={['term', 'name']}
@@ -70,13 +74,13 @@ export default class OntologyList extends React.Component<Props, State> {
                 }} />
         </Table>;
     }
-    renderNoItems() {
-        return <Empty description="No Children" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
-    }
+    // renderNoItems() {
+    //     return <Empty description="No Children" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+    // }
     render() {
-        if (this.props.terms.length === 0) {
-            return this.renderNoItems();
-        }
+        // if (this.props.terms.length === 0) {
+        //     return this.renderNoItems();
+        // }
         return this.renderItemsTable();
     }
 }
