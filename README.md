@@ -1,14 +1,33 @@
-# KBase UI Plugin: Relation Engine Landing Pages
+# KBase UI Plugin: Ontology
 
-> A landing page system for viewing Relation Engine nodes.
+> View ontology terms, and navigate within an ontology.
 
-BRIEF DESCRIPTION
+This is a plugin for [kbase-ui](https://github.com/kbase/kbase-ui), which allows a KBase user to view individual ontological terms, and navigate within the ontology to which that term belongs.
+
+The canonical home for it is https://narrative.kbase.us#ontology.
+
+Currently the Ontology plugin supports [Gene Ontology (GO)](http://geneontology.org) and [Environment Ontology (ENVO)](http://www.environmentontology.org) ontologies.
 
 ## Usage
-HOW TO GET STARTED and USE IT
+
+Ontology terms are typically linked from other parts of KBase, although you can simply invoke the appropriate url to view them, if you know the url format and the terms involved.
+
+While viewing a term, other terms are exposed as links. For example, since ontologies are trees, you can view parents and children of a term and click on them to view them. Therefore, this tool enables hou to navigate the entire ontology.
+
+### Viewing a Term
+
+[https://ci.kbase.us#ontology/term/go_ontology/GO:0008152](https://narrative.kbase.us#ontology/go_ontology/GO:0008152) will show the term for "metabolic process" in the Gene Ontology.
+
+<!-- [](https://ci.kbase.us#ontology/envo/) -->
+
+### Help
+
+### About
+
 
 ## Install
-INSTALLATION OF DEPENDENCIES, THE THING ITSELF
+
+There is no need for a user to install the Ontology plugin -- it is provided as part of the KBase service.
 
 ## Background
 HOW THIS FITS INTO KBASE
@@ -16,19 +35,24 @@ HOW THIS FITS INTO KBASE
 ## API
 IF IT IS A LIBRARY OR SERVICE
 
+## Development
+
+See [](docs/development.md)
+
 ## Acknowledgments
 - NAME - COMMENT
 
 ## See Also
--  [TITLE](URL)
+-  [About KBase](https://www.kbase.us)
 
 ## License
 SEE LICENSE IN LICENSE.md
-```
 
-- Refs
-- [Awesome README](https://github.com/matiassingers/awesome-readme) 
-- collection links to examples, specs, articles, tools.
 
-- Tooling
-- [common-readme](https://github.com/noffle/common-readme) - an effort to, er, create a standard readme
+## Refs
+
+- Gene Ontology
+- Environment Ontology
+- KBase
+- KBase Narrative
+- KBase Development Guid

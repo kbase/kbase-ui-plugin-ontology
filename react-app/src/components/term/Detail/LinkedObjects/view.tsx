@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-import { Table, Alert } from 'antd';
+import { Table, Alert, Empty } from 'antd';
 import { RelatedFeature } from '../../lib/model';
 
 export interface Props {
@@ -14,10 +14,13 @@ export default class LinkedObjects extends React.Component<Props, State> {
     renderTable() {
         return <Table<RelatedFeature>
             dataSource={this.props.linkedObjects}
-            className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
+            // className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
             size="small"
-            pagination={false}
-            scroll={{ y: '100%' }}
+            // pagination={false}
+            pagination={{
+                pageSize: 20
+            }}
+            // scroll={{ y: '100%' }}
             rowKey={(row: RelatedFeature) => {
                 return [
                     row.objectRef.workspaceID,
@@ -100,9 +103,13 @@ export default class LinkedObjects extends React.Component<Props, State> {
         );
     }
     render() {
-        if (this.props.linkedObjects.length === 0) {
-            return this.renderNone();
-        }
-        return this.renderTable();
+        // if (this.props.linkedObjects.length === 0) {
+        //     return this.renderNone();
+        // }
+        // return this.renderTable();
+        return <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="Linked Data currently disabled - working on a replacement" >
+        </Empty>;
     }
 }

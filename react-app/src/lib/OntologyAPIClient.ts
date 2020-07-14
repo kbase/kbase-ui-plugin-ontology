@@ -190,7 +190,10 @@ export interface RelatedWSObject {
 }
 
 export interface GetAssociatedWSObjectsResults {
-    results: Array<RelatedWSObject>;
+    results: {
+        results: Array<RelatedWSObject>;
+        total_count: number;
+    };
     ns: string;
     ts: number;
     stats: any;
@@ -199,35 +202,35 @@ export interface GetAssociatedWSObjectsResults {
 export default class OntologyAPIClient extends DynamicServiceClient {
     static module: string = 'OntologyAPI';
 
-    async getParents(params: GetParentsParams): Promise<GetParentsResult> {
+    async get_parents(params: GetParentsParams): Promise<GetParentsResult> {
         const [result] = await this.callFunc<[GetParentsParams], [GetParentsResult]>('get_parents', [
             params
         ]);
         return result;
     }
 
-    async getTerms(params: GetTermsParams): Promise<GetTermsResult> {
+    async get_terms(params: GetTermsParams): Promise<GetTermsResult> {
         const [result] = await this.callFunc<[GetTermsParams], [GetTermsResult]>('get_terms', [
             params
         ]);
         return result;
     }
 
-    async getChildren(params: GetChildrenParams): Promise<GetChildrenResult> {
+    async get_children(params: GetChildrenParams): Promise<GetChildrenResult> {
         const [result] = await this.callFunc<[GetChildrenParams], [GetChildrenResult]>('get_children', [
             params
         ]);
         return result;
     }
 
-    async getHierarchicalAncestors(params: GetHierarchicalAncestorsParams): Promise<GetHierarchicalAncestorsResult> {
+    async get_hierarchical_ancestors(params: GetHierarchicalAncestorsParams): Promise<GetHierarchicalAncestorsResult> {
         const [result] = await this.callFunc<[GetHierarchicalAncestorsParams], [GetHierarchicalAncestorsResult]>('get_hierarchical_ancestors', [
             params
         ]);
         return result;
     }
 
-    async getAssociatedWSObjects(params: GetAssociatedWSObjectsParams): Promise<GetAssociatedWSObjectsResults> {
+    async get_associated_ws_objects(params: GetAssociatedWSObjectsParams): Promise<GetAssociatedWSObjectsResults> {
         const [result] = await this.callFunc<[GetAssociatedWSObjectsParams], [GetAssociatedWSObjectsResults]>('get_associated_ws_objects', [
             params
         ]);

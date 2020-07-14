@@ -28,7 +28,7 @@ function mapStateToProps(state: StoreState, props: OwnProps): StateProps {
         app: {
             runtime: {
                 navigation: {
-                    view, params
+                    view: navView, params: navParams
                 }
             }
         }
@@ -43,20 +43,27 @@ function mapStateToProps(state: StoreState, props: OwnProps): StateProps {
         token = userAuthorization.token;
     }
 
-    const viewParams = {
-        ...params
+    const params = {
+        ...navParams
     };
-    delete viewParams.rest;
-    delete viewParams.view;
+    delete params.rest;
+    delete params.view;
 
-    const trigger: number = 1;
-    return {
-        token,
-        rootState,
-        view: view || null,
-        path: params.rest.split('/'),
-        params: params
-    };
+    const path = (() => {
+        if (!params.rest) {
+            return [];
+        }
+        return params.rest.split('/');
+    })();
+
+    const view = (() => {
+        if (!navView) {
+            return 'about';
+        }
+        return navView;
+    })();
+
+    return { token, rootState, view, path, params };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>, ownProps: OwnProps): DispatchProps {

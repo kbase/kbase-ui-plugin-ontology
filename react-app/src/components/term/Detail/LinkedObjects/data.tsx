@@ -18,6 +18,8 @@ interface State { }
 
 export default class Data extends React.Component<Props, State> {
     db: LinkedObjectsDB;
+    offset: number;
+    limit: number;
     constructor(props: Props) {
         super(props);
         this.db = new LinkedObjectsDB({
@@ -30,13 +32,15 @@ export default class Data extends React.Component<Props, State> {
             token: props.token,
             config: props.config
         });
+        this.offset = 0;
+        this.limit = 20;
     }
 
     componentDidMount() {
         const db = this.db.get();
         switch (db.status) {
             case DBStatus.NONE:
-                this.db.getLinkedObjects(this.props.termRef);
+                this.db.getLinkedObjects(this.props.termRef, this.offset, this.limit);
         }
     }
 
