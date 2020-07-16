@@ -40,6 +40,7 @@ export default class OntologyDB extends DB<OntologyDBState> {
             token: this.props.token,
             url: this.props.config.services.ServiceWizard.url,
             relationEngineURL: this.props.config.services.RelationEngine.url,
+            workspaceURL: this.props.config.services.Workspace.url,
             ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
         });
 
@@ -82,6 +83,7 @@ export default class OntologyDB extends DB<OntologyDBState> {
             token: this.props.token,
             url: this.props.config.services.ServiceWizard.url,
             relationEngineURL: this.props.config.services.RelationEngine.url,
+            workspaceURL: this.props.config.services.Workspace.url,
             ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
         });
 

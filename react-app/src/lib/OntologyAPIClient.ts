@@ -177,10 +177,7 @@ export interface GetAssociatedWSObjectsParams {
 }
 
 export interface RelatedWSObject {
-    features: Array<{
-        feature_id: string;
-        updated_at: number;
-    }>,
+    feature_count: number,
     ws_obj: {
         name: string,
         workspace_id: number;
@@ -190,10 +187,8 @@ export interface RelatedWSObject {
 }
 
 export interface GetAssociatedWSObjectsResults {
-    results: {
-        results: Array<RelatedWSObject>;
-        total_count: number;
-    };
+    results: Array<RelatedWSObject>;
+    total_count: number;
     ns: string;
     ts: number;
     stats: any;

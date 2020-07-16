@@ -1,10 +1,11 @@
 import React from 'react';
 import './style.css';
-import { Table, Alert, Empty } from 'antd';
-import { RelatedFeature } from '../../lib/model';
+import { Table, Alert } from 'antd';
+import { RelatedObject } from '../../lib/model';
 
 export interface Props {
-    linkedObjects: Array<RelatedFeature>;
+    linkedObjects: Array<RelatedObject>;
+    totalCount: number;
 }
 
 interface State {
@@ -12,79 +13,106 @@ interface State {
 
 export default class LinkedObjects extends React.Component<Props, State> {
     renderTable() {
-        return <Table<RelatedFeature>
+        return <Table<RelatedObject>
             dataSource={this.props.linkedObjects}
-            // className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
+            className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
             size="small"
-            // pagination={false}
-            pagination={{
-                pageSize: 20
-            }}
-            // scroll={{ y: '100%' }}
-            rowKey={(row: RelatedFeature) => {
+            pagination={false}
+            // pagination={{
+            //     pageSize: 20
+            // }}
+            scroll={{ y: '100%' }}
+            rowKey={(row: RelatedObject) => {
                 return [
-                    row.objectRef.workspaceID,
-                    row.objectRef.objectID,
-                    row.objectRef.version,
-                    row.featureID
+                    row.workspaceId,
+                    row.id,
+                    row.version
                 ].join(':');
             }}
             bordered={false}
         >
             <Table.Column
-                dataIndex={"objectName"}
+                dataIndex={"name"}
                 title="Object Name"
                 width="40%"
-                render={(objectName: string, row: RelatedFeature) => {
+                render={(name: string, row: RelatedObject) => {
                     const hash = [
                         'dataview',
-                        String(row.objectRef.workspaceID),
-                        String(row.objectRef.objectID),
-                        String(row.objectRef.version)
+                        String(row.workspaceId),
+                        String(row.id),
+                        String(row.version)
                     ].join('/');
                     const url = new URL('', window.location.origin);
                     url.hash = hash;
                     return (
                         <a href={url.toString()} target="_blank" rel="noopener noreferrer">
-                            {objectName}
+                            {name}
                         </a>
                     );
                 }}
+                defaultSortOrder="ascend"
+                sorter={(a: RelatedObject, b: RelatedObject) => {
+                    return a.name.localeCompare(b.name);
+                }}
             />
             <Table.Column
-                dataIndex={"featureID"}
-                title="Feature"
+                dataIndex={"workspaceType"}
+                title="Type"
                 width="40%"
-                render={(featureID: string, row: RelatedFeature) => {
+                render={(workspaceType: string, row: RelatedObject) => {
                     const hash = [
-                        'dataview',
-                        String(row.objectRef.workspaceID),
-                        String(row.objectRef.objectID),
-                        String(row.objectRef.version)
+                        'spec',
+                        'type',
+                        workspaceType
                     ].join('/');
-                    // Note the sample url just to make URL happy.
                     const url = new URL('', window.location.origin);
                     url.hash = hash;
-                    const search = url.searchParams;
-                    search.set('sub', 'Feature');
-                    search.set('subid', featureID);
+                    // const search = url.searchParams;
+                    // search.set('sub', 'Feature');
+                    // search.set('subid', featureID);
                     return (
                         <a href={url.toString()} target="_blank" rel="noopener noreferrer">
-                            {featureID}
+                            {workspaceType}
                         </a>
                     );
                 }}
-            />
-            <Table.Column
-                dataIndex={"relatedAt"}
-                width="20%"
-                title="Linked"
-                render={(relatedAt: number) => {
-                    return Intl.DateTimeFormat('en-US').format(relatedAt);
+                sorter={(a: RelatedObject, b: RelatedObject) => {
+                    return a.workspaceType.localeCompare(b.workspaceType);
                 }}
             />
+            <Table.Column
+                dataIndex={"featureCount"}
+                width="8em"
+                title="# Features"
+                render={(featureCount: number) => {
+                    const content = Intl.NumberFormat('en-US', {
+                        useGrouping: true
+                    }).format(featureCount);
+                    return <div style={{
+                        fontFamily: 'monospace',
+                        textAlign: 'right',
+                        paddingRight: '2em'
+                    }}>
+                        {content}
+                    </div>;
+                }}
+                sorter={(a: RelatedObject, b: RelatedObject) => {
+                    return a.featureCount - b.featureCount;
+                }}
+            />
+
         </Table>;
     }
+    /*
+                // <Table.Column
+            //     dataIndex={"relatedAt"}
+            //     width="20%"
+            //     title="Linked"
+            //     render={(relatedAt: number) => {
+            //         return Intl.DateTimeFormat('en-US').format(relatedAt);
+            //     }}
+            // />
+    */
     renderNone() {
         return (
             <Alert type="info"
@@ -103,13 +131,13 @@ export default class LinkedObjects extends React.Component<Props, State> {
         );
     }
     render() {
-        // if (this.props.linkedObjects.length === 0) {
-        //     return this.renderNone();
-        // }
-        // return this.renderTable();
-        return <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="Linked Data currently disabled - working on a replacement" >
-        </Empty>;
+        if (this.props.linkedObjects.length === 0) {
+            return this.renderNone();
+        }
+        return this.renderTable();
+        // return <Empty
+        //     image={Empty.PRESENTED_IMAGE_SIMPLE}
+        //     description="Linked Data currently disabled - working on a replacement" >
+        // </Empty>;
     }
 }

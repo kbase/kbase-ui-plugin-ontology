@@ -4,7 +4,7 @@ import { createReduxStore } from './redux/store';
 import { AppBase, AuthGate } from '@kbase/ui-components';
 import './App.css';
 // import Dispatcher from './components/dispatcher';
-import ErrorBoundary from './components/ErrorBoundary';
+import ErrorBoundary from './ui/ErrorBoundary';
 import Dispatcher from './ui/dispatcher';
 
 const store = createReduxStore();
