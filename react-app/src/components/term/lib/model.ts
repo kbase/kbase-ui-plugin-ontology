@@ -507,17 +507,23 @@ export default class OntologyModel {
             };
         });
 
-        const wsClient = new GenericClient({
-            module: 'Workspace',
-            url: this.workspaceURL,
-            token: this.token
-        });
+        const objectsInfo = await (async () => {
+            if (objectRefs.length) {
+                const wsClient = new GenericClient({
+                    module: 'Workspace',
+                    url: this.workspaceURL,
+                    token: this.token
+                });
 
-        const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-            objects: objectRefs,
-            includeMetadata: 1,
-            ignoreErrors: 0
-        }]);
+                const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
+                    objects: objectRefs,
+                    includeMetadata: 1,
+                    ignoreErrors: 0
+                }]);
+                return objectsInfo.infos;
+            }
+            return [];
+        })();
 
         // const features: Array<RelatedFeature> = [];
         // console.log('here 2', result);
@@ -536,7 +542,7 @@ export default class OntologyModel {
             //     });
             // });
 
-            const objectInfo = objectsInfo.infos[index];
+            const objectInfo = objectsInfo[index];
 
             // console.log('hmm', objectInfo);
 
