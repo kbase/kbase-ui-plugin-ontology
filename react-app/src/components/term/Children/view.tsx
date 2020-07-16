@@ -37,7 +37,12 @@ export default class OntologyList extends React.Component<Props, State> {
                 width="60%"
                 render={(name: string, term: OntologyRelatedTerm) => {
                     return name;
-                }} />
+                }}
+                defaultSortOrder="ascend"
+                sorter={(a: OntologyRelatedTerm, b: OntologyRelatedTerm) => {
+                    return a.term.name.localeCompare(b.term.name);
+                }}
+            />
             <Column dataIndex={['term', 'goID']} title="ID" width="20%"
                 render={(id: string, term: OntologyRelatedTerm) => {
                     let ownId: string;
@@ -54,20 +59,23 @@ export default class OntologyList extends React.Component<Props, State> {
                     const tooltip = (
                         <div>
                             {term.term.name}<br />
-                            {ownId}
+                            {term.term.ref.term}
                             <hr />
                             {term.term.definition}
                         </div>
                     );
-                    // TODO: fix the hard coded url below!
                     return (
                         <Tooltip title={tooltip} placement="left">
-                            <a href={`/#ontology/term/${namespace}/${ownId}/${term.term.ref.timestamp}`} target="_parent">
+                            <a href={`/#ontology/term/${term.term.ref.namespace}/${term.term.ref.term}/${term.term.ref.timestamp}`} target="_parent">
                                 {ownId}
                             </a>
                         </Tooltip>
                     );
-                }} />
+                }}
+                sorter={(a: OntologyRelatedTerm, b: OntologyRelatedTerm) => {
+                    return a.term.ref.term.localeCompare(b.term.ref.term);
+                }}
+            />
             <Column dataIndex="relation" title="Relation" width="20%"
                 render={(relation: OntologyRelation) => {
                     return this.renderRelation(relation);
