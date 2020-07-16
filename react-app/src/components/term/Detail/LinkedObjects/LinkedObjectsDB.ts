@@ -1,14 +1,15 @@
 import DB, { DBProps, DBStatus, DBStateNone, DBStateLoading, DBStateLoaded, DBStateError } from '../../../../lib/DB';
 import { OntologyReference } from '../../../../types/ontology';
 import { AppConfig } from '@kbase/ui-components';
-import OntologyModel, { RelatedFeature } from '../../lib/model';
+import OntologyModel, { RelatedObject } from '../../lib/model';
 
 export type LinkedObjectsDBStateNone = DBStateNone;
 export type LinkedObjectsDBStateLoading = DBStateLoading;
 export type LinkedObjectsDBStateError = DBStateError;
 
 export interface LinkedObjectsDBStateLoaded extends DBStateLoaded {
-    linkedObjects: Array<RelatedFeature>;
+    linkedObjects: Array<RelatedObject>;
+    totalCount: number;
 }
 
 export type LinkedObjectsDBState = LinkedObjectsDBStateNone | LinkedObjectsDBStateLoading | LinkedObjectsDBStateError | LinkedObjectsDBStateLoaded;
@@ -29,6 +30,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
         const client = new OntologyModel({
             url: this.props.config.services.ServiceWizard.url,
             relationEngineURL: this.props.config.services.RelationEngine.url,
+            workspaceURL: this.props.config.services.Workspace.url,
             token: this.props.token,
             ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
         });
@@ -40,7 +42,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
                 };
             });
 
-            const linkedObjects = await client.getRelatedFeatures({
+            const linkedObjects = await client.getRelatedObjects({
                 ref: termRef,
                 // TODO: provided by table ui
                 offset,
@@ -53,7 +55,8 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
                 return {
                     ...state,
                     status: DBStatus.LOADED,
-                    linkedObjects: linkedObjects.features
+                    linkedObjects: linkedObjects.objects,
+                    totalCount: linkedObjects.totalCount
                 };
             });
         } catch (ex) {

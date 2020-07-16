@@ -55,7 +55,7 @@ export default class Data extends React.Component<Props, State> {
     renderLoaded(db: LinkedObjectsDBStateLoaded) {
         return (
             <View
-                linkedObjects={db.linkedObjects}
+                linkedObjects={db.linkedObjects} totalCount={db.totalCount}
             />
         );
     }

@@ -7,28 +7,10 @@ import { OntologyReference } from '../../types/ontology';
 import { Namespace } from '../../lib/OntologyAPIClient';
 import Navigation from '../navigation';
 import { RouteConfig, routeConfigToSpec } from '../navigation/RouteConfig';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 const routes: Array<RouteConfig> = [
     {
         path: "ontology/term/:namespace/:term/:-timestamp?tab=:-tab",
-        // path: [{
-        //     type: 'literal',
-        //     value: 'ontology'
-        // }, {
-        //     type: 'literal',
-        //     value: 'term'
-        // }, {
-        //     type: 'param',
-        //     name: 'namespace'
-        // }, {
-        //     type: 'param',
-        //     name: 'term'
-        // }, {
-        //     type: 'param',
-        //     name: 'timestamp',
-        //     optional: true
-        // }],
         view: 'term'
     },
     {

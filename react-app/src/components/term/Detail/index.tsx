@@ -3,7 +3,7 @@ import { FlexTabs } from '@kbase/ui-components';
 import './style.css';
 import { Synonym, OntologySource, OntologyItem } from '../../../types/ontology';
 import TermLink from '../TermLink';
-import LinkedObjects from './LinkedObjects/view';
+import LinkedObjects from './LinkedObjects';
 import Children from '../Children';
 import AncestorGraph from '../AncestorGraph';
 import { Tabs } from 'antd';
@@ -138,12 +138,12 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
         );
     }
     renderLinkedObjects() {
-        // return (
-        //     <LinkedObjects termRef={this.props.item.ref} />
-        // );
         return (
-            <LinkedObjects linkedObjects={[]} />
+            <LinkedObjects termRef={this.props.item.ref} />
         );
+        // return (
+        //     <LinkedObjects linkedObjects={[]} />
+        // );
     }
     renderMetadata() {
         return (

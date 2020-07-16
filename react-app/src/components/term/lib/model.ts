@@ -9,6 +9,7 @@ import {
 } from '../../../types/ontology';
 import { DynamicServiceConfig } from '@kbase/ui-components/lib/redux/integration/store';
 import RelationEngineAPIClient from '../../../lib/RelationEngineAPIClient';
+import { GenericClient } from '@kbase/ui-lib';
 
 const REQUEST_TIMEOUT = 30000;
 
@@ -78,7 +79,7 @@ export interface GetAncestorGraphParams {
     ref: OntologyReference;
 }
 
-export interface GetRelatedFeaturesParams {
+export interface GetRelatedObjectsParams {
     ref: OntologyReference;
     offset: number;
     limit: number;
@@ -90,15 +91,24 @@ export interface WorkspaceObjectReference {
     version: number;
 }
 
-export interface RelatedFeature {
-    objectName: string;
-    featureID: string;
-    relatedAt: number;
-    objectRef: WorkspaceObjectReference;
+// export interface RelatedFeature {
+//     objectName: string;
+//     featureID: string;
+//     relatedAt: number;
+//     objectRef: WorkspaceObjectReference;
+// }
+
+export interface RelatedObject {
+    name: string;
+    id: number;
+    version: number;
+    workspaceId: number;
+    featureCount: number;
+    workspaceType: string;
 }
 
-export interface GetRelatedFeaturesResult {
-    features: Array<RelatedFeature>;
+export interface GetRelatedObjectsResult {
+    objects: Array<RelatedObject>;
     totalCount: number;
 }
 
@@ -314,7 +324,36 @@ export interface OntologyModelParams {
     token: string;
     url: string;
     relationEngineURL: string;
+    workspaceURL: string;
     ontologyAPIConfig: DynamicServiceConfig;
+}
+
+export interface GetObjectInfo3Params {
+    objects: Array<any>;
+    includeMetadata: number;
+    ignoreErrors: number;
+}
+
+export interface Metadata {
+    [key: string]: string;
+}
+
+export type ObjectInfo = [
+    number, // object id
+    string, // object name
+    string, // workspace type of object
+    string, // timestamp saved
+    number, // object version
+    string, // username of user who saved
+    number, // workspace id
+    string, // checksum
+    number, // size in bytes
+    Metadata, // metadata
+];
+
+export interface GetObjectInfo3Result {
+    infos: Array<ObjectInfo>;
+    paths: Array<Array<string>>;
 }
 
 export default class OntologyModel {
@@ -322,11 +361,13 @@ export default class OntologyModel {
     token: string;
     url: string;
     relationEngineURL: string;
+    workspaceURL: string;
     ontologyAPIConfig: DynamicServiceConfig;
-    constructor({ token, url, ontologyAPIConfig, relationEngineURL }: OntologyModelParams) {
+    constructor({ token, url, ontologyAPIConfig, relationEngineURL, workspaceURL }: OntologyModelParams) {
         this.token = token;
         this.url = url;
         this.relationEngineURL = relationEngineURL;
+        this.workspaceURL = workspaceURL;
         this.ontologyAPIConfig = ontologyAPIConfig;
         this.ontologyClient = new OntologyAPIClient({
             token,
@@ -428,7 +469,7 @@ export default class OntologyModel {
         };
     }
 
-    async getRelatedFeatures({ ref, offset, limit }: GetRelatedFeaturesParams): Promise<GetRelatedFeaturesResult> {
+    async getRelatedObjects({ ref, offset, limit }: GetRelatedObjectsParams): Promise<GetRelatedObjectsResult> {
         const client = new OntologyAPIClient({
             token: this.token,
             url: this.url,
@@ -459,28 +500,60 @@ export default class OntologyModel {
         //     return features;
         // }, []: Array<RelatedFeature>);
 
+        // Get object info.
+        const objectRefs = result.results.map((object) => {
+            return {
+                ref: `${object.ws_obj.workspace_id}/${object.ws_obj.object_id}/${object.ws_obj.version}`
+            };
+        });
 
-        const features: Array<RelatedFeature> = [];
-        console.log('here 2', result.results);
-        result.results.results.forEach((genomeWithFeatures) => {
-            console.log('here', genomeWithFeatures);
-            genomeWithFeatures.features.forEach((feature) => {
-                features.push({
-                    featureID: feature.feature_id,
-                    relatedAt: feature.updated_at,
-                    objectName: genomeWithFeatures.ws_obj.name,
-                    objectRef: {
-                        workspaceID: genomeWithFeatures.ws_obj.workspace_id,
-                        objectID: genomeWithFeatures.ws_obj.object_id,
-                        version: genomeWithFeatures.ws_obj.version
-                    }
-                });
-            });
+        const wsClient = new GenericClient({
+            module: 'Workspace',
+            url: this.workspaceURL,
+            token: this.token
+        });
+
+        const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
+            objects: objectRefs,
+            includeMetadata: 1,
+            ignoreErrors: 0
+        }]);
+
+        // const features: Array<RelatedFeature> = [];
+        // console.log('here 2', result);
+        const objects = result.results.map((object, index) => {
+            // console.log('here', object);
+            // genomeWithFeatureCount.features.forEach((feature) => {
+            //     features.push({
+            //         featureID: feature.feature_id,
+            //         relatedAt: feature.updated_at,
+            //         objectName: genomeWithFeatures.ws_obj.name,
+            //         objectRef: {
+            //             workspaceID: genomeWithFeatures.ws_obj.workspace_id,
+            //             objectID: genomeWithFeatures.ws_obj.object_id,
+            //             version: genomeWithFeatures.ws_obj.version
+            //         }
+            //     });
+            // });
+
+            const objectInfo = objectsInfo.infos[index];
+
+            // console.log('hmm', objectInfo);
+
+            return {
+                id: object.ws_obj.object_id,
+                name: object.ws_obj.name,
+                version: object.ws_obj.version,
+                workspaceId: object.ws_obj.workspace_id,
+                featureCount: object.feature_count,
+                workspaceType: objectInfo[2]
+            };
         });
 
         return {
-            features,
-            totalCount: result.results.total_count
+            // features,
+            objects,
+            totalCount: objects.length
         };
     }
 
