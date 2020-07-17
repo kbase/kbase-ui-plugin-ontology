@@ -36,7 +36,7 @@ export default class Data extends React.Component<Props, State> {
             config: props.config
         });
         this.offset = 0;
-        this.limit = 20;
+        this.limit = 1000;
         this.state = {
             selectedObjectRef: null
         };
