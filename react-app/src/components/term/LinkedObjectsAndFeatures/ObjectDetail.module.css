@@ -1,0 +1,7 @@
+.LabelCol {
+    flex: 0 0 4em !important;
+}
+
+.EmptyCol {
+    background-color: rgba(200, 200, 200, 0.5);
+}

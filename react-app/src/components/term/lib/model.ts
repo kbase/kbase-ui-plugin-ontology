@@ -79,6 +79,8 @@ export interface GetAncestorGraphParams {
     ref: OntologyReference;
 }
 
+// Related Objects
+
 export interface GetRelatedObjectsParams {
     ref: OntologyReference;
     offset: number;
@@ -105,12 +107,35 @@ export interface RelatedObject {
     workspaceId: number;
     featureCount: number;
     workspaceType: string;
+    info: ObjectInfo;
 }
 
 export interface GetRelatedObjectsResult {
     objects: Array<RelatedObject>;
     totalCount: number;
 }
+
+// Related Features
+
+export interface GetRelatedObjectFeaturesParams {
+    ref: OntologyReference;
+    objectRef: string;
+    offset: number;
+    limit: number;
+}
+
+export interface Feature {
+    id: string;
+}
+
+export interface GetRelatedObjectFeaturesResult {
+    object: RelatedObject;
+    totalCount: number;
+    features: Array<Feature>;
+}
+
+
+//
 
 export type NodeID = string;
 
@@ -552,7 +577,8 @@ export default class OntologyModel {
                 version: object.ws_obj.version,
                 workspaceId: object.ws_obj.workspace_id,
                 featureCount: object.feature_count,
-                workspaceType: objectInfo[2]
+                workspaceType: objectInfo[2],
+                info: objectInfo
             };
         });
 
@@ -560,6 +586,85 @@ export default class OntologyModel {
             // features,
             objects,
             totalCount: objects.length
+        };
+    }
+
+    async getRelatedObjectFeatures({ ref, objectRef, offset, limit }: GetRelatedObjectFeaturesParams): Promise<GetRelatedObjectFeaturesResult> {
+        const client = new OntologyAPIClient({
+            token: this.token,
+            url: this.url,
+            timeout: REQUEST_TIMEOUT,
+            version: this.ontologyAPIConfig.version
+        });
+
+        const result = await client.get_associated_ws_features({
+            ns: ontologyReferenceToNamespace(ref),
+            obj_ref: objectRef,
+            id: ref.term,
+            ts: ref.timestamp || Date.now(),
+            offset, limit
+        });
+
+        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
+        //     genomeWithFeatures.features.forEach((feature) => {
+        //         features.push({
+        //             featureID: feature.feature_id,
+        //             relatedAt: feature.updated_at,
+        //             objectName: genomeWithFeatures.ws_obj.name,
+        //             objectRef: {
+        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
+        //                 objectID: genomeWithFeatures.ws_obj.object_id,
+        //                 version: genomeWithFeatures.ws_obj.version
+        //             }
+        //         });
+        //     })
+        //     return features;
+        // }, []: Array<RelatedFeature>);
+
+        // Get object info.
+        const objectRefs = [{
+            ref: objectRef
+        }];
+
+
+        const objectInfo = await (async () => {
+            const wsClient = new GenericClient({
+                module: 'Workspace',
+                url: this.workspaceURL,
+                token: this.token
+            });
+
+            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
+                objects: objectRefs,
+                includeMetadata: 1,
+                ignoreErrors: 0
+            }]);
+            return objectsInfo.infos[0];
+
+        })();
+
+        const ws_obj = result.results[0].ws_obj;
+        const object = {
+            id: ws_obj.object_id,
+            name: ws_obj.name,
+            version: ws_obj.version,
+            workspaceId: ws_obj.workspace_id,
+            featureCount: result.results[0].features.length,
+            workspaceType: objectInfo[2],
+            info: objectInfo
+        };
+
+        const features: Array<Feature> = result.results[0].features.map((feature) => {
+            return {
+                id: feature.feature_id
+            };
+        });
+
+        return {
+            // features,
+            object,
+            totalCount: result.results[0].features.length,
+            features
         };
     }
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import LinkedObjectsDB, { LinkedObjectsDBStateLoaded } from './LinkedObjectsDB';
-import { DBStatus, DBStateError } from '../../../../lib/DB';
+import { DBStatus, DBStateError } from '../../../lib/DB';
 
 import { AppConfig } from '@kbase/ui-components';
 import View from './view';
-import { OntologyReference } from '../../../../types/ontology';
-import ErrorView from '../../../ErrorView';
-import Loading from '../../../Loading';
+import { OntologyReference } from '../../../types/ontology';
+import ErrorView from '../../ErrorView';
+import Loading from '../../Loading';
 
 export interface Props {
     token: string;

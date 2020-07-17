@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 import { Table, Alert } from 'antd';
-import { RelatedObject } from '../../lib/model';
+import { RelatedObject } from '../lib/model';
 
 export interface Props {
     linkedObjects: Array<RelatedObject>;
@@ -113,6 +113,20 @@ export default class LinkedObjects extends React.Component<Props, State> {
             //     }}
             // />
     */
+    renderControls() {
+        return <div>
+            Controls Here
+        </div>;
+    }
+
+    renderLinkedObjects() {
+        return <>
+            <div style={{ flex: '0 0 auto' }}>{this.renderControls()}</div>
+            <div style={{ flex: '1 1 0px' }}>
+                {this.renderTable()}
+            </div>
+        </>;
+    }
     renderNone() {
         return (
             <Alert type="info"
@@ -134,7 +148,8 @@ export default class LinkedObjects extends React.Component<Props, State> {
         if (this.props.linkedObjects.length === 0) {
             return this.renderNone();
         }
-        return this.renderTable();
+        return this.renderLinkedObjects();
+
         // return <Empty
         //     image={Empty.PRESENTED_IMAGE_SIMPLE}
         //     description="Linked Data currently disabled - working on a replacement" >

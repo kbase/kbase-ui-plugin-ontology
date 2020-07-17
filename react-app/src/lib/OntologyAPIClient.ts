@@ -194,6 +194,38 @@ export interface GetAssociatedWSObjectsResults {
     stats: any;
 }
 
+export interface GetAssociatedWSFeaturesParams {
+    id: string,
+    obj_ref: string;
+    ns: Namespace,
+    ts: number,
+    offset: number,
+    limit: number;
+}
+
+export interface RelatedWSFeature {
+    feature_id: string;
+    updated_at: number;
+}
+
+export interface RelatedWSObjectFeatures {
+    ws_obj: {
+        name: string,
+        workspace_id: number;
+        object_id: number;
+        version: number;
+    };
+    features: Array<RelatedWSFeature>;
+}
+
+export interface GetAssociatedWSFeaturesResults {
+    results: Array<RelatedWSObjectFeatures>;
+    total_count: number;
+    ns: string;
+    ts: number;
+    stats: any;
+}
+
 export default class OntologyAPIClient extends DynamicServiceClient {
     static module: string = 'OntologyAPI';
 
@@ -227,6 +259,13 @@ export default class OntologyAPIClient extends DynamicServiceClient {
 
     async get_associated_ws_objects(params: GetAssociatedWSObjectsParams): Promise<GetAssociatedWSObjectsResults> {
         const [result] = await this.callFunc<[GetAssociatedWSObjectsParams], [GetAssociatedWSObjectsResults]>('get_associated_ws_objects', [
+            params
+        ]);
+        return result;
+    }
+
+    async get_associated_ws_features(params: GetAssociatedWSFeaturesParams): Promise<GetAssociatedWSFeaturesResults> {
+        const [result] = await this.callFunc<[GetAssociatedWSFeaturesParams], [GetAssociatedWSFeaturesResults]>('get_associated_ws_features', [
             params
         ]);
         return result;
