@@ -36,7 +36,9 @@ export default class OntologyList extends React.Component<Props, State> {
                 title="Name"
                 width="60%"
                 render={(name: string, term: OntologyRelatedTerm) => {
-                    return name;
+                    return <a href={`/#ontology/term/${term.term.ref.namespace}/${term.term.ref.term}/${term.term.ref.timestamp}`} target="_parent">
+                        {name}
+                    </a>;
                 }}
                 defaultSortOrder="ascend"
                 sorter={(a: OntologyRelatedTerm, b: OntologyRelatedTerm) => {

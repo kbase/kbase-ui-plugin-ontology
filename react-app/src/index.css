@@ -122,19 +122,22 @@ code {
     flex-direction: column;
 }
 
-.InfoTable-row {
+.InfoTable-row,
+.InfoTable>div {
     display: flex;
     flex-direction: row;
     padding: 4px;
 }
 
-.InfoTable-labelCol {
+.InfoTable-labelCol,
+.InfoTable>div>div:nth-child(1) {
     flex: 0 0 auto;
     font-weight: bold;
     color: rgba(150, 150, 150, 1);
 }
 
-.InfoTable-dataCol {
+.InfoTable-dataCol,
+.InfoTable>div>div:nth-child(2) {
     flex: 1 1 0px;
     text-align: left;
     overflow-x: hidden;

@@ -1,12 +1,12 @@
 import React from 'react';
-import { FlexTabs } from '@kbase/ui-components';
 import './style.css';
 import { Synonym, OntologySource, OntologyItem } from '../../../types/ontology';
 import TermLink from '../TermLink';
-import LinkedObjects from './LinkedObjects';
+import LinkedObjects from '../LinkedObjects';
 import Children from '../Children';
 import AncestorGraph from '../AncestorGraph';
 import { Tabs } from 'antd';
+import LinkedObjectsAndFeatures from '../LinkedObjectsAndFeatures';
 
 export interface DetailProps {
     item: OntologyItem;
@@ -145,6 +145,11 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
         //     <LinkedObjects linkedObjects={[]} />
         // );
     }
+    renderLinkedObjectsAndFeatures() {
+        return (
+            <LinkedObjectsAndFeatures termRef={this.props.item.ref} />
+        );
+    }
     renderMetadata() {
         return (
             <div>
@@ -158,45 +163,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
         />;
     }
 
-    renderx() {
-        const tabs = [
-            {
-                tab: 'detail',
-                title: 'Detail',
-                component: this.renderDetail()
-            },
-            // {
-            //     tab: 'synonyms',
-            //     title: 'Synonyms',
-            //     component: this.renderAllSynonyms()
-            // },
-            {
-                tab: 'graph',
-                title: 'Graph',
-                component: this.renderGraph()
-            },
 
-
-            {
-                tab: 'children',
-                title: 'Children',
-                component: this.renderChildren()
-            },
-            {
-                tab: 'linked',
-                title: 'Linked Data',
-                component: this.renderLinkedObjects()
-            },
-            // {
-            //     tab: 'metadata',
-            //     title: 'Metadata',
-            //     component: this.renderMetadata()
-            // }
-        ];
-        return (
-            <FlexTabs tabs={tabs} />
-        );
-    }
 
     render() {
         return <Tabs
@@ -214,10 +181,8 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
             <Tabs.TabPane tab="Children" key="children" forceRender={false}>
                 {this.renderChildren()}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Linked Data" key="linkedData" forceRender={false}>
-                <div className="Col" style={{ overflowY: 'auto', paddingTop: '10px' }}>
-                    {this.renderLinkedObjects()}
-                </div>
+            <Tabs.TabPane tab="Linked Data" key="linkedObjects" forceRender={false}>
+                {this.renderLinkedObjectsAndFeatures()}
             </Tabs.TabPane>
         </Tabs>;
     }

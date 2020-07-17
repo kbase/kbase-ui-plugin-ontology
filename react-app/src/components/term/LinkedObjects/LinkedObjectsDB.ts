@@ -1,7 +1,7 @@
-import DB, { DBProps, DBStatus, DBStateNone, DBStateLoading, DBStateLoaded, DBStateError } from '../../../../lib/DB';
-import { OntologyReference } from '../../../../types/ontology';
+import DB, { DBProps, DBStatus, DBStateNone, DBStateLoading, DBStateLoaded, DBStateError } from '../../../lib/DB';
+import { OntologyReference } from '../../../types/ontology';
 import { AppConfig } from '@kbase/ui-components';
-import OntologyModel, { RelatedObject } from '../../lib/model';
+import OntologyModel, { RelatedObject } from '../lib/model';
 
 export type LinkedObjectsDBStateNone = DBStateNone;
 export type LinkedObjectsDBStateLoading = DBStateLoading;
