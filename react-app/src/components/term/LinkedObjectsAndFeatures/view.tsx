@@ -255,9 +255,16 @@ export default class LinkedObjects extends React.Component<Props, State> {
         </div>;
     }
 
+    renderSummary() {
+        return <div style={{ marginBottom: '6px', textAlign: 'center', fontStyle: 'italic' }}>
+            {this.props.linkedObjects.length} {this.props.linkedObjects.length === 1 ? 'object' : 'objects'} found
+        </div>;
+    }
+
     renderLinkedObjects() {
         return <>
             <div style={{ flex: '0 0 auto' }}>{this.renderControls()}</div>
+            <div style={{ flex: '0 0 auto' }}>{this.renderSummary()}</div>
             <div style={{ flex: '1 1 0px', overflowY: 'auto' }}>
                 {this.renderObjects()}
             </div>
@@ -269,7 +276,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
             return <Alert
                 type="info"
                 message={<p>Select an object to show its linked features...</p>}
-                style={{ maxWidth: '40em', margin: '10px auto' }}
+                style={{ width: '40em', margin: '10px auto' }}
             />;
         }
         return <Features

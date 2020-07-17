@@ -26,7 +26,7 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
                 <Alert
                     type="info"
                     message={<p>Select an object to show its detail...</p>}
-                    style={{ maxWidth: '40em', margin: '10px auto' }}
+                    style={{ width: '40em', margin: '10px auto' }}
                 />
 
             </div>
