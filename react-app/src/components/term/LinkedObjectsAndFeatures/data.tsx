@@ -16,7 +16,7 @@ export interface Props {
 }
 
 interface State {
-    selectedObjectRef: string | null;
+    selectedObject: RelatedObject | null;
 }
 
 export default class Data extends React.Component<Props, State> {
@@ -38,7 +38,7 @@ export default class Data extends React.Component<Props, State> {
         this.offset = 0;
         this.limit = 1000;
         this.state = {
-            selectedObjectRef: null
+            selectedObject: null
         };
     }
 
@@ -60,15 +60,14 @@ export default class Data extends React.Component<Props, State> {
         return <ErrorView error={db.error} />;
     }
 
-    async selectObject(ref: string) {
+    async selectObject(selectedObject: RelatedObject) {
         this.setState({
-            selectedObjectRef: ref
+            selectedObject
         });
     }
 
     sortObjects(sortBy: SortKey, direction: SortDirection) {
         const dir = direction === 'ascending' ? 1 : -1;
-        console.log('sorting?', sortBy, direction);
         this.db.sortLinkedObjects((a: RelatedObject, b: RelatedObject) => {
             switch (sortBy) {
                 case 'name':
@@ -87,7 +86,7 @@ export default class Data extends React.Component<Props, State> {
                 linkedObjects={db.linkedObjects}
                 totalCount={db.totalCount}
                 selectObject={this.selectObject.bind(this)}
-                selectedObjectRef={this.state.selectedObjectRef}
+                selectedObject={this.state.selectedObject}
                 termRef={this.props.termRef}
                 sortObjects={this.sortObjects.bind(this)}
             />

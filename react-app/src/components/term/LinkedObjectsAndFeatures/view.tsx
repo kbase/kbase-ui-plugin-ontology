@@ -1,20 +1,19 @@
 import React from 'react';
 
-import { Table, Alert, Radio, Select } from 'antd';
+import { Table, Alert, Select } from 'antd';
 import { RelatedObject, ObjectInfo } from '../lib/model';
 import styles from './style.module.css';
 import Features from './Features';
 import { OntologyReference } from '../../../types/ontology';
 import ObjectDetail from './ObjectDetail';
 import { SortKey, SortDirection } from './LinkedObjectsDB';
-import { RadioChangeEvent } from 'antd/lib/radio';
 import { SelectValue } from 'antd/lib/select';
 
 export interface Props {
     linkedObjects: Array<RelatedObject>;
     totalCount: number;
-    selectObject: (ref: string) => void;
-    selectedObjectRef: string | null;
+    selectObject: (object: RelatedObject) => void;
+    selectedObject: RelatedObject | null;
     termRef: OntologyReference;
     sortObjects: (sortBy: SortKey, direction: SortDirection) => void;
 }
@@ -154,8 +153,8 @@ export default class LinkedObjects extends React.Component<Props, State> {
     }
 
     selectObject(object: RelatedObject) {
-        const ref = `${object.workspaceId}/${object.id}/${object.version}`;
-        this.props.selectObject(ref);
+        // const ref = `${object.workspaceId}/${object.id}/${object.version}`;
+        this.props.selectObject(object);
         this.setState({
             selectedObjectInfo: object.info
         });
@@ -165,7 +164,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
         return this.props.linkedObjects.map((object) => {
             const ref = `${object.workspaceId}/${object.id}/${object.version}`;
             const classNames: Array<string> = [styles.Object];
-            if (this.props.selectedObjectRef === ref) {
+            if (this.props.selectedObject?.name === ref) {
                 classNames.push(styles.SelectedObject);
             }
             const [, typeName,] = object.workspaceType.split(/[-.]/);
@@ -198,33 +197,11 @@ export default class LinkedObjects extends React.Component<Props, State> {
         this.props.sortObjects(this.currentSortKey, this.currentSortDirection);
     }
 
-    // handleSortDirectionMenu(clickParam: ClickParam) {
-    //     this.currentSortDirection = clickParam.key as SortKey;
-    //     this.props.sortObjects(this.currentSortKey, this.currentSortDirection);
-    // }
-
-    // renderSortDropdown() {
-    //     const menu = <Menu
-    //         defaultSelectedKeys={['name']}
-    //         onClick={this.handleSortMenu.bind(this)}>
-    //         <Menu.Item key="name">Name</Menu.Item>
-    //         <Menu.Item key="date">Date</Menu.Item>
-    //         <Menu.Item key="featureCount"># Features</Menu.Item>
-    //     </Menu>;
-    //     return <div>
-    //         <Dropdown overlay={menu}>
-    //             <Button>
-    //                 Sort <DownOutlined />
-    //             </Button>
-    //         </Dropdown>
-    //     </div>;
-    // }
-
     renderSortSelect() {
         return <Select
             defaultValue='name'
             dropdownMatchSelectWidth={true}
-            style={{ width: '9em' }}
+            style={{ width: '10em' }}
             onChange={this.handleSortChange.bind(this)}
         >
             <Select.Option value="name">Name</Select.Option>
@@ -232,18 +209,20 @@ export default class LinkedObjects extends React.Component<Props, State> {
         </Select>;
     }
 
-    handleSortDirectionChange(e: RadioChangeEvent) {
-        this.currentSortDirection = e.target.value as SortDirection;
+    handleSortDirectionChange(value: SelectValue) {
+        this.currentSortDirection = value as SortDirection;
         this.props.sortObjects(this.currentSortKey, this.currentSortDirection);
     }
 
     renderSortDirectionControl() {
-        return <Radio.Group
-            defaultValue='ascending'
+        return <Select
+            defaultValue="ascending"
+            dropdownMatchSelectWidth={true}
+            style={{ width: '9em' }}
             onChange={this.handleSortDirectionChange.bind(this)}>
-            <Radio value="ascending">Ascending</Radio>
-            <Radio value="descending">Descending</Radio>
-        </Radio.Group>;
+            <Select.Option value="ascending">Ascending</Select.Option>
+            <Select.Option value="descending">Descending</Select.Option>
+        </Select>;
     }
 
     renderControls() {
@@ -272,7 +251,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
     }
 
     renderFeatures() {
-        if (this.props.selectedObjectRef === null) {
+        if (this.props.selectedObject === null) {
             return <Alert
                 type="info"
                 message={<p>Select an object to show its linked features...</p>}
@@ -281,8 +260,8 @@ export default class LinkedObjects extends React.Component<Props, State> {
         }
         return <Features
             termRef={this.props.termRef}
-            objectRef={this.props.selectedObjectRef}
-            key={this.props.selectedObjectRef} />;
+            object={this.props.selectedObject}
+            key={this.props.selectedObject.ref} />;
     }
 
     renderColumnHeading(title: string) {

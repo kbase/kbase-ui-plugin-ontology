@@ -4,14 +4,14 @@ import View from './view';
 import Loading from '../../../Loading';
 import { OntologyReference } from '../../../../types/ontology';
 import { AsyncProcess, AsyncProcessStatus } from '../../../../lib/processing';
-import OntologyModel, { Feature } from '../../lib/model';
+import OntologyModel, { Feature, RelatedObject } from '../../lib/model';
 import Alert from 'antd/lib/alert';
 
 export interface DataProps {
     token: string;
     config: AppConfig;
     termRef: OntologyReference;
-    objectRef: string;
+    object: RelatedObject;
 }
 
 interface SimpleError {
@@ -54,9 +54,10 @@ export default class Data extends React.Component<DataProps, DataState> {
         try {
             const { features, object, totalCount } = await client.getRelatedObjectFeatures({
                 ref: this.props.termRef,
-                objectRef: this.props.objectRef,
+                objectRef: this.props.object.ref,
                 offset: this.offset,
-                limit: this.limit
+                limit: this.limit,
+                featureCount: this.props.object.featureCount
             });
             this.setState({
                 process: {
@@ -90,7 +91,7 @@ export default class Data extends React.Component<DataProps, DataState> {
         return (
             <View
                 features={state.features}
-                objectRef={this.props.objectRef}
+                objectRef={this.props.object.ref}
             />
         );
     }
