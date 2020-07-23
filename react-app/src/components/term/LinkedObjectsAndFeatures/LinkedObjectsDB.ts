@@ -107,58 +107,58 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
         });
     }
 
-    async getFeatures(termRef: OntologyReference, objectRef: string, offset: number, limit: number) {
-        const client = new OntologyModel({
-            url: this.props.config.services.ServiceWizard.url,
-            relationEngineURL: this.props.config.services.RelationEngine.url,
-            workspaceURL: this.props.config.services.Workspace.url,
-            token: this.props.token,
-            ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
-        });
-        try {
-            this.set((state: LinkedObjectsDBState) => {
-                if (state.status !== DBStatus.LOADED) {
-                    return state;
-                }
-                return {
-                    ...state,
-                    status: DBStatus.RELOADING
-                };
-            });
+    // async getFeatures(termRef: OntologyReference, objectRef: string, offset: number, limit: number) {
+    //     const client = new OntologyModel({
+    //         url: this.props.config.services.ServiceWizard.url,
+    //         relationEngineURL: this.props.config.services.RelationEngine.url,
+    //         workspaceURL: this.props.config.services.Workspace.url,
+    //         token: this.props.token,
+    //         ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
+    //     });
+    //     try {
+    //         this.set((state: LinkedObjectsDBState) => {
+    //             if (state.status !== DBStatus.LOADED) {
+    //                 return state;
+    //             }
+    //             return {
+    //                 ...state,
+    //                 status: DBStatus.RELOADING
+    //             };
+    //         });
 
-            const linkedObjectFeatures = await client.getRelatedObjectFeatures({
-                ref: termRef,
-                objectRef,
-                // TODO: provided by table ui
-                offset,
-                limit
-            });
+    //         const linkedObjectFeatures = await client.getRelatedObjectFeatures({
+    //             ref: termRef,
+    //             objectRef,
+    //             // TODO: provided by table ui
+    //             offset,
+    //             limit
+    //         });
 
-            // do the call here when it is available
+    //         // do the call here when it is available
 
-            this.set((state: LinkedObjectsDBState) => {
-                if (state.status !== DBStatus.LOADED) {
-                    return state;
-                }
-                return {
-                    ...state,
-                    status: DBStatus.LOADED,
-                    selectedObject: linkedObjectFeatures.object,
-                    features: linkedObjectFeatures.features
-                };
-            });
-        } catch (ex) {
-            this.set((state: LinkedObjectsDBState) => {
-                return {
-                    status: DBStatus.ERROR,
-                    error: {
-                        code: 'not-found',
-                        source: 'LinkedObjectsDB.getLinkedObjects',
-                        message: ex.message
-                    }
-                };
-            });
-        }
-    }
+    //         this.set((state: LinkedObjectsDBState) => {
+    //             if (state.status !== DBStatus.LOADED) {
+    //                 return state;
+    //             }
+    //             return {
+    //                 ...state,
+    //                 status: DBStatus.LOADED,
+    //                 selectedObject: linkedObjectFeatures.object,
+    //                 features: linkedObjectFeatures.features
+    //             };
+    //         });
+    //     } catch (ex) {
+    //         this.set((state: LinkedObjectsDBState) => {
+    //             return {
+    //                 status: DBStatus.ERROR,
+    //                 error: {
+    //                     code: 'not-found',
+    //                     source: 'LinkedObjectsDB.getLinkedObjects',
+    //                     message: ex.message
+    //                 }
+    //             };
+    //         });
+    //     }
+    // }
 
 }

@@ -198,9 +198,9 @@ export interface GetAssociatedWSFeaturesParams {
     id: string,
     obj_ref: string;
     ns: Namespace,
-    ts: number,
-    offset: number,
-    limit: number;
+    ts?: number,
+    offset?: number,
+    limit?: number;
 }
 
 export interface RelatedWSFeature {
