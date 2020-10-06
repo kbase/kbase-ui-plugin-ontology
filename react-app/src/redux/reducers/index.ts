@@ -1,28 +1,46 @@
 import { Action, Reducer } from 'redux';
 import { baseReducer, BaseStoreState } from '@kbase/ui-components';
 import { StoreState } from '../store';
-import { AppActions, NavigateSuccess, NavigateError } from '../actions';
+import { AppActions, LoadDataError, LoadDataStart, LoadDataSuccess } from '../actions';
+import { AsyncProcessStatus } from '../../lib/processing';
 
-function navigateSuccess(state: StoreState, action: NavigateSuccess): StoreState {
+function loadDataStart(state: StoreState, action: LoadDataStart): StoreState {
     return {
         ...state,
-        // view: {
-        //     status: ViewStatus.LOADED,
-        //     relationEngineID: action.relationEngineID,
-        //     relationEngineNodeType: action.relationEngineNodeType,
-        //     viewType: action.viewType,
-        //     currentView: action.view
-        // }
-        navigation: action.navigation,
-        trigger: Date.now()
+        ontlologyPlugin: {
+            data: {
+                status: AsyncProcessStatus.NONE
+            }
+        }
     };
 }
 
-function navigateError(state: StoreState, action: NavigateError): StoreState {
+function loadDataSuccess(state: StoreState, action: LoadDataSuccess): StoreState {
     return {
         ...state,
+        ontlologyPlugin: {
+            data: {
+                status: AsyncProcessStatus.SUCCESS,
+                state: {
+                    sources: action.data.sources
+                }
+            }
 
-        // TODO: Need to add navigation error condition to the store...
+        }
+    };
+}
+
+
+function loadDataError(state: StoreState, action: LoadDataError): StoreState {
+    return {
+        ...state,
+        ontlologyPlugin: {
+            data: {
+                status: AsyncProcessStatus.ERROR,
+                error: action.error
+            }
+
+        }
     };
 }
 
@@ -44,12 +62,12 @@ const reducer: Reducer<StoreState | undefined, Action> = (state: StoreState | un
         return state;
     }
     switch (action.type) {
-        // case AppActions.NAVIGATE_START:
-        //     return navigateStart(state, action as NavigateStart);
-        case AppActions.NAVIGATE_SUCCESS:
-            return navigateSuccess(state, action as NavigateSuccess);
-        case AppActions.NAVIGATE_ERROR:
-            return navigateError(state, action as NavigateError);
+        case AppActions.LOAD_DATA_START:
+            return loadDataStart(state, action as LoadDataStart);
+        case AppActions.LOAD_DATA_SUCCESS:
+            return loadDataSuccess(state, action as LoadDataSuccess);
+        case AppActions.LOAD_DATA_ERROR:
+            return loadDataError(state, action as LoadDataError);
     }
     return state;
 };

@@ -6,7 +6,7 @@ package:
   type: iframe
 install:
   routes:
-    - path: ontology/term/:namespace/:term/:-timestamp?tab=:-tab
+    - path: ontology/term/:namespace/:id/:-timestamp?tab=:-tab
       view: term
       authorization: true
     - path: ontology/about
