@@ -1,5 +1,71 @@
 import { DynamicServiceClient } from "@kbase/ui-lib";
 
+const SOURCES: Array<Source> = [
+    {
+        id: 'go',
+        namespace: 'go_ontology',
+        data_url: 'http://release.geneontology.org/',
+        home_url: 'http://geneontology.org/',
+        logo_url: 'https://ci.kbase.us/ui-assets/images/third-party-data-sources/go/logo-248-64.png',
+        title: 'Gene Ontology',
+        fields: [{
+            id: 'synonyms',
+            type: 'array<synonym>',
+            label: 'Synonyms',
+            tooltip: '',
+            description: ''
+        }],
+        term_url: 'http://amigo.geneontology.org/amigo/term/{{term}}',
+        term_url_label: 'Gene Ontology AmiGO',
+    }, {
+        id: 'envo',
+        namespace: 'envo_ontology',
+        data_url: 'https://github.com/EnvironmentOntology/envo/releases',
+        home_url: 'http://www.obofoundry.org/ontology/envo.html',
+        logo_url: 'https://ci.kbase.us/ui-assets/images/third-party-data-sources/envo/logo-119-64.png',
+        term_url: 'http://purl.obolibrary.org/obo/{{term}}',
+        term_url_label: 'ENVO Ontology Ontobee',
+        title: 'GTDB Taxonomy',
+        fields: []
+    }
+];
+
+export interface SourceMap {
+    [id: string]: Source;
+}
+
+export type SourceFieldDataType = 'string' | 'number' | 'boolean' | 'array<string>' | 'array<synonym>' | 'sequence';
+
+export interface SourceFieldDefinition {
+    id: string;
+    type: SourceFieldDataType;
+    label: string;
+    tooltip: string;
+    description: string;
+}
+
+export interface Source {
+    id: string;
+    namespace: string;
+    data_url: string;
+    home_url: string;
+    logo_url: string;
+    term_url: string;
+    term_url_label: string;
+    title: string;
+    fields: Array<SourceFieldDefinition>;
+}
+
+// const SOURCES_MAP = SOURCES.reduce<SourceMap>((map, source) => {
+//     map[source.id] = source;
+//     return map;
+// }, {});
+
+const SOURCES_NAMESPACE_MAP = SOURCES.reduce<Map<string, Source>>((map, source) => {
+    map.set(source.namespace, source);
+    return map;
+}, new Map());
+
 export interface GetParentsParams {
     ns: Namespace;
     id: string;
@@ -100,7 +166,8 @@ export interface TermNode {
 export type EdgeType = 'is_a' | 'part_of' | 'has_part' | 'regulates' | 'positively_regulates' |
     'negatively_regulates' | 'occurs_in' | 'ends_during' | 'happens_during' | 'derives_from' |
     'has_output' | 'has_input' | 'output_of' | 'input_of' | 'determines' | 'surrounded_by' |
-    'has_quality' | 'adjacent_to' | 'overlaps' | 'composed_primarily_of';
+    'has_quality' | 'adjacent_to' | 'overlaps' | 'composed_primarily_of' | 'has_participant' |
+    'formed_as_result_of' | 'UNKNOWN';
 
 export interface TermEdge {
     id: string;
@@ -269,5 +336,14 @@ export default class OntologyAPIClient extends DynamicServiceClient {
             params
         ]);
         return result;
+    }
+
+    async get_sources(): Promise<Array<Source>> {
+        return Promise.resolve(SOURCES);
+    }
+
+    async get_source({ ns }: { ns: string; }): Promise<Source | null> {
+        const source = SOURCES_NAMESPACE_MAP.get(ns) || null;
+        return Promise.resolve(source);
     }
 }

@@ -5,13 +5,15 @@ import { AppBase, AuthGate } from '@kbase/ui-components';
 import './App.css';
 // import Dispatcher from './components/dispatcher';
 import ErrorBoundary from './ui/ErrorBoundary';
-import Dispatcher from './ui/dispatcher';
+import AppLoader from './components/AppLoader';
 
 const store = createReduxStore();
 
 interface AppProps { }
 
 interface AppState { }
+
+
 
 export default class App<AppProps, AppState> extends React.Component {
     render() {
@@ -20,9 +22,7 @@ export default class App<AppProps, AppState> extends React.Component {
                 <Provider store={store}>
                     <AppBase>
                         <AuthGate required={true}>
-                            <div className="App Col scrollable">
-                                <Dispatcher />
-                            </div>
+                            <AppLoader />
                         </AuthGate>
                     </AppBase>
                 </Provider>

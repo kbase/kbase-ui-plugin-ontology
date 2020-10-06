@@ -1,5 +1,4 @@
 import { PathSpec, QuerySpec, ParamsSpec, RouteSpec } from "./RouteSpec";
-import { options } from "marked";
 
 export interface RouteConfig {
     path: PathSpec | string;

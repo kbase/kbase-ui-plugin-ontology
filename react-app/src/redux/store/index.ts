@@ -1,4 +1,4 @@
-import { BaseStoreState, makeBaseStoreState } from '@kbase/ui-components';
+import { AppError, BaseStoreState, makeBaseStoreState } from '@kbase/ui-components';
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from '../reducers';
@@ -6,6 +6,8 @@ import reducer from '../reducers';
 import { OntologyReference } from '../../types/ontology';
 import { AsyncViewStatus, ViewType } from './view';
 import { View } from './views';
+import { Source } from '../../lib/OntologyAPIClient';
+import { AsyncProcess, AsyncProcessStatus } from '../../lib/processing';
 
 export type RelationEngineID = string;
 export enum RelationEngineNodeType {
@@ -47,12 +49,18 @@ export type NavigationSome = NavigationTerm | NavigationSearch;
 export type Navigation = NavigationNone | NavigationSome;
 // export type View = ViewBase<OntologyView> | null;
 
+export interface OntologyAppData {
+    sources: Array<Source>;
+}
 
 // STORE STATE type definition
 export interface StoreState extends BaseStoreState {
     navigation: Navigation;
     trigger: number;
     view: View;
+    ontlologyPlugin: {
+        data: AsyncProcess<OntologyAppData, AppError>;
+    };
 }
 
 // Store Construction
@@ -67,6 +75,11 @@ export function makeInitialStoreState(): StoreState {
         trigger: 0,
         view: {
             status: AsyncViewStatus.NONE
+        },
+        ontlologyPlugin: {
+            data: {
+                status: AsyncProcessStatus.NONE
+            }
         }
     };
 }

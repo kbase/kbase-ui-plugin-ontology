@@ -1,3 +1,5 @@
+import { Metadata } from "./metadata";
+
 export type OntologyNamespace =
     'envo_ontology' |
     'go_ontology';
@@ -68,7 +70,10 @@ export enum OntologyRelation {
     HAS_QUALITY = 'OntologyRelation$HasQuality',
     ADJACENT_TO = 'OntologyRelation$AdjacentTo',
     OVERLAPS = 'OntologyRelation$Overlaps',
-    COMPOSED_PRIMARILY_OF = 'OntologyRelation$ComposedPrimarilyOf'
+    COMPOSED_PRIMARILY_OF = 'OntologyRelation$ComposedPrimarilyOf',
+    HAS_PARTICIPANT = 'OntologyRelation$HasParticipant',
+    FORMED_AS_RESULT_OF = 'OntologyRelation$FormedAsResultOf',
+    UNKNOWN = 'OntologyRelation$Unknown'
 }
 
 // Brief term - for list displays
@@ -96,45 +101,55 @@ export interface OntologyTermRelatedBrief extends OntologyTermBrief {
 
 // Term - the full term info for detail
 
-export interface OntologyTermBase {
+export interface OntologyTermRecord {
     ref: OntologyReference;
     name: string;
     comments: Array<string>;
     definition: string;
     isObsolete: boolean;
+
+    metadata: Metadata;
 }
 
-export enum GOSynonymScope {
-    EXACT,
-    NARROW,
-    BROAD,
-    RELATED
-}
+// export interface OntologyTermBase {
+//     ref: OntologyReference;
+//     name: string;
+//     comments: Array<string>;
+//     definition: string;
+//     isObsolete: boolean;
+// }
 
-export type Synonym = string;
+// export enum GOSynonymScope {
+//     EXACT,
+//     NARROW,
+//     BROAD,
+//     RELATED
+// }
 
-export interface GOSynonyms {
-    exact: Array<Synonym>;
-    narrow: Array<Synonym>;
-    broad: Array<Synonym>;
-    related: Array<Synonym>;
-}
+// export type Synonym = string;
 
-export interface GOOntologyTerm extends OntologyTermBase {
-    type: OntologySource.GO;
-    synonyms: GOSynonyms;
-    goID: string;
-    namespace: string;
-}
+// export interface GOSynonyms {
+//     exact: Array<Synonym>;
+//     narrow: Array<Synonym>;
+//     broad: Array<Synonym>;
+//     related: Array<Synonym>;
+// }
 
-export interface ENVOOntologyTerm extends OntologyTermBase {
-    type: OntologySource.ENVO;
-    // synonyms: EnvoSynonyms;
-    envoID: string;
-    namespace: string;
-}
+// export interface GOOntologyTerm extends OntologyTermBase {
+//     type: OntologySource.GO;
+//     synonyms: GOSynonyms;
+//     goID: string;
+//     namespace: string;
+// }
 
-export type OntologyItem = GOOntologyTerm | ENVOOntologyTerm;
+// export interface ENVOOntologyTerm extends OntologyTermBase {
+//     type: OntologySource.ENVO;
+//     // synonyms: EnvoSynonyms;
+//     envoID: string;
+//     namespace: string;
+// }
+
+// export type OntologyItem = GOOntologyTerm | ENVOOntologyTerm;
 
 // export interface OntologyTermRelated extends OntologyTerm {
 //     related: OntologyRelation;
@@ -142,11 +157,11 @@ export type OntologyItem = GOOntologyTerm | ENVOOntologyTerm;
 
 export interface OntologyRelatedTerm {
     relation: OntologyRelation,
-    term: OntologyItem;
+    term: OntologyTermRecord;
 }
 
 export interface OntologyRelatedTerms {
-    term: OntologyItem,
+    term: OntologyTermRecord,
     terms: Array<OntologyRelatedTerm>;
 }
 

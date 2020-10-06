@@ -1,65 +1,94 @@
+import { AppError } from '@kbase/ui-components';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { StoreState, RelationEngineID, Navigation } from '../store';
+import OntologyAPIClient, { Source } from '../../lib/OntologyAPIClient';
+import { StoreState } from '../store';
 import { View } from '../store/views';
 
 export enum AppActions {
-    NAVIGATE = 'kbase-ui-plugin-landing-pages/navigate',
-    NAVIGATE_START = 'kbase-ui-plugin-landing-pages/navigate/start',
-    NAVIGATE_SUCCESS = 'kbase-ui-plugin-landing-pages/navigate/success',
-    NAVIGATE_ERROR = 'kbase-ui-plugin-landing-pages/navigate/error'
+    LOAD_DATA = 'OntologyLandingPage$LOAD_DATA',
+    LOAD_DATA_START = 'OntologyLandingPage$LOAD_DATA_START',
+    LOAD_DATA_SUCCESS = 'OntologyLandingPage$LOAD_DATA_SUCCESS',
+    LOAD_DATA_ERROR = 'OntologyLandingPage$LOAD_DATA_ERROR',
 }
 
-export interface Navigate extends Action<AppActions.NAVIGATE> {
-    type: AppActions.NAVIGATE;
-    relationEngineID: RelationEngineID;
+export interface LoadDataStart extends Action<AppActions.LOAD_DATA_START> {
+    type: AppActions.LOAD_DATA_START;
 }
-
-export interface NavigateStart extends Action<AppActions.NAVIGATE_START> {
-    type: AppActions.NAVIGATE_START;
-}
-
-export interface NavigateSuccess extends Action<AppActions.NAVIGATE_SUCCESS> {
-    type: AppActions.NAVIGATE_SUCCESS;
-    navigation: Navigation;
-}
-
-export interface NavigateError extends Action<AppActions.NAVIGATE_ERROR> {
-    type: AppActions.NAVIGATE_ERROR;
-    message: string;
-}
-
-export function navigateStart(): NavigateStart {
-    return {
-        type: AppActions.NAVIGATE_START
+export interface LoadDataSuccess extends Action<AppActions.LOAD_DATA_SUCCESS> {
+    type: AppActions.LOAD_DATA_SUCCESS;
+    data: {
+        sources: Array<Source>;
     };
 }
 
-export function navigateError(message: string): NavigateError {
+export interface LoadDataError extends Action<AppActions.LOAD_DATA_ERROR> {
+    type: AppActions.LOAD_DATA_ERROR;
+    error: AppError;
+}
+
+export function loadDataStart(): LoadDataStart {
     return {
-        type: AppActions.NAVIGATE_ERROR,
-        message
+        type: AppActions.LOAD_DATA_START
     };
 }
 
-export function navigateSuccess(
-    navigation: Navigation
-): NavigateSuccess {
+export function loadDataSuccess(sources: Array<Source>): LoadDataSuccess {
     return {
-        type: AppActions.NAVIGATE_SUCCESS,
-        navigation
+        type: AppActions.LOAD_DATA_SUCCESS,
+        data: { sources }
     };
 }
 
-export function navigate(navigation: Navigation) {
+export function loadDataError(code: string, message: string): LoadDataError {
+    return {
+        type: AppActions.LOAD_DATA_ERROR,
+        error: {
+            code, message
+        }
+    };
+}
+
+export function loadData() {
     return async (dispatch: ThunkDispatch<StoreState, void, Action>, getState: () => StoreState) => {
-        dispatch(navigateStart());
+        dispatch(loadDataStart());
+
+        const {
+            auth: { userAuthorization },
+            app: {
+                config: {
+                    dynamicServices: {
+                        OntologyAPI: {
+                            version
+                        }
+                    },
+                    services: {
+                        ServiceWizard: {
+                            url
+                        }
+                    }
+                }
+            }
+        } = getState();
+
+        // Auth integration.
+
+        if (!userAuthorization) {
+            throw new Error('No user authorization');
+        }
+        const token = userAuthorization.token;
+
+        const client = new OntologyAPIClient({
+            token, url, version
+        });
+
+        const sources = await client.get_sources();
 
         try {
-            dispatch(navigateSuccess(navigation));
+            dispatch(loadDataSuccess(sources));
         } catch (ex) {
             console.error('ERROR', ex);
-            dispatch(navigateError(ex.message));
+            dispatch(loadDataError('loading-data', ex.message));
         }
 
     };
