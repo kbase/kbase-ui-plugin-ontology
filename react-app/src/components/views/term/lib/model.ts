@@ -143,139 +143,18 @@ export interface GetAncestorGraphResult {
     termsGraph: TermsGraph;
 }
 
-/*
-  IS_A = 'OntologyRelation$is_a',
-    PART_OF = 'OntologyRelation$part_of',
-    HAS_PART = 'OntologyRelation$has_part',
-    REGULATES = 'OntologyRelation$regulates',
-    POSITIVELY_REGULATES = 'OntologyRelation$positivelyRegulates',
-    NEGATIVELY_REGULATES = 'OntologyRelation$negativelyRegulates',
-    OCCURS_IN = 'OntologyRelation$occursIn',
-    ENDS_DURING = 'OntologyRelation$endsDuring',
-    HAPPENS_DURING = 'OntologyRelation$happensDuring'
-*/
-
 export function stringToTermRelation(relationString: EdgeType): OntologyRelation {
-    switch (relationString) {
-        case 'is_a':
-            return OntologyRelation.IS_A;
-        case 'part_of':
-            return OntologyRelation.PART_OF;
-        case 'has_part':
-            return OntologyRelation.HAS_PART;
-        case 'regulates':
-            return OntologyRelation.REGULATES;
-        case 'positively_regulates':
-            return OntologyRelation.POSITIVELY_REGULATES;
-        case 'negatively_regulates':
-            return OntologyRelation.NEGATIVELY_REGULATES;
-        case 'occurs_in':
-            return OntologyRelation.OCCURS_IN;
-        case 'ends_during':
-            return OntologyRelation.ENDS_DURING;
-        case 'happens_during':
-            return OntologyRelation.HAPPENS_DURING;
-        case 'derives_from':
-            return OntologyRelation.DERIVES_FROM;
-        case 'has_output':
-            return OntologyRelation.HAS_OUTPUT;
-        case 'has_input':
-            return OntologyRelation.HAS_INPUT;
-        case 'input_of':
-            return OntologyRelation.INPUT_OF;
-        case 'output_of':
-            return OntologyRelation.OUTPUT_OF;
-        case 'determines':
-            return OntologyRelation.DETERMINES;
-        case 'surrounded_by':
-            return OntologyRelation.SURROUNDED_BY;
-        case 'has_quality':
-            return OntologyRelation.HAS_QUALITY;
-        case 'adjacent_to':
-            return OntologyRelation.ADJACENT_TO;
-        case 'overlaps':
-            return OntologyRelation.OVERLAPS;
-        case 'composed_primarily_of':
-            return OntologyRelation.COMPOSED_PRIMARILY_OF;
-        case 'has_participant':
-            return OntologyRelation.HAS_PARTICIPANT;
-        case 'formed_as_result_of':
-            return OntologyRelation.FORMED_AS_RESULT_OF;
-        default:
-            console.warn(`Unknown Relation ${relationString}, defaulting to UNKNOWN`);
-            return OntologyRelation.UNKNOWN;
+    return relationString;
 
-        // throw new Error('Unknown relation: ' + relationString);
-    }
 }
 
-export function relationToString(relation: OntologyRelation): EdgeType {
-    switch (relation) {
-        case OntologyRelation.IS_A:
-            return 'is_a';
-        case OntologyRelation.PART_OF:
-            return 'part_of';
-        case OntologyRelation.HAS_PART:
-            return 'has_part';
-        case OntologyRelation.REGULATES:
-            return 'regulates';
-        case OntologyRelation.POSITIVELY_REGULATES:
-            return 'positively_regulates';
-        case OntologyRelation.NEGATIVELY_REGULATES:
-            return 'negatively_regulates';
-        case OntologyRelation.OCCURS_IN:
-            return 'occurs_in';
-        case OntologyRelation.ENDS_DURING:
-            return 'ends_during';
-        case OntologyRelation.HAPPENS_DURING:
-            return 'happens_during';
-        case OntologyRelation.DERIVES_FROM:
-            return 'derives_from';
-        case OntologyRelation.HAS_OUTPUT:
-            return 'has_output';
-        case OntologyRelation.HAS_INPUT:
-            return 'has_input';
-        case OntologyRelation.OUTPUT_OF:
-            return 'output_of';
-        case OntologyRelation.INPUT_OF:
-            return 'input_of';
-        case OntologyRelation.DETERMINES:
-            return 'determines';
-        case OntologyRelation.SURROUNDED_BY:
-            return 'surrounded_by';
-        case OntologyRelation.HAS_QUALITY:
-            return 'has_quality';
-        case OntologyRelation.ADJACENT_TO:
-            return 'adjacent_to';
-        case OntologyRelation.OVERLAPS:
-            return 'overlaps';
-        case OntologyRelation.COMPOSED_PRIMARILY_OF:
-            return 'composed_primarily_of';
-        case OntologyRelation.HAS_PARTICIPANT:
-            return 'has_participant';
-        case OntologyRelation.FORMED_AS_RESULT_OF:
-            return 'formed_as_result_of';
-        case OntologyRelation.UNKNOWN:
-            return 'UNKNOWN';
-
-    }
+export function relationToString(relation: OntologyRelation): string {
+    return relation;
 }
-
-
-
-// export function ontologyReferenceToNamespace(ref: OntologyReference): OntologyNamespace {
-//     switch (ref.namespace) {
-//         case 'go_ontology':
-//             return 'go_ontology';
-//         case 'envo_ontology':
-//             return 'envo_ontology';
-//     }
-// }
 
 export interface OntologyModelParams {
     token: string;
     url: string;
-    relationEngineURL: string;
     workspaceURL: string;
     ontologyAPIConfig: DynamicServiceConfig;
 }
@@ -312,21 +191,13 @@ export default class OntologyModel {
     ontologyAPI: OntologyAPIClient;
     token: string;
     url: string;
-    relationEngineURL: string;
     workspaceURL: string;
     ontologyAPIConfig: DynamicServiceConfig;
-    constructor({ token, url, ontologyAPIConfig, relationEngineURL, workspaceURL }: OntologyModelParams) {
+    constructor({ token, url, ontologyAPIConfig, workspaceURL }: OntologyModelParams) {
         this.token = token;
         this.url = url;
-        this.relationEngineURL = relationEngineURL;
         this.workspaceURL = workspaceURL;
         this.ontologyAPIConfig = ontologyAPIConfig;
-        // this.sources = sources;
-        // this.sourcesMap = sources.reduce<Map<string, Source>>((map, source) => {
-        //     map.set(source.namespace, source);
-        //     return map;
-        // }, new Map());
-
         this.ontologyAPI = new OntologyAPIClient({
             token,
             url,
@@ -702,21 +573,4 @@ export default class OntologyModel {
         return this.ontologyAPI.get_source({ ns });
     }
 
-    // async getDataSourceInfo(namespace: Namespace): Promise<DataSourceInfo> {
-    //     const client = new RelationEngineAPIClient({
-    //         token: this.token,
-    //         url: this.relationEngineURL,
-    //         timeout: REQUEST_TIMEOUT
-    //     });
-
-    //     const { data_source: dataSource } = await client.data_source(namespace);
-
-    //     return {
-    //         source: stringToRelationEngineDataSource(dataSource.name),
-    //         data_url: dataSource.data_url,
-    //         home_url: dataSource.home_url,
-    //         logo_url: dataSource.logo_url,
-    //         title: dataSource.title
-    //     };
-    // }
 }

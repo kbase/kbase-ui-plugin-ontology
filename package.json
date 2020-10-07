@@ -1,7 +1,7 @@
 {
-    "name": "kbase-ui-plugin-re-landing-pages",
+    "name": "kbase-ui-plugin-ontology",
     "version": "1.0.0",
-    "description": "A kbase-ui plugin providing landing pages for the Relation Engine",
+    "description": "A kbase-ui plugin providing landing pages for the RE Ontoloeis",
     "main": "index.js",
     "devDependencies": {
         "bluebird": "3.7.2",
@@ -15,12 +15,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/kbase/kbase-ui-plugin-re-landing-pages.git"
+        "url": "git+https://github.com/kbase/kbase-ui-plugin-ontology.git"
     },
     "author": "KBase Developers",
     "license": "SEE LICENSE IN LICENSE.md",
     "bugs": {
-        "url": "https://github.com/kbase/kbase-ui-plugin-re-landing-pages/issues"
+        "url": "https://github.com/kbase/kbase-ui-plugin-ontology/issues"
     },
-    "homepage": "https://github.com/kbase/kbase-ui-plugin-re-landing-pages#readme"
+    "homepage": "https://github.com/kbase/kbase-ui-plugin-ontology#readme"
 }

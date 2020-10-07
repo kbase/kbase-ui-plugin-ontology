@@ -120,49 +120,6 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
     }
 
 
-    // TODO: restore through METADATA
-    // renderAllSynonyms() {
-    //     const item = this.props.item;
-    //     if (item.type === OntologySource.ENVO) {
-    //         return <i>Synonyms not available for ENVO Ontology</i>;
-    //     }
-    //     return (
-    //         <div className="InfoTable DetailTable">
-    //             <div className="InfoTable-row">
-    //                 <div className="InfoTable-labelCol">
-    //                     exact
-    //                     </div>
-    //                 <div className="InfoTable-dataCol">
-    //                     {this.renderSynonyms(item.synonyms.exact)}
-    //                 </div>
-    //             </div>
-    //             <div className="InfoTable-row">
-    //                 <div className="InfoTable-labelCol">
-    //                     narrow
-    //                             </div>
-    //                 <div className="InfoTable-dataCol">
-    //                     {this.renderSynonyms(item.synonyms.narrow)}
-    //                 </div>
-    //             </div>
-    //             <div className="InfoTable-row">
-    //                 <div className="InfoTable-labelCol">
-    //                     broad
-    //                             </div>
-    //                 <div className="InfoTable-dataCol">
-    //                     {this.renderSynonyms(item.synonyms.broad)}
-    //                 </div>
-    //             </div>
-    //             <div className="InfoTable-row">
-    //                 <div className="InfoTable-labelCol">
-    //                     related
-    //                             </div>
-    //                 <div className="InfoTable-dataCol">
-    //                     {this.renderSynonyms(item.synonyms.related)}
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
     renderGraph() {
         return (
             <AncestorGraph termRef={this.props.item.ref} />
@@ -172,9 +129,6 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
         return (
             <LinkedObjects termRef={this.props.item.ref} />
         );
-        // return (
-        //     <LinkedObjects linkedObjects={[]} />
-        // );
     }
     renderLinkedObjectsAndFeatures() {
         return (
@@ -187,8 +141,6 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
             termRef={this.props.item.ref}
         />;
     }
-
-
 
     render() {
         return <Tabs

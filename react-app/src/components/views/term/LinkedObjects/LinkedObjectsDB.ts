@@ -29,7 +29,6 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
     async getLinkedObjects(termRef: OntologyReference, offset: number, limit: number) {
         const client = new OntologyModel({
             url: this.props.config.services.ServiceWizard.url,
-            relationEngineURL: this.props.config.services.RelationEngine.url,
             workspaceURL: this.props.config.services.Workspace.url,
             token: this.props.token,
             ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI

@@ -1,5 +1,5 @@
 import React from 'react';
-import { OntologyReference, OntologyTermBrief, OntologyRelation, OntologySource, OntologyTermRelatedBrief } from '../../../types/ontology';
+import { OntologyReference, OntologyTermBrief } from '../../../types/ontology';
 import './OntologyList.css';
 import Term from './OntologyTerm';
 import { Empty } from 'antd';
@@ -25,12 +25,6 @@ export default class OntologyList extends React.Component<Props, State> {
     renderItemsPlain() {
         return this.props.terms.map((term) => {
             const isActive = this.props.selectedTermRef === term.ref;
-            // const tempTerm: OntologyTermRelatedBrief = {
-            //     ref: term.ref,
-            //     name: 'hello',
-            //     relation: OntologyRelation.IS_A,
-            //     goID: 'hi'
-            // }
             return (
                 <Term
                     term={term}

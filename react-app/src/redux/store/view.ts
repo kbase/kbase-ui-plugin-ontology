@@ -69,12 +69,6 @@ export enum ViewType {
     SEARCH
 }
 
-// export interface ViewBase<S> {
-//     type: ViewType;
-//     ref: RelationEngineReference;
-//     state: AsyncView<TopLevelViewState, UIError>
-// }
-
 export interface ViewBase<S> {
     type: ViewType;
     state: AsyncView<S, UIError>;

@@ -35,7 +35,6 @@ export default class ParentsDB extends DB<ParentsDBState> {
         const client = new OntologyModel({
             token: this.props.token,
             url: this.props.config.services.ServiceWizard.url,
-            relationEngineURL: this.props.config.services.RelationEngine.url,
             workspaceURL: this.props.config.services.Workspace.url,
             ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
         });
