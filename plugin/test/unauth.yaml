@@ -1,10 +1,10 @@
 ---
-description: Accessing Relation Engine Landing Pages without authentication
+description: Accessing Ontology Landing Pages without authentication
 cases:
   - description: should get the signin page with the path displayed
     tasks:
       - action: navigate
-        path: review
+        path: ontology/term/namespace/id
       - subtask: plugin
       - wait: forText
         selector:
@@ -14,4 +14,4 @@ cases:
             value: login-view
           - type: field
             value: requested-path
-        text: review
+        text: ontology/term/namespace/id
