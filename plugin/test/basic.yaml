@@ -1,13 +1,13 @@
 ---
-description: Accessing Relation Engine Landing Pages with authentication
+description: Accessing Ontology Plugin
 cases:
-  - description: should load the re-landing-pages plugin
+  - description: should load the ontology plugin
     tasks:
       - subtask: login
       - action: navigate
-        path: review
+        path: ontology/about
       - subtask: plugin
       - wait: forElement
         selector:
           - type: plugin
-            value: re-landing-pages
+            value: ontology
