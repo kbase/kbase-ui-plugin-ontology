@@ -73,7 +73,7 @@ export interface GetParentsParams {
 }
 
 // TODO: this should not live here, or should just be a string?
-export type Namespace = 'go_ontology' | 'envo_ontology';
+export type Namespace = string;
 
 export interface GetParentsResult {
     results: Array<RelatedTerm>;
@@ -142,32 +142,8 @@ export interface TermNode {
     release_expired: number;
 }
 
-// aka relation
-/*
- case 'is_a':
-            return OntologyRelation.IS_A;
-        case 'part_of':
-            return OntologyRelation.PART_OF;
-        case 'has_part':
-            return OntologyRelation.HAS_PART;
-        case 'regulates':
-            return OntologyRelation.REGULATES;
-        case 'positively_regulates':
-            return OntologyRelation.POSITIVELY_REGULATES;
-        case 'negatively_regulates':
-            return OntologyRelation.NEGATIVELY_REGULATES;
-        case 'occurs_in':
-            return OntologyRelation.OCCURS_IN;
-        case 'ends_during':
-            return OntologyRelation.ENDS_DURING;
-        case 'happens_during':
-            return OntologyRelation.HAPPENS_DURING;
-*/
-export type EdgeType = 'is_a' | 'part_of' | 'has_part' | 'regulates' | 'positively_regulates' |
-    'negatively_regulates' | 'occurs_in' | 'ends_during' | 'happens_during' | 'derives_from' |
-    'has_output' | 'has_input' | 'output_of' | 'input_of' | 'determines' | 'surrounded_by' |
-    'has_quality' | 'adjacent_to' | 'overlaps' | 'composed_primarily_of' | 'has_participant' |
-    'formed_as_result_of' | 'UNKNOWN';
+
+export type EdgeType = string;
 
 export interface TermEdge {
     id: string;
@@ -186,15 +162,6 @@ export interface RelatedTerm {
     term: TermNode;
     edge: TermEdge;
 }
-
-// export interface TermBrief {
-//     ns: Namespace;
-//     id: string;
-//     ts: number;
-//     name: string;
-//     scientific_name: string;
-//     relation: string;
-// }
 
 export type TermBrief = TermNode;
 

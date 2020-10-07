@@ -33,20 +33,6 @@ function mapStateToProps(state: StoreState, props: OwnProps): StateProps {
 
 function mapDispatchToProps(dispatch: Dispatch<Action>, props: OwnProps): DispatchProps {
     return {
-        // navigate: (ref: OntologyReference) => {
-        //     // const relationEngineID = [
-        //     //     ontologyReferenceToNamespace(ref),
-        //     //     ref.id,
-        //     //     String(ref.timestamp)
-        //     // ].join('/');
-        //     const navigation: Navigation = {
-        //         view: 'term',
-        //         params: {
-
-        //         }
-        //     };
-        //     dispatch(navigate(navigation) as any);
-        // },
         setTitle: (title: string) => {
             dispatch(sendTitle(title) as any);
         }
