@@ -29,7 +29,7 @@ export default class TermLink extends React.Component<Props, State> {
 
         const tooltip = (
             <React.Fragment>
-                <p>Link to the {this.props.source.term_url_label} page for this term.</p>
+                <p>Link to the {this.props.source.item_link?.label} page for this term.</p>
                 {windowMessage}
             </React.Fragment>
         );
@@ -44,8 +44,11 @@ export default class TermLink extends React.Component<Props, State> {
     }
 
     render() {
+        if (this.props.source.item_link === null) {
+            return;
+        }
         const item = this.props.item;
-        const template = this.props.source.term_url;
+        const template = this.props.source.item_link.template;
         const context = new Map();
         context.set('term', item.ref.term);
 

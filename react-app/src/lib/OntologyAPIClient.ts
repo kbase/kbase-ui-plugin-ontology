@@ -1,34 +1,9 @@
 import { DynamicServiceClient } from "@kbase/ui-lib";
+import sourcesData from './sources.json';
 
-const SOURCES: Array<Source> = [
-    {
-        id: 'go',
-        namespace: 'go_ontology',
-        data_url: 'http://release.geneontology.org/',
-        home_url: 'http://geneontology.org/',
-        logo_url: 'https://ci.kbase.us/ui-assets/images/third-party-data-sources/go/logo-248-64.png',
-        title: 'Gene Ontology',
-        fields: [{
-            id: 'synonyms',
-            type: 'array<synonym>',
-            label: 'Synonyms',
-            tooltip: '',
-            description: ''
-        }],
-        term_url: 'http://amigo.geneontology.org/amigo/term/{{term}}',
-        term_url_label: 'Gene Ontology AmiGO',
-    }, {
-        id: 'envo',
-        namespace: 'envo_ontology',
-        data_url: 'https://github.com/EnvironmentOntology/envo/releases',
-        home_url: 'http://www.obofoundry.org/ontology/envo.html',
-        logo_url: 'https://ci.kbase.us/ui-assets/images/third-party-data-sources/envo/logo-119-64.png',
-        term_url: 'http://purl.obolibrary.org/obo/{{term}}',
-        term_url_label: 'ENVO Ontology Ontobee',
-        title: 'GTDB Taxonomy',
-        fields: []
-    }
-];
+const SOURCES = sourcesData as Array<Source>;
+
+console.log(JSON.stringify(SOURCES));
 
 export interface SourceMap {
     [id: string]: Source;
@@ -50,9 +25,14 @@ export interface Source {
     data_url: string;
     home_url: string;
     logo_url: string;
-    term_url: string;
-    term_url_label: string;
+    license_url: string;
+    item_link: {
+        template: string;
+        label: string;
+    } | null;
+    citation: string;
     title: string;
+    short_title: string;
     fields: Array<SourceFieldDefinition>;
 }
 

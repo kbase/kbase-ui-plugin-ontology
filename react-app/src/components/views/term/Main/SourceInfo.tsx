@@ -1,15 +1,50 @@
 import React from 'react';
 import './SourceInfo.css';
-import { Tooltip } from 'antd';
+import { Button, Modal, Tooltip } from 'antd';
 import { Source } from '../../../../lib/OntologyAPIClient';
+import marked from 'marked';
 
 export interface SourceInfoProps {
     source: Source;
 }
 
-interface SourceInfoState { }
+interface SourceInfoState {
+    showCitation: boolean;
+}
 
 export default class SourceInfo extends React.Component<SourceInfoProps, SourceInfoState> {
+    constructor(props: SourceInfoProps) {
+        super(props);
+        this.state = {
+            showCitation: false
+        };
+    }
+    renderCitation() {
+        const citation = marked(this.props.source.citation);
+        const footer = <div style={{ textAlign: 'center' }}>
+            <Button onClick={() => { this.setState({ showCitation: false }); }}>
+                close
+            </Button>
+        </div>;
+        return <div>
+            <Button
+                type="default"
+                size="small"
+                style={{ margin: 0 }}
+                onClick={(e) => {
+                    this.setState({ showCitation: true });
+                }}>
+                show
+            </Button>
+            <Modal title={`${this.props.source.short_title} Citation`}
+                visible={this.state.showCitation}
+                closable={true}
+                footer={footer}
+            >
+                <div dangerouslySetInnerHTML={{ __html: citation }} />
+            </Modal>
+        </div>;
+    }
     renderSourceInfo() {
         return (
             <div className="Row">
@@ -48,6 +83,14 @@ export default class SourceInfo extends React.Component<SourceInfoProps, SourceI
                                         {this.props.source.data_url}
                                     </a>
                                 </Tooltip>
+                            </div>
+                        </div>
+                        <div className="InfoTable-row">
+                            <div className="InfoTable-labelCol" style={{ width: '5em' }}>
+                                Citation
+                            </div>
+                            <div className="InfoTable-dataCol">
+                                {this.renderCitation()}
                             </div>
                         </div>
                     </div>
