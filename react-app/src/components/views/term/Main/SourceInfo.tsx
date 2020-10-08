@@ -19,6 +19,14 @@ export default class SourceInfo extends React.Component<SourceInfoProps, SourceI
             showCitation: false
         };
     }
+    renderLicense() {
+        if (this.props.source.license === null) {
+            return <Button disabled={true} size="small" style={{ fontStyle: 'italic' }}>no license</Button>;
+        }
+        return <Tooltip title={this.props.source.license.label}>
+            <Button href={this.props.source.license.url} size="small" target="_blank">License</Button>
+        </Tooltip>;
+    }
     renderCitation() {
         const citation = marked(this.props.source.citation);
         const footer = <div style={{ textAlign: 'center' }}>
@@ -26,7 +34,7 @@ export default class SourceInfo extends React.Component<SourceInfoProps, SourceI
                 close
             </Button>
         </div>;
-        return <div>
+        return <span>
             <Button
                 type="default"
                 size="small"
@@ -34,7 +42,7 @@ export default class SourceInfo extends React.Component<SourceInfoProps, SourceI
                 onClick={(e) => {
                     this.setState({ showCitation: true });
                 }}>
-                show
+                Citation
             </Button>
             <Modal title={`${this.props.source.short_title} Citation`}
                 visible={this.state.showCitation}
@@ -43,7 +51,7 @@ export default class SourceInfo extends React.Component<SourceInfoProps, SourceI
             >
                 <div dangerouslySetInnerHTML={{ __html: citation }} />
             </Modal>
-        </div>;
+        </span>;
     }
     renderSourceInfo() {
         return (
@@ -87,10 +95,12 @@ export default class SourceInfo extends React.Component<SourceInfoProps, SourceI
                         </div>
                         <div className="InfoTable-row">
                             <div className="InfoTable-labelCol" style={{ width: '5em' }}>
-                                Citation
+
                             </div>
                             <div className="InfoTable-dataCol">
                                 {this.renderCitation()}
+                                {' '}
+                                {this.renderLicense()}
                             </div>
                         </div>
                     </div>

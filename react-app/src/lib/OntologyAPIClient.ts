@@ -23,7 +23,10 @@ export interface Source {
     data_url: string;
     home_url: string;
     logo_url: string;
-    license_url: string;
+    license: {
+        url: string;
+        label: string;
+    } | null;
     item_link: {
         template: string;
         label: string;
