@@ -7,7 +7,10 @@
         "data_url": "http://release.geneontology.org/",
         "home_url": "http://geneontology.org/",
         "logo_url": "https://ci.kbase.us/ui-assets/images/third-party-data-sources/go/logo-248-64.png",
-        "license_url": "",
+        "license": {
+            "url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+            "label": "Creative Commons Attribution 4.0 Unported License"
+        },
         "citation": "Ashburner et al. Gene ontology: tool for the unification of biology. Nat Genet. May 2000;25(1):25-9. [[abstract](https://www.ncbi.nlm.nih.gov/pubmed/10802651) | [full text](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3037419/)]\n\nThe Gene Ontology Consortium. The Gene Ontology Resource: 20 years and still GOing strong. Nucleic Acids Res. Jan 2019;47(D1):D330-D338. [[abstract](https://www.ncbi.nlm.nih.gov/pubmed/30395331) | [full text](https://academic.oup.com/nar/article/47/D1/D330/5160994)]",
         "item_link": {
             "template": "http://amigo.geneontology.org/amigo/term/{{term}}",
@@ -31,7 +34,10 @@
         "data_url": "https://github.com/EnvironmentOntology/envo/releases",
         "home_url": "http://www.obofoundry.org/ontology/envo.html",
         "logo_url": "https://ci.kbase.us/ui-assets/images/third-party-data-sources/envo/logo-119-64.png",
-        "license_url": "",
+        "license": {
+            "url": "https://creativecommons.org/licenses/by/3.0/",
+            "label": "Attribution 3.0 Unported (CC BY 3.0)"
+        },
         "citation": "Buttigieg, P. L., Morrison, N., Smith, B., Mungall, C. J., & Lewis, S. E. (2013). The environment ontology: contextualising biological and biomedical entities. Journal of Biomedical Semantics, 4(1), 43. [doi:10.1186/2041-1480-4-43](http://www.dx.doi.org/10.1186/2041-1480-4-43)\n        \nButtigieg, P. L., Pafilis, E., Lewis, S. E., Schildhauer, M. P., Walls, R. L., & Mungall, C. J. (2016). The environment ontology in 2016: bridging domains with increased scope, semantic density, and interoperation. Journal of Biomedical Semantics, 7(1), 57. [doi:10.1186/s13326-016-0097-6](https://doi.org/10.1186/s13326-016-0097-6)\n        ",
         "item_link": {
             "template": "http://purl.obolibrary.org/obo/{{term}}",
