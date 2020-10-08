@@ -3,8 +3,6 @@ import sourcesData from './sources.json';
 
 const SOURCES = sourcesData as Array<Source>;
 
-console.log(JSON.stringify(SOURCES));
-
 export interface SourceMap {
     [id: string]: Source;
 }
