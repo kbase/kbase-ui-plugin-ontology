@@ -4,14 +4,15 @@ package:
   name: ontology
   description: A plugin providing landing page support for ontology via the relation engine
   type: iframe
-install:
-  routes:
-    - path: ontology/term/:namespace/:id/:-timestamp?tab=:-tab
-      view: term
-      authorization: true
-    - path: ontology/about
-      view: about
-      authorization: true
-    - path: ontology/help
-      view: help
-      authorization: true
+services:
+  route:
+    routes:
+      - path: ontology/term/:namespace/:id/:-timestamp?tab=:-tab
+        view: term
+        authorization: true
+      - path: ontology/about
+        view: about
+        authorization: true
+      - path: ontology/help
+        view: help
+        authorization: true
