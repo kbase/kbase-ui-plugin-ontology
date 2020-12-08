@@ -6,11 +6,11 @@ export enum AsyncProcessStatus {
     REPROCESSING = 'REPROCESSING'
 }
 
-export interface AsyncProcessNone<> {
+export interface AsyncProcessNone {
     status: AsyncProcessStatus.NONE;
 }
 
-export interface AsyncProcessProcessing<> {
+export interface AsyncProcessProcessing {
     status: AsyncProcessStatus.PROCESSING;
 }
 
