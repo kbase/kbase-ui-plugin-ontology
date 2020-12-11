@@ -45,7 +45,7 @@ export default class Data extends React.Component<Props, State> {
     }
 
     renderLoading() {
-        return <Loading message="Loading linked data..." />;
+        return <Loading message="Loading linked genomes..." />;
     }
 
     renderError(db: DBStateError) {

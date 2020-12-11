@@ -1,0 +1,100 @@
+/* .Section {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+}
+
+.Section:nth-child(1) {
+    margin-top: 0;
+}
+
+.Section>div:nth-child(1),
+.Section>div:nth-child(3) {
+    flex: 1 1 0px;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.5);
+}
+
+.Section>div:nth-child(2) {
+    flex: 0 0 auto;
+    border-left: 1px solid rgba(150, 150, 150, 0.5);
+    border-top: 1px solid rgba(150, 150, 150, 0.5);
+    border-right: 1px solid rgba(150, 150, 150, 0.5);
+    padding: 6px 18px;
+    border-radius: 6px 6px 0 0;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(76, 137, 38, 1);
+} */
+
+.Section-fullheight,
+.Section {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 6px 0;
+    min-height: 0;
+}
+
+.Section-fullheight {
+    flex: 1 1 0px;
+}
+
+.Section-fullheight,
+.Section:first-child {
+    margin-top: 0;
+}
+
+.Section-header {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    border-bottom: 2px solid rgba(76, 137, 38, 0.2);
+}
+
+.Section-title {
+    text-transform: uppercase;
+}
+
+.Section-header>div:nth-child(1) {
+    flex: 0 0 auto;
+    /* border-left: 1px solid rgba(150, 150, 150, 0.5);
+    border-top: 1px solid rgba(150, 150, 150, 0.5);
+    border-right: 1px solid rgba(150, 150, 150, 0.5); */
+    /* border: 1px solid rgba(200, 200, 200, 0.5); */
+    /* padding: 6px 18px; */
+    margin-top: 0;
+    /* margin-bottom: -1px; */
+    overflow: visible;
+    padding: 2px 6px 2px 0;
+    border-radius: 4px 4px 0 0;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(76, 137, 38, 1);
+    /* border-bottom: 2px solid rgba(200, 200, 200, 0.5); */
+}
+
+.Section-header>div:nth-child(2) {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 6px;
+    /* border-bottom: 1px solid rgba(150, 150, 150, 0.5); */
+    /* border-bottom: 2px solid rgba(200, 200, 200, 0.5); */
+}
+
+.Section-header>div:nth-child(2)>hr {
+    width: 100%;
+    /* color: rgba(200, 20, 200, 0.5); */
+    border-top: 1px solid rgba(200, 200, 200, 0.5);
+    border-bottom: none;
+
+}
+
+.Section-body {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}

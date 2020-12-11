@@ -56,7 +56,7 @@ export default class Data extends React.Component<DataProps, DataState> {
                 objectRef: this.props.object.ref,
                 offset: this.offset,
                 limit: this.limit,
-                featureCount: this.props.object.featureCount
+                featureCount: this.props.object.linkedFeatureCount
             });
             this.setState({
                 process: {

@@ -97,7 +97,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                     </div>;
                 }}
                 sorter={(a: RelatedObject, b: RelatedObject) => {
-                    return a.featureCount - b.featureCount;
+                    return a.linkedFeatureCount - b.linkedFeatureCount;
                 }}
             />
 
@@ -130,7 +130,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
     renderNone() {
         return (
             <Alert type="info"
-                message="No Linked Data"
+                message="No Linked Genomes"
                 description={
                     <p>
                         No data objects have yet been associated with this term
@@ -152,7 +152,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
 
         // return <Empty
         //     image={Empty.PRESENTED_IMAGE_SIMPLE}
-        //     description="Linked Data currently disabled - working on a replacement" >
+        //     description="Linked Genomes currently disabled - working on a replacement" >
         // </Empty>;
     }
 }

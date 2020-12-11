@@ -118,7 +118,6 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
         </div>;
     }
 
-
     render() {
         if (this.props.objectInfo) {
             return this.renderObjectInfo(this.props.objectInfo);

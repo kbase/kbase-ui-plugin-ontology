@@ -158,7 +158,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
             <Tabs.TabPane tab="Children" key="children" forceRender={false}>
                 {this.renderChildren()}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Linked Data" key="linkedObjects" forceRender={false}>
+            <Tabs.TabPane tab="Linked Genomes" key="linkedObjects" forceRender={false}>
                 {this.renderLinkedObjectsAndFeatures()}
             </Tabs.TabPane>
         </Tabs>;

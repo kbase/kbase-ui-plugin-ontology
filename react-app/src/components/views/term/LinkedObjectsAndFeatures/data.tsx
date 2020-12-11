@@ -53,7 +53,7 @@ export default class Data extends React.Component<Props, State> {
     }
 
     renderLoading() {
-        return <Loading message="Loading linked data..." />;
+        return <Loading message="Loading linked genomes..." />;
     }
 
     renderError(db: DBStateError) {
@@ -73,7 +73,7 @@ export default class Data extends React.Component<Props, State> {
                 case 'name':
                     return dir * a.name.localeCompare(b.name);
                 case 'featureCount':
-                    return dir * (a.featureCount - b.featureCount);
+                    return dir * (a.linkedFeatureCount - b.linkedFeatureCount);
                 default:
                     return 0;
             }

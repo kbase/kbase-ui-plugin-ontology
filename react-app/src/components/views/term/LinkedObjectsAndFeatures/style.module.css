@@ -5,7 +5,7 @@
 }
 
 .SelectedObject {
-    background-color: rgba(200, 200, 200, 0.5);
+    background-color: rgba(200, 200, 200, 0.3);
 }
 
 .CardNameRow {
@@ -16,17 +16,69 @@
 .CardNameRow {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .Object:hover {
-    background-color: rgba(200, 200, 200, 1);
+    background-color: rgba(200, 200, 200, 0.5);
     cursor: pointer;
 }
 
 .ObjectName {
     flex: 1 1 0px;
 }
+
+.ScientificName {
+    flex: 1 1 0px;
+    font-style: italic;
+}
+
+.Domain {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.TotalFeatures {}
+
+.LinkedFeatures {
+    margin-left: 10px;
+}
+
+.Suffix {
+    color: rgba(150, 150, 150, 1);
+    text-transform: lowercase;
+}
+
+
+.Label {
+    font-weight: bold;
+    color: rgba(150, 150, 150, 1);
+    margin-right: 4px;
+    text-transform: lowercase;
+}
+
+.Label::after {
+    content: ':'
+}
+
+.Source {
+    /* flex: 1 1 0px; */
+    /* font-style: italic; */
+}
+
+.SourceID {
+    /* flex: 1 1 0px; */
+    /* text-align: right; */
+    margin-left: 10px;
+}
+
+.KBaseID {
+    flex: 1 1 0px;
+    /* text-align: right; */
+}
+
 
 .ObjectType {
     flex: 0 0 auto;

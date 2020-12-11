@@ -9,6 +9,7 @@ import {
 import { DynamicServiceConfig } from '@kbase/ui-components/lib/redux/integration/store';
 import { GenericClient } from '@kbase/ui-lib';
 import { Metadata, transformField } from '../../../../types/metadata';
+import { JSONObject } from '../../../../types/json';
 
 const REQUEST_TIMEOUT = 30000;
 
@@ -86,16 +87,12 @@ export interface RelatedObject {
     id: number;
     version: number;
     workspaceId: number;
-    linkedFeatureCount: number;
+    featureCount: number;
     workspaceType: string;
     ref: string;
     info: ObjectInfo;
     scientificName: string;
     domain: string;
-    source: string;
-    sourceId: string;
-    kbaseId: string;
-    totalFeatureCount: number;
 }
 
 export interface GetRelatedObjectsResult {
@@ -192,6 +189,72 @@ export type ObjectInfo = [
 export interface GetObjectInfo3Result {
     infos: Array<ObjectInfo>;
     paths: Array<Array<string>>;
+}
+
+export type ObjectRefString = string;
+
+export interface ObjectIdentity {
+    workspace?: string;
+    wsid?: number;
+    name?: string;
+    objid?: number;
+    ver?: number;
+    ref?: ObjectRef;
+}
+
+export type ObjectRefChain = Array<ObjectIdentity>;
+
+export type ObjectPath = string;
+
+export interface ObjectSpecification {
+    workspace?: string;
+    wsid?: number;
+    name?: string;
+    objid?: number;
+    ver?: number;
+    ref?: ObjectRef;
+    obj_path?: Array<ObjectRef>;
+    obj_ref_path?: Array<ObjectRef>;
+    find_reference_path?: number;
+    included?: Array<ObjectPath>;
+    strict_maps?: number;
+    string_arrays?: number;
+}
+
+export interface GetObjects2Params {
+    objects: Array<ObjectSpecification>;
+    ignoreErrors?: number;
+    no_data?: number;
+}
+
+export type ObjectRef = string;
+
+export type ExtractedId = string;
+
+// TODO: flesh this out
+
+export type ProvenanceAction = JSONObject;
+
+export interface ObjectData {
+    data: JSONObject;
+    info: ObjectInfo;
+    path: Array<ObjectRef>;
+    provenance: Array<ProvenanceAction>;
+    creator: string;
+    orig_wsid: number;
+    created: string;
+    epoch: number;
+    refs: Array<ObjectRef>;
+    copied: ObjectRef;
+    copy_source_inaccessible: number;
+    extracted_ids: { [id_type: string]: Array<ExtractedId>; };
+    handle_error: string;
+    handle_stacktrace: string;
+}
+
+
+export interface GetObjects2Result {
+    data: Array<ObjectData>;
 }
 
 export default class OntologyModel {
@@ -359,39 +422,46 @@ export default class OntologyModel {
                 token: this.token
             });
 
-            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-                objects: objectRefs,
-                includeMetadata: 1,
-                ignoreErrors: 0
+            console.log('object refs?', objectRefs);
+
+            const [objectsInfo] = await wsClient.callFunc<[GetObjects2Params], [GetObjects2Result]>('get_objects2', [{
+                objects: objectRefs.map(({ ref }) => {
+                    return {
+                        ref,
+                        included: [
+                            'scientific_name',
+                            'domain'
+                        ]
+                    };
+                }),
+                ignoreErrors: 0,
+                no_data: 1
             }]);
-            return objectsInfo.infos;
+            console.log('objects ... info ...', objectsInfo);
+            return objectsInfo.data;
         })();
 
         const objects = result.results.map((object, index) => {
-            const objectInfo = objectsInfo[index];
+            const objectData = objectsInfo[index];
             const [
-                id, /* name */, /* type */, /* savedDate */, version,
+                id, /* name */, type, /* savedDate */, version,
                 /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
                 /* size */, metadata
-            ] = objectInfo;
+            ] = objectData.info;
             const ref = `${workspaceId}/${id}/${version}`;
-            // console.log('metadata', metadata);
+            console.log('metadata', metadata);
 
             return {
                 id: object.ws_obj.object_id,
                 name: object.ws_obj.name,
                 version: object.ws_obj.version,
                 workspaceId: object.ws_obj.workspace_id,
-                linkedFeatureCount: object.feature_count,
+                featureCount: object.feature_count,
                 ref,
-                workspaceType: objectInfo[2],
-                info: objectInfo,
-                scientificName: metadata['Name'],
-                domain: metadata['Domain'],
-                source: metadata['Source'],
-                sourceId: metadata['Source ID'],
-                totalFeatureCount: parseInt(metadata['Number features']), // TODO: check if empty
-                kbaseId: 'not in metadata?'
+                workspaceType: type,
+                info: objectData.info,
+                scientificName: objectData.data['scientific_name'] as string,
+                domain: objectData.data['domain'] as string
             };
         });
 
@@ -464,20 +534,28 @@ export default class OntologyModel {
                 token: this.token
             });
 
-            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-                objects: objectRefs,
-                includeMetadata: 1,
-                ignoreErrors: 0
+            const [objectsInfo] = await wsClient.callFunc<[GetObjects2Params], [GetObjects2Result]>('get_objects2', [{
+                objects: objectRefs.map(({ ref }) => {
+                    return {
+                        ref,
+                        included: [
+                            'scientific_name',
+                            'domain'
+                        ]
+                    };
+                }),
+                ignoreErrors: 0,
+                no_data: 1
             }]);
-            return objectsInfo.infos[0];
-
+            console.log('objects info?', objectsInfo);
+            return objectsInfo.data[0];
         })();
 
         const [
             id, name, workspaceType, /* savedDate */, version,
-            /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
-            /* size */, metadata
-        ] = objectInfo;
+            /* savedBy */, workspaceId, /*workspaceName*/, /* checksum */,
+            /* size */, /* metadata */
+        ] = objectInfo.info;
         // const objectRef = `${workspaceId}/${id}/${version}`;
 
         // const ws_obj = result.results[0].ws_obj;
@@ -487,15 +565,11 @@ export default class OntologyModel {
             version,
             workspaceId,
             ref: objectRef,
-            linkedFeatureCount: featureCount,
+            featureCount,
             workspaceType,
-            info: objectInfo,
-            scientificName: metadata['Name'],
-            domain: metadata['Domain'],
-            source: metadata['Source'],
-            sourceId: metadata['Source ID'],
-            kbaseId: 'not in metadata?',
-            totalFeatureCount: parseInt(metadata['Number features']), // TODO: check if empty
+            info: objectInfo.info,
+            scientificName: objectInfo.data['scientific_name'] as string,
+            domain: objectInfo.data['domain'] as string
         };
 
         return {
