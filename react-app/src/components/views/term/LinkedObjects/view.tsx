@@ -1,7 +1,8 @@
 import React from 'react';
-import './style.css';
-import { Table, Alert } from 'antd';
+import { Table, Alert, Tooltip, Input, Select } from 'antd';
 import { RelatedObject } from '../lib/model';
+import { LinkedObject } from '../../../../types/ontology';
+import './style.css';
 
 export interface Props {
     linkedObjects: Array<RelatedObject>;
@@ -58,7 +59,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
             <Table.Column
                 dataIndex={"workspaceType"}
                 title="Type"
-                width="40%"
+                width="12em"
                 render={(workspaceType: string, row: RelatedObject) => {
                     const hash = [
                         'spec',
@@ -67,13 +68,13 @@ export default class LinkedObjects extends React.Component<Props, State> {
                     ].join('/');
                     const url = new URL('', window.location.origin);
                     url.hash = hash;
-                    // const search = url.searchParams;
-                    // search.set('sub', 'Feature');
-                    // search.set('subid', featureID);
+                    const [module, name, majorVersion, minorVersion] = workspaceType.split(/[.-]/);
                     return (
-                        <a href={url.toString()} target="_blank" rel="noopener noreferrer">
-                            {workspaceType}
-                        </a>
+                        <Tooltip title={workspaceType}>
+                            <a href={url.toString()} target="_blank" rel="noopener noreferrer">
+                                {name}
+                            </a>
+                        </Tooltip>
                     );
                 }}
                 sorter={(a: RelatedObject, b: RelatedObject) => {
@@ -81,23 +82,39 @@ export default class LinkedObjects extends React.Component<Props, State> {
                 }}
             />
             <Table.Column
-                dataIndex={"featureCount"}
+                dataIndex={"savedBy"}
+                title="Last saved by"
                 width="8em"
-                title="# Features"
-                render={(featureCount: number) => {
-                    const content = Intl.NumberFormat('en-US', {
-                        useGrouping: true
-                    }).format(featureCount);
-                    return <div style={{
-                        fontFamily: 'monospace',
-                        textAlign: 'right',
-                        paddingRight: '2em'
-                    }}>
-                        {content}
-                    </div>;
+                render={(savedBy: string, row: RelatedObject) => {
+                    // TODO: flatten the objects for better table usage?
+                    savedBy = row.info.savedBy;
+                    const hash = [
+                        'user',
+                        savedBy
+                    ].join('/');
+                    const url = new URL('', window.location.origin);
+                    url.hash = hash;
+                    return (
+                        <Tooltip title={savedBy}>
+                            <a href={url.toString()} target="_blank" rel="noopener noreferrer">
+                                {savedBy}
+                            </a>
+                        </Tooltip>
+                    );
                 }}
                 sorter={(a: RelatedObject, b: RelatedObject) => {
-                    return a.linkedFeatureCount - b.linkedFeatureCount;
+                    return a.workspaceType.localeCompare(b.workspaceType);
+                }}
+            />
+            <Table.Column
+                dataIndex={"updated"}
+                width="8em"
+                title="Last updated"
+                render={(featureCount: number, linkedObject: RelatedObject) => {
+                    return <span>{Intl.DateTimeFormat('en-US', {}).format(new Date(linkedObject.info.savedAt))}</span>;
+                }}
+                sorter={(a: RelatedObject, b: RelatedObject) => {
+                    return a.info.savedAt - b.info.savedAt;
                 }}
             />
 
@@ -113,16 +130,36 @@ export default class LinkedObjects extends React.Component<Props, State> {
             //     }}
             // />
     */
+
+    renderFilterControl() {
+        return <span>
+            <span className="LinkedObjects-filterLabel">filter by - </span>{' '}
+            <span className="LinkedObjects-filterFieldLabel">type:</span>
+            <Select style={{ width: '6em' }}>
+                <Select.Option value="tes1t">Test 1</Select.Option>
+                <Select.Option value="test2">Test 2</Select.Option>
+            </Select>
+            {' '}
+            <span className="LinkedObjects-filterFieldLabel">user:</span>
+            <Select style={{ width: '6em' }}>
+                <Select.Option value="tes1t">Test 1</Select.Option>
+                <Select.Option value="test2">Test 2</Select.Option>
+            </Select>
+        </span>;
+    }
+
     renderControls() {
         return <div>
-            Controls Here
+            <Input.Search placeholder="Search" allowClear style={{ width: '12em', margin: '0 1em' }} />
+
+            {this.renderFilterControl()}
         </div>;
     }
 
     renderLinkedObjects() {
         return <>
             <div style={{ flex: '0 0 auto' }}>{this.renderControls()}</div>
-            <div style={{ flex: '1 1 0px' }}>
+            <div style={{ flex: '1 1 0px', display: 'flex', flexDirection: 'column', minHeight: '0' }}>
                 {this.renderTable()}
             </div>
         </>;

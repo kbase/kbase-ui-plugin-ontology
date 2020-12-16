@@ -4,14 +4,14 @@ import View from './view';
 import Loading from '../../../../Loading';
 import { OntologyReference } from '../../../../../types/ontology';
 import { AsyncProcess, AsyncProcessStatus } from '../../../../../lib/processing';
-import OntologyModel, { Feature, RelatedObject } from '../../lib/model';
+import OntologyModel, { Feature, RelatedGenome } from '../../lib/model';
 import Alert from 'antd/lib/alert';
 
 export interface DataProps {
     token: string;
     config: AppConfig;
     termRef: OntologyReference;
-    object: RelatedObject;
+    object: RelatedGenome;
 }
 
 interface SimpleError {
@@ -51,7 +51,7 @@ export default class Data extends React.Component<DataProps, DataState> {
         });
 
         try {
-            const { features } = await client.getRelatedObjectFeatures({
+            const { features } = await client.getRelatedGenomeFeatures({
                 ref: this.props.termRef,
                 objectRef: this.props.object.ref,
                 offset: this.offset,

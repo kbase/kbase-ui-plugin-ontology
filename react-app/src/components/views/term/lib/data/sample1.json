@@ -1,0 +1,265 @@
+{
+    "id": "465b1476-3699-4e6c-a06b-8d384fcc41f3",
+    "user": "slebras",
+    "name": "altamaha_2018_pw_15hr_WHONDRS-PP48-000107",
+    "node_tree": [
+        {
+            "id": "HRV003M16",
+            "type": "BioReplicate",
+            "parent": null,
+            "meta_controlled": {
+                "name": {
+                    "value": "altamaha_2018_pw_15hr_WHONDRS-PP48-000107"
+                },
+                "id": {
+                    "value": "HRV003M16"
+                },
+                "biome": {
+                    "value": "ENVO:01000221"
+                },
+                "material": {
+                    "value": "Other"
+                },
+                "field_name_informal_classification": {
+                    "value": "Filter"
+                },
+                "sample_description": {
+                    "value": "15 hour time point. Filter used for filtered pore water samples (second site located a few meters upstream in a more variably inundated zone)"
+                },
+                "collection_method_description": {
+                    "value": "0.22 micron filter used to filter water samples"
+                },
+                "purpose": {
+                    "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                },
+                "latitude": {
+                    "units": "degrees",
+                    "value": 31.334597
+                },
+                "longitude": {
+                    "units": "degrees",
+                    "value": -81.479282
+                },
+                "primary_physiographic_feature": {
+                    "value": "Stream"
+                },
+                "name_of_physiographic_feature": {
+                    "value": "Altamaha River"
+                },
+                "location_description": {
+                    "value": "Persistently inundated location of the stream near to the shoreline."
+                },
+                "country": {
+                    "value": "United States"
+                },
+                "state_province": {
+                    "value": "Georgia"
+                },
+                "field_program_cruise": {
+                    "value": "WHONDRS 48hr"
+                },
+                "collector_chief_scientist": {
+                    "value": "Christof Meile"
+                },
+                "collection_date": {
+                    "value": "2018-10-17"
+                },
+                "collection_time": {
+                    "value": "10:00:00Z"
+                }
+            },
+            "meta_user": {
+                "latitude": {
+                    "units": "degrees",
+                    "value": 31.334597
+                },
+                "collection_date": {
+                    "value": "2018-10-17"
+                },
+                "longitude": {
+                    "units": "degrees",
+                    "value": -81.479282
+                },
+                "primary_physiographic_feature": {
+                    "value": "Stream"
+                },
+                "name_of_physiographic_feature": {
+                    "value": "Altamaha River"
+                },
+                "collection_method_description": {
+                    "value": "0.22 micron filter used to filter water samples"
+                },
+                "purpose": {
+                    "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                },
+                "location_description": {
+                    "value": "Persistently inundated location of the stream near to the shoreline."
+                },
+                "material": {
+                    "value": "Other"
+                },
+                "country": {
+                    "value": "United States"
+                },
+                "collection_time": {
+                    "value": "10:00:00Z"
+                },
+                "field_program_cruise": {
+                    "value": "WHONDRS 48hr"
+                },
+                "sample_description": {
+                    "value": "15 hour time point. Filter used for filtered pore water samples (second site located a few meters upstream in a more variably inundated zone)"
+                },
+                "field_name_informal_classification": {
+                    "value": "Filter"
+                },
+                "state_province": {
+                    "value": "Georgia"
+                },
+                "collector_chief_scientist": {
+                    "value": "Christof Meile"
+                },
+                "biome": {
+                    "value": "ENVO:01000221"
+                }
+            },
+            "source_meta": [
+                {
+                    "key": "name",
+                    "skey": "Sample Name",
+                    "svalue": {
+                        "value": "altamaha_2018_pw_15hr_WHONDRS-PP48-000107"
+                    }
+                },
+                {
+                    "key": "id",
+                    "skey": "IGSN",
+                    "svalue": {
+                        "value": "HRV003M16"
+                    }
+                },
+                {
+                    "key": "biome",
+                    "skey": "Biome",
+                    "svalue": {
+                        "value": "ENVO:01000221"
+                    }
+                },
+                {
+                    "key": "material",
+                    "skey": "Material",
+                    "svalue": {
+                        "value": "Other"
+                    }
+                },
+                {
+                    "key": "field_name_informal_classification",
+                    "skey": "Field name (informal classification)",
+                    "svalue": {
+                        "value": "Filter"
+                    }
+                },
+                {
+                    "key": "sample_description",
+                    "skey": "Sample description",
+                    "svalue": {
+                        "value": "15 hour time point. Filter used for filtered pore water samples (second site located a few meters upstream in a more variably inundated zone)"
+                    }
+                },
+                {
+                    "key": "collection_method_description",
+                    "skey": "Collection method description",
+                    "svalue": {
+                        "value": "0.22 micron filter used to filter water samples"
+                    }
+                },
+                {
+                    "key": "purpose",
+                    "skey": "Purpose",
+                    "svalue": {
+                        "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                    }
+                },
+                {
+                    "key": "latitude",
+                    "skey": "Latitude",
+                    "svalue": {
+                        "value": 31.334597
+                    }
+                },
+                {
+                    "key": "longitude",
+                    "skey": "Longitude",
+                    "svalue": {
+                        "value": -81.479282
+                    }
+                },
+                {
+                    "key": "primary_physiographic_feature",
+                    "skey": "Primary physiographic feature",
+                    "svalue": {
+                        "value": "Stream"
+                    }
+                },
+                {
+                    "key": "name_of_physiographic_feature",
+                    "skey": "Name of physiographic feature",
+                    "svalue": {
+                        "value": "Altamaha River"
+                    }
+                },
+                {
+                    "key": "location_description",
+                    "skey": "Location description",
+                    "svalue": {
+                        "value": "Persistently inundated location of the stream near to the shoreline."
+                    }
+                },
+                {
+                    "key": "country",
+                    "skey": "Country",
+                    "svalue": {
+                        "value": "United States"
+                    }
+                },
+                {
+                    "key": "state_province",
+                    "skey": "State/Province",
+                    "svalue": {
+                        "value": "Georgia"
+                    }
+                },
+                {
+                    "key": "field_program_cruise",
+                    "skey": "Field program/cruise",
+                    "svalue": {
+                        "value": "WHONDRS 48hr"
+                    }
+                },
+                {
+                    "key": "collector_chief_scientist",
+                    "skey": "Collector/Chief Scientist",
+                    "svalue": {
+                        "value": "Christof Meile"
+                    }
+                },
+                {
+                    "key": "collection_date",
+                    "skey": "Collection date",
+                    "svalue": {
+                        "value": "2018-10-17"
+                    }
+                },
+                {
+                    "key": "collection_time",
+                    "skey": "Collection time",
+                    "svalue": {
+                        "value": "10:00:00Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "save_date": 1607969648813,
+    "version": 1
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Table, Alert, Select, Tooltip, Button } from 'antd';
-import { RelatedObject, ObjectInfo } from '../lib/model';
+import { RelatedGenome, ObjectInfo } from '../lib/model';
 import styles from './style.module.css';
 import Features from './Features';
 import { OntologyReference } from '../../../../types/ontology';
@@ -11,10 +11,10 @@ import { SelectValue } from 'antd/lib/select';
 import { Section } from '../../../Section';
 
 export interface Props {
-    linkedObjects: Array<RelatedObject>;
+    linkedObjects: Array<RelatedGenome>;
     totalCount: number;
-    selectObject: (object: RelatedObject) => void;
-    selectedObject: RelatedObject | null;
+    selectObject: (object: RelatedGenome) => void;
+    selectedObject: RelatedGenome | null;
     termRef: OntologyReference;
     sortObjects: (sortBy: SortKey, direction: SortDirection) => void;
 }
@@ -37,7 +37,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
     }
 
     renderTable() {
-        return <Table<RelatedObject>
+        return <Table<RelatedGenome>
             dataSource={this.props.linkedObjects}
             className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
             size="small"
@@ -46,7 +46,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
             //     pageSize: 20
             // }}
             scroll={{ y: '100%' }}
-            rowKey={(row: RelatedObject) => {
+            rowKey={(row: RelatedGenome) => {
                 return [
                     row.workspaceId,
                     row.id,
@@ -59,7 +59,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                 dataIndex={"name"}
                 title="Object Name"
                 width="40%"
-                render={(name: string, row: RelatedObject) => {
+                render={(name: string, row: RelatedGenome) => {
                     const hash = [
                         'dataview',
                         String(row.workspaceId),
@@ -75,7 +75,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                     );
                 }}
                 defaultSortOrder="ascend"
-                sorter={(a: RelatedObject, b: RelatedObject) => {
+                sorter={(a: RelatedGenome, b: RelatedGenome) => {
                     return a.name.localeCompare(b.name);
                 }}
             />
@@ -83,7 +83,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                 dataIndex={"workspaceType"}
                 title="Type"
                 width="40%"
-                render={(workspaceType: string, row: RelatedObject) => {
+                render={(workspaceType: string, row: RelatedGenome) => {
                     const hash = [
                         'spec',
                         'type',
@@ -100,7 +100,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                         </a>
                     );
                 }}
-                sorter={(a: RelatedObject, b: RelatedObject) => {
+                sorter={(a: RelatedGenome, b: RelatedGenome) => {
                     return a.workspaceType.localeCompare(b.workspaceType);
                 }}
             />
@@ -120,7 +120,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                         {content}
                     </div>;
                 }}
-                sorter={(a: RelatedObject, b: RelatedObject) => {
+                sorter={(a: RelatedGenome, b: RelatedGenome) => {
                     return a.linkedFeatureCount - b.linkedFeatureCount;
                 }}
             />
@@ -155,7 +155,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
         );
     }
 
-    selectObject(object: RelatedObject) {
+    selectObject(object: RelatedGenome) {
         // const ref = `${object.workspaceId}/${object.id}/${object.version}`;
         this.props.selectObject(object);
         this.setState({

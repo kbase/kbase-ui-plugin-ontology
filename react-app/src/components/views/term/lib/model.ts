@@ -10,6 +10,42 @@ import { DynamicServiceConfig } from '@kbase/ui-components/lib/redux/integration
 import { GenericClient } from '@kbase/ui-lib';
 import { Metadata, transformField } from '../../../../types/metadata';
 
+import sample1Data from './data/sample1.json';
+import sample2Data from './data/sample2.json';
+import sample3Data from './data/sample3.json';
+import sample4Data from './data/sample4.json';
+import sample5Data from './data/sample5.json';
+import sample6Data from './data/sample6.json';
+import sample7Data from './data/sample7.json';
+
+import { Sample } from './Sample';
+
+const sample1 = sample1Data as Sample;
+const sample2 = sample2Data as Sample;
+const sample3 = sample3Data as Sample;
+const sample4 = sample4Data as Sample;
+const sample5 = sample5Data as Sample;
+const sample6 = sample6Data as Sample;
+const sample7 = sample7Data as Sample;
+
+const samples: Array<Sample> = [
+    sample1, sample2, sample3, sample4, sample5, sample6, sample7
+];
+
+const samplesMap: Map<string, Array<Sample>> = new Map();
+samples.forEach((sample) => {
+    const term = sample.node_tree[0].meta_controlled.biome.value as string;
+    if (!samplesMap.has(term)) {
+        samplesMap.set(term, []);
+    }
+    samplesMap.get(term)!.push(sample);
+});
+
+
+// const samples = [
+//     sample1, sample2
+// ] as Array<Sample>;
+
 const REQUEST_TIMEOUT = 30000;
 
 // Supporting data types
@@ -68,10 +104,36 @@ export interface GetRelatedObjectsParams {
     limit: number;
 }
 
+export interface GetRelatedGenomesParams {
+    ref: OntologyReference;
+    offset: number;
+    limit: number;
+}
+
 export interface WorkspaceObjectReference {
     workspaceID: number;
     objectID: number;
     version: number;
+}
+
+export interface RelatedObject {
+    name: string;
+    id: number;
+    version: number;
+    workspaceId: number;
+    workspaceType: string;
+    ref: string;
+    info: ObjectInfo;
+}
+
+export interface GetRelatedObjectsResult {
+    objects: Array<RelatedObject>;
+    totalCount: number;
+}
+
+export interface GetRelatedGenomesResult {
+    objects: Array<RelatedGenome>;
+    totalCount: number;
 }
 
 // export interface RelatedFeature {
@@ -81,7 +143,7 @@ export interface WorkspaceObjectReference {
 //     objectRef: WorkspaceObjectReference;
 // }
 
-export interface RelatedObject {
+export interface RelatedGenome {
     name: string;
     id: number;
     version: number;
@@ -98,14 +160,14 @@ export interface RelatedObject {
     totalFeatureCount: number;
 }
 
-export interface GetRelatedObjectsResult {
-    objects: Array<RelatedObject>;
+export interface GetRelatedGenomesResult {
+    objects: Array<RelatedGenome>;
     totalCount: number;
 }
 
 // Related Features
 
-export interface GetRelatedObjectFeaturesParams {
+export interface GetRelatedGenomeFeaturesParams {
     ref: OntologyReference;
     objectRef: string;
     offset: number;
@@ -117,8 +179,8 @@ export interface Feature {
     id: string;
 }
 
-export interface GetRelatedObjectFeaturesResult {
-    object: RelatedObject;
+export interface GetRelatedGenomeFeaturesResult {
+    object: RelatedGenome;
     totalCount: number;
     features: Array<Feature>;
 }
@@ -175,7 +237,7 @@ export interface ObjectMetadata {
     [key: string]: string;
 }
 
-export type ObjectInfo = [
+export type RawObjectInfo = [
     number, // object id
     string, // object name
     string, // workspace type of object
@@ -189,9 +251,41 @@ export type ObjectInfo = [
     ObjectMetadata, // metadata
 ];
 
+export interface ObjectInfo {
+    objectId: number,
+    objectName: string,
+    workspaceType: string,
+    savedAt: number,
+    objectVersion: number,
+    savedBy: string,
+    workspaceId: number,
+    workspaceName: string,
+    checksum: string,
+    size: number;
+    metadata: ObjectMetadata;
+}
+
 export interface GetObjectInfo3Result {
-    infos: Array<ObjectInfo>;
+    infos: Array<RawObjectInfo>;
     paths: Array<Array<string>>;
+}
+
+
+export interface RelatedSample {
+    fieldKey: string;
+    sample: Sample;
+}
+
+
+export interface GetRelatedSamplesParams {
+    ref: OntologyReference;
+    offset: number;
+    limit: number;
+}
+
+export interface GetRelatedSamplesResult {
+    samples: Array<RelatedSample>;
+    totalCount: number;
 }
 
 export default class OntologyModel {
@@ -377,6 +471,111 @@ export default class OntologyModel {
             const ref = `${workspaceId}/${id}/${version}`;
             // console.log('metadata', metadata);
 
+            const info: ObjectInfo = (() => {
+                const [
+                    objectId, objectName, workspaceType, savedAtString, objectVersion,
+                    savedBy, workspaceId, workspaceName, checksum,
+                    size, metadata
+                ] = objectInfo;
+                const savedAt = new Date(savedAtString).getTime();
+                return {
+                    objectId, objectName, workspaceType, savedAt, objectVersion,
+                    savedBy, workspaceId, workspaceName, checksum,
+                    size, metadata
+                };
+            })();
+
+            return {
+                id: object.ws_obj.object_id,
+                name: object.ws_obj.name,
+                version: object.ws_obj.version,
+                workspaceId: object.ws_obj.workspace_id,
+                ref,
+                workspaceType: objectInfo[2],
+                info,
+            } as RelatedObject;
+        });
+
+        return {
+            // features,
+            objects,
+            totalCount: objects.length
+        };
+    }
+
+    async getRelatedGenomes({ ref, offset, limit }: GetRelatedGenomesParams): Promise<GetRelatedGenomesResult> {
+        const result = await this.ontologyAPI.get_associated_ws_objects({
+            ns: this.stringToOntologyNamespace(ref.namespace),
+            id: ref.term,
+            ts: ref.timestamp || Date.now(),
+            offset, limit
+        });
+
+        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
+        //     genomeWithFeatures.features.forEach((feature) => {
+        //         features.push({
+        //             featureID: feature.feature_id,
+        //             relatedAt: feature.updated_at,
+        //             objectName: genomeWithFeatures.ws_obj.name,
+        //             objectRef: {
+        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
+        //                 objectID: genomeWithFeatures.ws_obj.object_id,
+        //                 version: genomeWithFeatures.ws_obj.version
+        //             }
+        //         });
+        //     })
+        //     return features;
+        // }, []: Array<RelatedFeature>);
+
+        // Get object info.
+        const objectRefs = result.results.map((object) => {
+            return {
+                ref: `${object.ws_obj.workspace_id}/${object.ws_obj.object_id}/${object.ws_obj.version}`
+            };
+        });
+
+        const objectsInfo = await (async () => {
+            if (objectRefs.length === 0) {
+                return [];
+            }
+            const wsClient = new GenericClient({
+                module: 'Workspace',
+                url: this.workspaceURL,
+                token: this.token
+            });
+
+            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
+                objects: objectRefs,
+                includeMetadata: 1,
+                ignoreErrors: 0
+            }]);
+            return objectsInfo.infos;
+        })();
+
+        const objects = result.results.map((object, index) => {
+            const objectInfo = objectsInfo[index];
+            const [
+                id, /* name */, /* type */, /* savedDate */, version,
+                /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
+                /* size */, metadata
+            ] = objectInfo;
+            const ref = `${workspaceId}/${id}/${version}`;
+            // console.log('metadata', metadata);
+
+            const info: ObjectInfo = (() => {
+                const [
+                    objectId, objectName, workspaceType, savedAtString, objectVersion,
+                    savedBy, workspaceId, workspaceName, checksum,
+                    size, metadata
+                ] = objectInfo;
+                const savedAt = new Date(savedAtString).getTime();
+                return {
+                    objectId, objectName, workspaceType, savedAt, objectVersion,
+                    savedBy, workspaceId, workspaceName, checksum,
+                    size, metadata
+                };
+            })();
+
             return {
                 id: object.ws_obj.object_id,
                 name: object.ws_obj.name,
@@ -385,7 +584,7 @@ export default class OntologyModel {
                 linkedFeatureCount: object.feature_count,
                 ref,
                 workspaceType: objectInfo[2],
-                info: objectInfo,
+                info,
                 scientificName: metadata['Name'],
                 domain: metadata['Domain'],
                 source: metadata['Source'],
@@ -402,7 +601,7 @@ export default class OntologyModel {
         };
     }
 
-    async getRelatedObjectFeatures({ ref, objectRef, offset, limit, featureCount }: GetRelatedObjectFeaturesParams): Promise<GetRelatedObjectFeaturesResult> {
+    async getRelatedGenomeFeatures({ ref, objectRef, offset, limit, featureCount }: GetRelatedGenomeFeaturesParams): Promise<GetRelatedGenomeFeaturesResult> {
         // if (typeof featureCount === 'undefined') {
         //     const result = await client.get_associated_ws_features({
         //         ns: ontologyReferenceToNamespace(ref),
@@ -480,8 +679,23 @@ export default class OntologyModel {
         ] = objectInfo;
         // const objectRef = `${workspaceId}/${id}/${version}`;
 
+        const info: ObjectInfo = (() => {
+            const [
+                objectId, objectName, workspaceType, savedAtString, objectVersion,
+                savedBy, workspaceId, workspaceName, checksum,
+                size, metadata
+            ] = objectInfo;
+            const savedAt = new Date(savedAtString).getTime();
+            return {
+                objectId, objectName, workspaceType, savedAt, objectVersion,
+                savedBy, workspaceId, workspaceName, checksum,
+                size, metadata
+            };
+        })();
+
+
         // const ws_obj = result.results[0].ws_obj;
-        const object: RelatedObject = {
+        const object: RelatedGenome = {
             id,
             name,
             version,
@@ -489,7 +703,7 @@ export default class OntologyModel {
             ref: objectRef,
             linkedFeatureCount: featureCount,
             workspaceType,
-            info: objectInfo,
+            info,
             scientificName: metadata['Name'],
             domain: metadata['Domain'],
             source: metadata['Source'],
@@ -543,8 +757,6 @@ export default class OntologyModel {
             return m;
         }, new Map<string, Array<TermsGraphRelation>>());
 
-
-
         const termsToGet = result.results.reduce((termsToGet, item) => {
             termsToGet.set(item.term.id, item.term);
             return termsToGet;
@@ -589,6 +801,133 @@ export default class OntologyModel {
 
     async getSource(ns: string): Promise<Source | null> {
         return this.ontologyAPI.get_source({ ns });
+    }
+
+    async getRelatedSamples({ ref, offset, limit }: GetRelatedSamplesParams): Promise<GetRelatedSamplesResult> {
+        // const result = await this.ontologyAPI.get_associated_ws_objects({
+        //     ns: this.stringToOntologyNamespace(ref.namespace),
+        //     id: ref.term,
+        //     ts: ref.timestamp || Date.now(),
+        //     offset, limit
+        // });
+
+        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
+        //     genomeWithFeatures.features.forEach((feature) => {
+        //         features.push({
+        //             featureID: feature.feature_id,
+        //             relatedAt: feature.updated_at,
+        //             objectName: genomeWithFeatures.ws_obj.name,
+        //             objectRef: {
+        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
+        //                 objectID: genomeWithFeatures.ws_obj.object_id,
+        //                 version: genomeWithFeatures.ws_obj.version
+        //             }
+        //         });
+        //     })
+        //     return features;
+        // }, []: Array<RelatedFeature>);
+
+        // Get object info.
+        // const objectRefs = result.results.map((object) => {
+        //     return {
+        //         ref: `${object.ws_obj.workspace_id}/${object.ws_obj.object_id}/${object.ws_obj.version}`
+        //     };
+        // });
+
+        // const objectsInfo = await (async () => {
+        //     if (objectRefs.length === 0) {
+        //         return [];
+        //     }
+        //     const wsClient = new GenericClient({
+        //         module: 'Workspace',
+        //         url: this.workspaceURL,
+        //         token: this.token
+        //     });
+
+        //     const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
+        //         objects: objectRefs,
+        //         includeMetadata: 1,
+        //         ignoreErrors: 0
+        //     }]);
+        //     return objectsInfo.infos;
+        // })();
+
+        // const objects = result.results.map((object, index) => {
+        //     const objectInfo = objectsInfo[index];
+        //     const [
+        //         id, /* name */, /* type */, /* savedDate */, version,
+        //         /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
+        //         /* size */, metadata
+        //     ] = objectInfo;
+        //     const ref = `${workspaceId}/${id}/${version}`;
+        //     // console.log('metadata', metadata);
+
+        //     const info: ObjectInfo = (() => {
+        //         const [
+        //             objectId, objectName, workspaceType, savedAtString, objectVersion,
+        //             savedBy, workspaceId, workspaceName, checksum,
+        //             size, metadata
+        //         ] = objectInfo;
+        //         const savedAt = new Date(savedAtString).getTime();
+        //         return {
+        //             objectId, objectName, workspaceType, savedAt, objectVersion,
+        //             savedBy, workspaceId, workspaceName, checksum,
+        //             size, metadata
+        //         };
+        //     })();
+
+        //     return {
+        //         id: object.ws_obj.object_id,
+        //         name: object.ws_obj.name,
+        //         version: object.ws_obj.version,
+        //         workspaceId: object.ws_obj.workspace_id,
+        //         ref,
+        //         workspaceType: objectInfo[2],
+        //         info,
+        //     } as RelatedObject;
+        // });
+
+        // return {
+        //     // features,
+        //     objects,
+        //     totalCount: objects.length
+        // };
+
+        const samples = (samplesMap.get(ref.term) || [])
+            .map((sample) => {
+                return {
+                    fieldKey: 'biome',
+                    sample
+                };
+            });
+
+        // const samples: Array<RelatedSample> = [{
+        //     key: 'biome',
+        //     sample: sample1
+        // }, {
+        //     key: 'biome',
+        //     sample: sample2
+        // }, {
+        //     key: 'biome',
+        //     sample: sample3
+        // }, {
+        //     key: 'biome',
+        //     sample: sample4
+        // }, {
+        //     key: 'biome',
+        //     sample: sample5
+        // }, {
+        //     key: 'biome',
+        //     sample: sample6
+        // }, {
+        //     key: 'biome',
+        //     sample: sample7
+        // }];
+
+        return {
+            samples,
+            totalCount: 11,
+        };
     }
 
 }
