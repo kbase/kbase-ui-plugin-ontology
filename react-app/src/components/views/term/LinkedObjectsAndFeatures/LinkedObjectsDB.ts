@@ -4,7 +4,7 @@ import DB, {
 } from '../../../../lib/DB';
 import { OntologyReference } from '../../../../types/ontology';
 import { AppConfig } from '@kbase/ui-components';
-import OntologyModel, { RelatedObject, Feature } from '../lib/model';
+import OntologyModel, { Feature, RelatedGenome } from '../lib/model';
 
 export type SortKey = 'name' | 'featureCount';
 export type SortDirection = 'ascending' | 'descending';
@@ -14,15 +14,15 @@ export type LinkedObjectsDBStateLoading = DBStateLoading;
 export type LinkedObjectsDBStateError = DBStateError;
 
 export interface LinkedObjectsDBStateLoaded extends DBStateLoaded {
-    linkedObjects: Array<RelatedObject>;
-    selectedObject: RelatedObject | null;
+    linkedObjects: Array<RelatedGenome>;
+    selectedObject: RelatedGenome | null;
     features: Array<Feature> | null;
     totalCount: number;
 }
 
 export interface LinkedObjectsDBStateReLoading extends DBStateReLoading {
-    linkedObjects: Array<RelatedObject>;
-    selectedObject: RelatedObject | null;
+    linkedObjects: Array<RelatedGenome>;
+    selectedObject: RelatedGenome | null;
     features: Array<Feature> | null;
     totalCount: number;
 }
@@ -41,7 +41,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
         this.props = props;
 
     }
-    async getLinkedObjects(termRef: OntologyReference, offset: number, limit: number) {
+    async getLinkedGenomes(termRef: OntologyReference, offset: number, limit: number) {
         const client = new OntologyModel({
             url: this.props.config.services.ServiceWizard.url,
             workspaceURL: this.props.config.services.Workspace.url,
@@ -56,7 +56,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
                 };
             });
 
-            const linkedObjects = await client.getRelatedObjects({
+            const linkedObjects = await client.getRelatedGenomes({
                 ref: termRef,
                 // TODO: provided by table ui
                 offset,
@@ -89,7 +89,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
         }
     }
 
-    sortLinkedObjects(sorter: (a: RelatedObject, b: RelatedObject) => number) {
+    sortLinkedObjects(sorter: (a: RelatedGenome, b: RelatedGenome) => number) {
         // const db = this.get();
         // if (db.status !== DBStatus.LOADED) {
         //     return;

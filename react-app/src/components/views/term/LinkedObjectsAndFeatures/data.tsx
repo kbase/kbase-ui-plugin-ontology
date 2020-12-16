@@ -7,7 +7,7 @@ import View from './view';
 import { OntologyReference } from '../../../../types/ontology';
 import ErrorView from '../../../ErrorView';
 import Loading from '../../../Loading';
-import { RelatedObject } from '../lib/model';
+import { RelatedGenome } from '../lib/model';
 
 export interface Props {
     token: string;
@@ -16,7 +16,7 @@ export interface Props {
 }
 
 interface State {
-    selectedObject: RelatedObject | null;
+    selectedObject: RelatedGenome | null;
 }
 
 export default class Data extends React.Component<Props, State> {
@@ -47,20 +47,20 @@ export default class Data extends React.Component<Props, State> {
         switch (db.status) {
             case DBStatus.NONE:
                 // TODO: refactor this whole business...
-                await this.db.getLinkedObjects(this.props.termRef, this.offset, this.limit);
+                await this.db.getLinkedGenomes(this.props.termRef, this.offset, this.limit);
                 this.sortObjects('name', 'ascending');
         }
     }
 
     renderLoading() {
-        return <Loading message="Loading linked data..." />;
+        return <Loading message="Loading linked genomes..." />;
     }
 
     renderError(db: DBStateError) {
         return <ErrorView error={db.error} />;
     }
 
-    async selectObject(selectedObject: RelatedObject) {
+    async selectObject(selectedObject: RelatedGenome) {
         this.setState({
             selectedObject
         });
@@ -68,12 +68,12 @@ export default class Data extends React.Component<Props, State> {
 
     sortObjects(sortBy: SortKey, direction: SortDirection) {
         const dir = direction === 'ascending' ? 1 : -1;
-        this.db.sortLinkedObjects((a: RelatedObject, b: RelatedObject) => {
+        this.db.sortLinkedObjects((a: RelatedGenome, b: RelatedGenome) => {
             switch (sortBy) {
                 case 'name':
                     return dir * a.name.localeCompare(b.name);
                 case 'featureCount':
-                    return dir * (a.featureCount - b.featureCount);
+                    return dir * (a.linkedFeatureCount - b.linkedFeatureCount);
                 default:
                     return 0;
             }

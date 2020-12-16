@@ -43,21 +43,38 @@ export default class Features extends React.Component<FeaturesProps, FeaturesSta
                     );
                 }} />
             <Column
+                title="Type"
+                dataIndex="type"
+                width="5em"
+                render={(location: string, feature: Feature) => {
+                    return na();
+                }} />
+            <Column
                 title="Function"
                 dataIndex="function"
                 render={(fun: string, feature: Feature) => {
                     return na();
                 }} />
+
             <Column
-                title="Length"
-                dataIndex="length"
-                render={(length: number, feature: Feature) => {
+                title="Start"
+                dataIndex="start"
+                width="5em"
+                render={(location: string, feature: Feature) => {
                     return na();
                 }} />
             <Column
-                title="Location"
-                dataIndex="location"
+                title="Strand"
+                dataIndex="strand"
+                width="5em"
                 render={(location: string, feature: Feature) => {
+                    return na();
+                }} />
+            <Column
+                title="Length"
+                dataIndex="length"
+                width="5em"
+                render={(length: number, feature: Feature) => {
                     return na();
                 }} />
         </Table>;

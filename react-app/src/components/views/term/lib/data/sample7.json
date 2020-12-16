@@ -1,0 +1,252 @@
+{
+    "id": "c7d925eb-e460-48dd-b7e6-605836f416fa",
+    "user": "slebras",
+    "name": "erpe_2018_sw_18hr_WHONDRS-SW48-000091",
+    "node_tree": [
+        {
+            "id": "IECUR0002Z",
+            "type": "BioReplicate",
+            "parent": null,
+            "meta_controlled": {
+                "name": {
+                    "value": "erpe_2018_sw_18hr_WHONDRS-SW48-000091"
+                },
+                "id": {
+                    "value": "IECUR0002Z"
+                },
+                "biome": {
+                    "value": "ENVO:01000041"
+                },
+                "material": {
+                    "value": "Other"
+                },
+                "field_name_informal_classification": {
+                    "value": "Filter"
+                },
+                "sample_description": {
+                    "value": "18 hour time point. Filter used for filtered surface water samples"
+                },
+                "collection_method_description": {
+                    "value": "0.22 micron filter used to filter water samples"
+                },
+                "purpose": {
+                    "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                },
+                "latitude": {
+                    "units": "degrees",
+                    "value": 52.476416
+                },
+                "longitude": {
+                    "units": "degrees",
+                    "value": 13.6257102
+                },
+                "primary_physiographic_feature": {
+                    "value": "Stream"
+                },
+                "name_of_physiographic_feature": {
+                    "value": "Erpe River"
+                },
+                "location_description": {
+                    "value": "Persistently inundated location of the stream near to the shoreline."
+                },
+                "country": {
+                    "value": "Germany"
+                },
+                "field_program_cruise": {
+                    "value": "WHONDRS 48hr"
+                },
+                "collector_chief_scientist": {
+                    "value": " J\u00f6rg Lewandowski and Birgit Mueller"
+                },
+                "collection_date": {
+                    "value": "2018-09-26"
+                },
+                "collection_time": {
+                    "value": "06:00:00Z"
+                }
+            },
+            "meta_user": {
+                "latitude": {
+                    "units": "degrees",
+                    "value": 52.476416
+                },
+                "collection_date": {
+                    "value": "2018-09-26"
+                },
+                "longitude": {
+                    "units": "degrees",
+                    "value": 13.6257102
+                },
+                "primary_physiographic_feature": {
+                    "value": "Stream"
+                },
+                "name_of_physiographic_feature": {
+                    "value": "Erpe River"
+                },
+                "collection_method_description": {
+                    "value": "0.22 micron filter used to filter water samples"
+                },
+                "purpose": {
+                    "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                },
+                "location_description": {
+                    "value": "Persistently inundated location of the stream near to the shoreline."
+                },
+                "material": {
+                    "value": "Other"
+                },
+                "country": {
+                    "value": "Germany"
+                },
+                "collection_time": {
+                    "value": "06:00:00Z"
+                },
+                "field_program_cruise": {
+                    "value": "WHONDRS 48hr"
+                },
+                "sample_description": {
+                    "value": "18 hour time point. Filter used for filtered surface water samples"
+                },
+                "field_name_informal_classification": {
+                    "value": "Filter"
+                },
+                "collector_chief_scientist": {
+                    "value": " J\u00f6rg Lewandowski and Birgit Mueller"
+                },
+                "biome": {
+                    "value": "ENVO:01000041"
+                }
+            },
+            "source_meta": [
+                {
+                    "key": "name",
+                    "skey": "Sample Name",
+                    "svalue": {
+                        "value": "erpe_2018_sw_18hr_WHONDRS-SW48-000091"
+                    }
+                },
+                {
+                    "key": "id",
+                    "skey": "IGSN",
+                    "svalue": {
+                        "value": "IECUR0002Z"
+                    }
+                },
+                {
+                    "key": "biome",
+                    "skey": "Biome",
+                    "svalue": {
+                        "value": "ENVO:01000041"
+                    }
+                },
+                {
+                    "key": "material",
+                    "skey": "Material",
+                    "svalue": {
+                        "value": "Other"
+                    }
+                },
+                {
+                    "key": "field_name_informal_classification",
+                    "skey": "Field name (informal classification)",
+                    "svalue": {
+                        "value": "Filter"
+                    }
+                },
+                {
+                    "key": "sample_description",
+                    "skey": "Sample description",
+                    "svalue": {
+                        "value": "18 hour time point. Filter used for filtered surface water samples"
+                    }
+                },
+                {
+                    "key": "collection_method_description",
+                    "skey": "Collection method description",
+                    "svalue": {
+                        "value": "0.22 micron filter used to filter water samples"
+                    }
+                },
+                {
+                    "key": "purpose",
+                    "skey": "Purpose",
+                    "svalue": {
+                        "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                    }
+                },
+                {
+                    "key": "latitude",
+                    "skey": "Latitude",
+                    "svalue": {
+                        "value": 52.476416
+                    }
+                },
+                {
+                    "key": "longitude",
+                    "skey": "Longitude",
+                    "svalue": {
+                        "value": 13.6257102
+                    }
+                },
+                {
+                    "key": "primary_physiographic_feature",
+                    "skey": "Primary physiographic feature",
+                    "svalue": {
+                        "value": "Stream"
+                    }
+                },
+                {
+                    "key": "name_of_physiographic_feature",
+                    "skey": "Name of physiographic feature",
+                    "svalue": {
+                        "value": "Erpe River"
+                    }
+                },
+                {
+                    "key": "location_description",
+                    "skey": "Location description",
+                    "svalue": {
+                        "value": "Persistently inundated location of the stream near to the shoreline."
+                    }
+                },
+                {
+                    "key": "country",
+                    "skey": "Country",
+                    "svalue": {
+                        "value": "Germany"
+                    }
+                },
+                {
+                    "key": "field_program_cruise",
+                    "skey": "Field program/cruise",
+                    "svalue": {
+                        "value": "WHONDRS 48hr"
+                    }
+                },
+                {
+                    "key": "collector_chief_scientist",
+                    "skey": "Collector/Chief Scientist",
+                    "svalue": {
+                        "value": " J\u00f6rg Lewandowski and Birgit Mueller"
+                    }
+                },
+                {
+                    "key": "collection_date",
+                    "skey": "Collection date",
+                    "svalue": {
+                        "value": "2018-09-26"
+                    }
+                },
+                {
+                    "key": "collection_time",
+                    "skey": "Collection time",
+                    "svalue": {
+                        "value": "06:00:00Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "save_date": 1607969657902,
+    "version": 1
+}

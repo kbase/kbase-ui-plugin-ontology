@@ -9,42 +9,7 @@ import {
 import { DynamicServiceConfig } from '@kbase/ui-components/lib/redux/integration/store';
 import { GenericClient } from '@kbase/ui-lib';
 import { Metadata, transformField } from '../../../../types/metadata';
-
-import sample1Data from './data/sample1.json';
-import sample2Data from './data/sample2.json';
-import sample3Data from './data/sample3.json';
-import sample4Data from './data/sample4.json';
-import sample5Data from './data/sample5.json';
-import sample6Data from './data/sample6.json';
-import sample7Data from './data/sample7.json';
-
-import { Sample } from './Sample';
-
-const sample1 = sample1Data as Sample;
-const sample2 = sample2Data as Sample;
-const sample3 = sample3Data as Sample;
-const sample4 = sample4Data as Sample;
-const sample5 = sample5Data as Sample;
-const sample6 = sample6Data as Sample;
-const sample7 = sample7Data as Sample;
-
-const samples: Array<Sample> = [
-    sample1, sample2, sample3, sample4, sample5, sample6, sample7
-];
-
-const samplesMap: Map<string, Array<Sample>> = new Map();
-samples.forEach((sample) => {
-    const term = sample.node_tree[0].meta_controlled.biome.value as string;
-    if (!samplesMap.has(term)) {
-        samplesMap.set(term, []);
-    }
-    samplesMap.get(term)!.push(sample);
-});
-
-
-// const samples = [
-//     sample1, sample2
-// ] as Array<Sample>;
+import { JSONObject } from '../../../../types/json';
 
 const REQUEST_TIMEOUT = 30000;
 
@@ -104,36 +69,10 @@ export interface GetRelatedObjectsParams {
     limit: number;
 }
 
-export interface GetRelatedGenomesParams {
-    ref: OntologyReference;
-    offset: number;
-    limit: number;
-}
-
 export interface WorkspaceObjectReference {
     workspaceID: number;
     objectID: number;
     version: number;
-}
-
-export interface RelatedObject {
-    name: string;
-    id: number;
-    version: number;
-    workspaceId: number;
-    workspaceType: string;
-    ref: string;
-    info: ObjectInfo;
-}
-
-export interface GetRelatedObjectsResult {
-    objects: Array<RelatedObject>;
-    totalCount: number;
-}
-
-export interface GetRelatedGenomesResult {
-    objects: Array<RelatedGenome>;
-    totalCount: number;
 }
 
 // export interface RelatedFeature {
@@ -143,31 +82,27 @@ export interface GetRelatedGenomesResult {
 //     objectRef: WorkspaceObjectReference;
 // }
 
-export interface RelatedGenome {
+export interface RelatedObject {
     name: string;
     id: number;
     version: number;
     workspaceId: number;
-    linkedFeatureCount: number;
+    featureCount: number;
     workspaceType: string;
     ref: string;
     info: ObjectInfo;
     scientificName: string;
     domain: string;
-    source: string;
-    sourceId: string;
-    kbaseId: string;
-    totalFeatureCount: number;
 }
 
-export interface GetRelatedGenomesResult {
-    objects: Array<RelatedGenome>;
+export interface GetRelatedObjectsResult {
+    objects: Array<RelatedObject>;
     totalCount: number;
 }
 
 // Related Features
 
-export interface GetRelatedGenomeFeaturesParams {
+export interface GetRelatedObjectFeaturesParams {
     ref: OntologyReference;
     objectRef: string;
     offset: number;
@@ -179,8 +114,8 @@ export interface Feature {
     id: string;
 }
 
-export interface GetRelatedGenomeFeaturesResult {
-    object: RelatedGenome;
+export interface GetRelatedObjectFeaturesResult {
+    object: RelatedObject;
     totalCount: number;
     features: Array<Feature>;
 }
@@ -237,7 +172,7 @@ export interface ObjectMetadata {
     [key: string]: string;
 }
 
-export type RawObjectInfo = [
+export type ObjectInfo = [
     number, // object id
     string, // object name
     string, // workspace type of object
@@ -251,41 +186,75 @@ export type RawObjectInfo = [
     ObjectMetadata, // metadata
 ];
 
-export interface ObjectInfo {
-    objectId: number,
-    objectName: string,
-    workspaceType: string,
-    savedAt: number,
-    objectVersion: number,
-    savedBy: string,
-    workspaceId: number,
-    workspaceName: string,
-    checksum: string,
-    size: number;
-    metadata: ObjectMetadata;
-}
-
 export interface GetObjectInfo3Result {
-    infos: Array<RawObjectInfo>;
+    infos: Array<ObjectInfo>;
     paths: Array<Array<string>>;
 }
 
+export type ObjectRefString = string;
 
-export interface RelatedSample {
-    fieldKey: string;
-    sample: Sample;
+export interface ObjectIdentity {
+    workspace?: string;
+    wsid?: number;
+    name?: string;
+    objid?: number;
+    ver?: number;
+    ref?: ObjectRef;
+}
+
+export type ObjectRefChain = Array<ObjectIdentity>;
+
+export type ObjectPath = string;
+
+export interface ObjectSpecification {
+    workspace?: string;
+    wsid?: number;
+    name?: string;
+    objid?: number;
+    ver?: number;
+    ref?: ObjectRef;
+    obj_path?: Array<ObjectRef>;
+    obj_ref_path?: Array<ObjectRef>;
+    find_reference_path?: number;
+    included?: Array<ObjectPath>;
+    strict_maps?: number;
+    string_arrays?: number;
+}
+
+export interface GetObjects2Params {
+    objects: Array<ObjectSpecification>;
+    ignoreErrors?: number;
+    no_data?: number;
+}
+
+export type ObjectRef = string;
+
+export type ExtractedId = string;
+
+// TODO: flesh this out
+
+export type ProvenanceAction = JSONObject;
+
+export interface ObjectData {
+    data: JSONObject;
+    info: ObjectInfo;
+    path: Array<ObjectRef>;
+    provenance: Array<ProvenanceAction>;
+    creator: string;
+    orig_wsid: number;
+    created: string;
+    epoch: number;
+    refs: Array<ObjectRef>;
+    copied: ObjectRef;
+    copy_source_inaccessible: number;
+    extracted_ids: { [id_type: string]: Array<ExtractedId>; };
+    handle_error: string;
+    handle_stacktrace: string;
 }
 
 
-export interface GetRelatedSamplesParams {
-    ref: OntologyReference;
-    offset: number;
-    limit: number;
-}
-
-export interface GetRelatedSamplesResult {
-    samples: Array<RelatedSample>;
-    totalCount: number;
+export interface GetObjects2Result {
+    data: Array<ObjectData>;
 }
 
 export default class OntologyModel {
@@ -453,144 +422,46 @@ export default class OntologyModel {
                 token: this.token
             });
 
-            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-                objects: objectRefs,
-                includeMetadata: 1,
-                ignoreErrors: 0
+            console.log('object refs?', objectRefs);
+
+            const [objectsInfo] = await wsClient.callFunc<[GetObjects2Params], [GetObjects2Result]>('get_objects2', [{
+                objects: objectRefs.map(({ ref }) => {
+                    return {
+                        ref,
+                        included: [
+                            'scientific_name',
+                            'domain'
+                        ]
+                    };
+                }),
+                ignoreErrors: 0,
+                no_data: 1
             }]);
-            return objectsInfo.infos;
+            console.log('objects ... info ...', objectsInfo);
+            return objectsInfo.data;
         })();
 
         const objects = result.results.map((object, index) => {
-            const objectInfo = objectsInfo[index];
+            const objectData = objectsInfo[index];
             const [
-                id, /* name */, /* type */, /* savedDate */, version,
+                id, /* name */, type, /* savedDate */, version,
                 /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
                 /* size */, metadata
-            ] = objectInfo;
+            ] = objectData.info;
             const ref = `${workspaceId}/${id}/${version}`;
-            // console.log('metadata', metadata);
-
-            const info: ObjectInfo = (() => {
-                const [
-                    objectId, objectName, workspaceType, savedAtString, objectVersion,
-                    savedBy, workspaceId, workspaceName, checksum,
-                    size, metadata
-                ] = objectInfo;
-                const savedAt = new Date(savedAtString).getTime();
-                return {
-                    objectId, objectName, workspaceType, savedAt, objectVersion,
-                    savedBy, workspaceId, workspaceName, checksum,
-                    size, metadata
-                };
-            })();
+            console.log('metadata', metadata);
 
             return {
                 id: object.ws_obj.object_id,
                 name: object.ws_obj.name,
                 version: object.ws_obj.version,
                 workspaceId: object.ws_obj.workspace_id,
+                featureCount: object.feature_count,
                 ref,
-                workspaceType: objectInfo[2],
-                info,
-            } as RelatedObject;
-        });
-
-        return {
-            // features,
-            objects,
-            totalCount: objects.length
-        };
-    }
-
-    async getRelatedGenomes({ ref, offset, limit }: GetRelatedGenomesParams): Promise<GetRelatedGenomesResult> {
-        const result = await this.ontologyAPI.get_associated_ws_objects({
-            ns: this.stringToOntologyNamespace(ref.namespace),
-            id: ref.term,
-            ts: ref.timestamp || Date.now(),
-            offset, limit
-        });
-
-        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
-        //     genomeWithFeatures.features.forEach((feature) => {
-        //         features.push({
-        //             featureID: feature.feature_id,
-        //             relatedAt: feature.updated_at,
-        //             objectName: genomeWithFeatures.ws_obj.name,
-        //             objectRef: {
-        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
-        //                 objectID: genomeWithFeatures.ws_obj.object_id,
-        //                 version: genomeWithFeatures.ws_obj.version
-        //             }
-        //         });
-        //     })
-        //     return features;
-        // }, []: Array<RelatedFeature>);
-
-        // Get object info.
-        const objectRefs = result.results.map((object) => {
-            return {
-                ref: `${object.ws_obj.workspace_id}/${object.ws_obj.object_id}/${object.ws_obj.version}`
-            };
-        });
-
-        const objectsInfo = await (async () => {
-            if (objectRefs.length === 0) {
-                return [];
-            }
-            const wsClient = new GenericClient({
-                module: 'Workspace',
-                url: this.workspaceURL,
-                token: this.token
-            });
-
-            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-                objects: objectRefs,
-                includeMetadata: 1,
-                ignoreErrors: 0
-            }]);
-            return objectsInfo.infos;
-        })();
-
-        const objects = result.results.map((object, index) => {
-            const objectInfo = objectsInfo[index];
-            const [
-                id, /* name */, /* type */, /* savedDate */, version,
-                /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
-                /* size */, metadata
-            ] = objectInfo;
-            const ref = `${workspaceId}/${id}/${version}`;
-            // console.log('metadata', metadata);
-
-            const info: ObjectInfo = (() => {
-                const [
-                    objectId, objectName, workspaceType, savedAtString, objectVersion,
-                    savedBy, workspaceId, workspaceName, checksum,
-                    size, metadata
-                ] = objectInfo;
-                const savedAt = new Date(savedAtString).getTime();
-                return {
-                    objectId, objectName, workspaceType, savedAt, objectVersion,
-                    savedBy, workspaceId, workspaceName, checksum,
-                    size, metadata
-                };
-            })();
-
-            return {
-                id: object.ws_obj.object_id,
-                name: object.ws_obj.name,
-                version: object.ws_obj.version,
-                workspaceId: object.ws_obj.workspace_id,
-                linkedFeatureCount: object.feature_count,
-                ref,
-                workspaceType: objectInfo[2],
-                info,
-                scientificName: metadata['Name'],
-                domain: metadata['Domain'],
-                source: metadata['Source'],
-                sourceId: metadata['Source ID'],
-                totalFeatureCount: parseInt(metadata['Number features']), // TODO: check if empty
-                kbaseId: 'not in metadata?'
+                workspaceType: type,
+                info: objectData.info,
+                scientificName: objectData.data['scientific_name'] as string,
+                domain: objectData.data['domain'] as string
             };
         });
 
@@ -601,7 +472,7 @@ export default class OntologyModel {
         };
     }
 
-    async getRelatedGenomeFeatures({ ref, objectRef, offset, limit, featureCount }: GetRelatedGenomeFeaturesParams): Promise<GetRelatedGenomeFeaturesResult> {
+    async getRelatedObjectFeatures({ ref, objectRef, offset, limit, featureCount }: GetRelatedObjectFeaturesParams): Promise<GetRelatedObjectFeaturesResult> {
         // if (typeof featureCount === 'undefined') {
         //     const result = await client.get_associated_ws_features({
         //         ns: ontologyReferenceToNamespace(ref),
@@ -663,53 +534,42 @@ export default class OntologyModel {
                 token: this.token
             });
 
-            const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-                objects: objectRefs,
-                includeMetadata: 1,
-                ignoreErrors: 0
+            const [objectsInfo] = await wsClient.callFunc<[GetObjects2Params], [GetObjects2Result]>('get_objects2', [{
+                objects: objectRefs.map(({ ref }) => {
+                    return {
+                        ref,
+                        included: [
+                            'scientific_name',
+                            'domain'
+                        ]
+                    };
+                }),
+                ignoreErrors: 0,
+                no_data: 1
             }]);
-            return objectsInfo.infos[0];
-
+            console.log('objects info?', objectsInfo);
+            return objectsInfo.data[0];
         })();
 
         const [
             id, name, workspaceType, /* savedDate */, version,
-            /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
-            /* size */, metadata
-        ] = objectInfo;
+            /* savedBy */, workspaceId, /*workspaceName*/, /* checksum */,
+            /* size */, /* metadata */
+        ] = objectInfo.info;
         // const objectRef = `${workspaceId}/${id}/${version}`;
 
-        const info: ObjectInfo = (() => {
-            const [
-                objectId, objectName, workspaceType, savedAtString, objectVersion,
-                savedBy, workspaceId, workspaceName, checksum,
-                size, metadata
-            ] = objectInfo;
-            const savedAt = new Date(savedAtString).getTime();
-            return {
-                objectId, objectName, workspaceType, savedAt, objectVersion,
-                savedBy, workspaceId, workspaceName, checksum,
-                size, metadata
-            };
-        })();
-
-
         // const ws_obj = result.results[0].ws_obj;
-        const object: RelatedGenome = {
+        const object: RelatedObject = {
             id,
             name,
             version,
             workspaceId,
             ref: objectRef,
-            linkedFeatureCount: featureCount,
+            featureCount,
             workspaceType,
-            info,
-            scientificName: metadata['Name'],
-            domain: metadata['Domain'],
-            source: metadata['Source'],
-            sourceId: metadata['Source ID'],
-            kbaseId: 'not in metadata?',
-            totalFeatureCount: parseInt(metadata['Number features']), // TODO: check if empty
+            info: objectInfo.info,
+            scientificName: objectInfo.data['scientific_name'] as string,
+            domain: objectInfo.data['domain'] as string
         };
 
         return {
@@ -757,6 +617,8 @@ export default class OntologyModel {
             return m;
         }, new Map<string, Array<TermsGraphRelation>>());
 
+
+
         const termsToGet = result.results.reduce((termsToGet, item) => {
             termsToGet.set(item.term.id, item.term);
             return termsToGet;
@@ -801,133 +663,6 @@ export default class OntologyModel {
 
     async getSource(ns: string): Promise<Source | null> {
         return this.ontologyAPI.get_source({ ns });
-    }
-
-    async getRelatedSamples({ ref, offset, limit }: GetRelatedSamplesParams): Promise<GetRelatedSamplesResult> {
-        // const result = await this.ontologyAPI.get_associated_ws_objects({
-        //     ns: this.stringToOntologyNamespace(ref.namespace),
-        //     id: ref.term,
-        //     ts: ref.timestamp || Date.now(),
-        //     offset, limit
-        // });
-
-        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
-        //     genomeWithFeatures.features.forEach((feature) => {
-        //         features.push({
-        //             featureID: feature.feature_id,
-        //             relatedAt: feature.updated_at,
-        //             objectName: genomeWithFeatures.ws_obj.name,
-        //             objectRef: {
-        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
-        //                 objectID: genomeWithFeatures.ws_obj.object_id,
-        //                 version: genomeWithFeatures.ws_obj.version
-        //             }
-        //         });
-        //     })
-        //     return features;
-        // }, []: Array<RelatedFeature>);
-
-        // Get object info.
-        // const objectRefs = result.results.map((object) => {
-        //     return {
-        //         ref: `${object.ws_obj.workspace_id}/${object.ws_obj.object_id}/${object.ws_obj.version}`
-        //     };
-        // });
-
-        // const objectsInfo = await (async () => {
-        //     if (objectRefs.length === 0) {
-        //         return [];
-        //     }
-        //     const wsClient = new GenericClient({
-        //         module: 'Workspace',
-        //         url: this.workspaceURL,
-        //         token: this.token
-        //     });
-
-        //     const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-        //         objects: objectRefs,
-        //         includeMetadata: 1,
-        //         ignoreErrors: 0
-        //     }]);
-        //     return objectsInfo.infos;
-        // })();
-
-        // const objects = result.results.map((object, index) => {
-        //     const objectInfo = objectsInfo[index];
-        //     const [
-        //         id, /* name */, /* type */, /* savedDate */, version,
-        //         /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
-        //         /* size */, metadata
-        //     ] = objectInfo;
-        //     const ref = `${workspaceId}/${id}/${version}`;
-        //     // console.log('metadata', metadata);
-
-        //     const info: ObjectInfo = (() => {
-        //         const [
-        //             objectId, objectName, workspaceType, savedAtString, objectVersion,
-        //             savedBy, workspaceId, workspaceName, checksum,
-        //             size, metadata
-        //         ] = objectInfo;
-        //         const savedAt = new Date(savedAtString).getTime();
-        //         return {
-        //             objectId, objectName, workspaceType, savedAt, objectVersion,
-        //             savedBy, workspaceId, workspaceName, checksum,
-        //             size, metadata
-        //         };
-        //     })();
-
-        //     return {
-        //         id: object.ws_obj.object_id,
-        //         name: object.ws_obj.name,
-        //         version: object.ws_obj.version,
-        //         workspaceId: object.ws_obj.workspace_id,
-        //         ref,
-        //         workspaceType: objectInfo[2],
-        //         info,
-        //     } as RelatedObject;
-        // });
-
-        // return {
-        //     // features,
-        //     objects,
-        //     totalCount: objects.length
-        // };
-
-        const samples = (samplesMap.get(ref.term) || [])
-            .map((sample) => {
-                return {
-                    fieldKey: 'biome',
-                    sample
-                };
-            });
-
-        // const samples: Array<RelatedSample> = [{
-        //     key: 'biome',
-        //     sample: sample1
-        // }, {
-        //     key: 'biome',
-        //     sample: sample2
-        // }, {
-        //     key: 'biome',
-        //     sample: sample3
-        // }, {
-        //     key: 'biome',
-        //     sample: sample4
-        // }, {
-        //     key: 'biome',
-        //     sample: sample5
-        // }, {
-        //     key: 'biome',
-        //     sample: sample6
-        // }, {
-        //     key: 'biome',
-        //     sample: sample7
-        // }];
-
-        return {
-            samples,
-            totalCount: 11,
-        };
     }
 
 }

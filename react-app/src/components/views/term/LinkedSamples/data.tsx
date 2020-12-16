@@ -1,5 +1,5 @@
 import React from 'react';
-import LinkedObjectsDB, { LinkedObjectsDBStateLoaded } from './LinkedObjectsDB';
+import LinkedObjectsDB, { LinkedSamplesDBStateLoaded } from './LinkedSamplesDB';
 import { DBStatus, DBStateError } from '../../../../lib/DB';
 
 import { AppConfig } from '@kbase/ui-components';
@@ -40,7 +40,7 @@ export default class Data extends React.Component<Props, State> {
         const db = this.db.get();
         switch (db.status) {
             case DBStatus.NONE:
-                this.db.getLinkedObjects(this.props.termRef, this.offset, this.limit);
+                this.db.getLinkedSamples(this.props.termRef, this.offset, this.limit);
         }
     }
 
@@ -52,10 +52,10 @@ export default class Data extends React.Component<Props, State> {
         return <ErrorView error={db.error} />;
     }
 
-    renderLoaded(db: LinkedObjectsDBStateLoaded) {
+    renderLoaded(db: LinkedSamplesDBStateLoaded) {
         return (
             <View
-                linkedObjects={db.linkedObjects} totalCount={db.totalCount}
+                linkedSamples={db.linkedSamples} totalCount={db.totalCount}
             />
         );
     }

@@ -71,12 +71,21 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
 
 
     renderObjectInfo(objectInfo: ObjectInfo) {
-        const [
-            id, name, type, savedDate, version,
-            savedBy, workspaceId, /* checksum */,
-            /* size */, /* metadata */
-        ] = objectInfo;
-        const ref = `${workspaceId}/${id}/${version}`;
+        // const [
+        //     id, name, type, savedDate, version,
+        //     savedBy, workspaceId, /* checksum */,
+        //     /* size */, /* metadata */
+        // ] = objectInfo;
+        const {
+            workspaceId,
+            objectId,
+            objectVersion,
+            objectName,
+            workspaceType,
+            savedAt,
+            savedBy
+        } = objectInfo;
+        const ref = `${workspaceId}/${objectId}/${objectVersion}`;
         return <div className="Row">
             <div className="Col InfoTable">
                 <div>
@@ -84,7 +93,7 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
                         Name
                     </div>
                     <div>
-                        <a href={`/#dataview/${ref}ref`} target="_blank" rel="noopener noreferrer">{name}</a>
+                        <a href={`/#dataview/${ref}ref`} target="_blank" rel="noopener noreferrer">{objectName}</a>
                     </div>
                 </div>
                 <div>
@@ -92,7 +101,7 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
                         Type
                     </div>
                     <div>
-                        <a href={`/#spec/type/${type}`}>{type}</a>
+                        <a href={`/#spec/type/${workspaceType}`}>{workspaceType}</a>
                     </div>
                 </div>
             </div>
@@ -102,7 +111,7 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
                         Saved
                     </div>
                     <div>
-                        <NiceRelativeTime time={new Date(savedDate)} />
+                        <NiceRelativeTime time={new Date(savedAt)} />
 
                     </div>
                 </div>
@@ -117,7 +126,6 @@ export default class ObjectDetail extends React.Component<ObjectDetailProps, Obj
             </div>
         </div>;
     }
-
 
     render() {
         if (this.props.objectInfo) {

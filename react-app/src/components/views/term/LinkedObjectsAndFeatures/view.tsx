@@ -1,19 +1,20 @@
 import React from 'react';
 
-import { Table, Alert, Select } from 'antd';
-import { RelatedObject, ObjectInfo } from '../lib/model';
+import { Table, Alert, Select, Tooltip, Button } from 'antd';
+import { RelatedGenome, ObjectInfo } from '../lib/model';
 import styles from './style.module.css';
 import Features from './Features';
 import { OntologyReference } from '../../../../types/ontology';
 import ObjectDetail from './ObjectDetail';
 import { SortKey, SortDirection } from './LinkedObjectsDB';
 import { SelectValue } from 'antd/lib/select';
+import { Section } from '../../../Section';
 
 export interface Props {
-    linkedObjects: Array<RelatedObject>;
+    linkedObjects: Array<RelatedGenome>;
     totalCount: number;
-    selectObject: (object: RelatedObject) => void;
-    selectedObject: RelatedObject | null;
+    selectObject: (object: RelatedGenome) => void;
+    selectedObject: RelatedGenome | null;
     termRef: OntologyReference;
     sortObjects: (sortBy: SortKey, direction: SortDirection) => void;
 }
@@ -25,6 +26,7 @@ interface State {
 export default class LinkedObjects extends React.Component<Props, State> {
     currentSortDirection: SortDirection;
     currentSortKey: SortKey;
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -33,8 +35,9 @@ export default class LinkedObjects extends React.Component<Props, State> {
         this.currentSortDirection = 'ascending';
         this.currentSortKey = 'name';
     }
+
     renderTable() {
-        return <Table<RelatedObject>
+        return <Table<RelatedGenome>
             dataSource={this.props.linkedObjects}
             className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
             size="small"
@@ -43,7 +46,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
             //     pageSize: 20
             // }}
             scroll={{ y: '100%' }}
-            rowKey={(row: RelatedObject) => {
+            rowKey={(row: RelatedGenome) => {
                 return [
                     row.workspaceId,
                     row.id,
@@ -56,7 +59,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                 dataIndex={"name"}
                 title="Object Name"
                 width="40%"
-                render={(name: string, row: RelatedObject) => {
+                render={(name: string, row: RelatedGenome) => {
                     const hash = [
                         'dataview',
                         String(row.workspaceId),
@@ -72,7 +75,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                     );
                 }}
                 defaultSortOrder="ascend"
-                sorter={(a: RelatedObject, b: RelatedObject) => {
+                sorter={(a: RelatedGenome, b: RelatedGenome) => {
                     return a.name.localeCompare(b.name);
                 }}
             />
@@ -80,7 +83,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                 dataIndex={"workspaceType"}
                 title="Type"
                 width="40%"
-                render={(workspaceType: string, row: RelatedObject) => {
+                render={(workspaceType: string, row: RelatedGenome) => {
                     const hash = [
                         'spec',
                         'type',
@@ -97,7 +100,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                         </a>
                     );
                 }}
-                sorter={(a: RelatedObject, b: RelatedObject) => {
+                sorter={(a: RelatedGenome, b: RelatedGenome) => {
                     return a.workspaceType.localeCompare(b.workspaceType);
                 }}
             />
@@ -117,8 +120,8 @@ export default class LinkedObjects extends React.Component<Props, State> {
                         {content}
                     </div>;
                 }}
-                sorter={(a: RelatedObject, b: RelatedObject) => {
-                    return a.featureCount - b.featureCount;
+                sorter={(a: RelatedGenome, b: RelatedGenome) => {
+                    return a.linkedFeatureCount - b.linkedFeatureCount;
                 }}
             />
 
@@ -137,7 +140,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
     renderNone() {
         return (
             <Alert type="info"
-                message="No Linked Data"
+                message="No Linked Genomes"
                 description={
                     <p>
                         No data objects have yet been associated with this term
@@ -152,7 +155,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
         );
     }
 
-    selectObject(object: RelatedObject) {
+    selectObject(object: RelatedGenome) {
         // const ref = `${object.workspaceId}/${object.id}/${object.version}`;
         this.props.selectObject(object);
         this.setState({
@@ -164,7 +167,8 @@ export default class LinkedObjects extends React.Component<Props, State> {
         return this.props.linkedObjects.map((object) => {
             const ref = `${object.workspaceId}/${object.id}/${object.version}`;
             const classNames: Array<string> = [styles.Object];
-            if (this.props.selectedObject?.name === ref) {
+
+            if (this.props.selectedObject?.ref === ref) {
                 classNames.push(styles.SelectedObject);
             }
             const [, typeName,] = object.workspaceType.split(/[-.]/);
@@ -178,17 +182,52 @@ export default class LinkedObjects extends React.Component<Props, State> {
                         <a href={`/#dataview/${ref}`} target="_blank" rel="noopener noreferrer">{object.name}</a>
                     </div>
                     <div className={styles.ObjectType}>
-                        <a href={`/#spec/type/${object.workspaceType}`} target="_blank" rel="noopener noreferrer">{typeName}</a>
+                        <Tooltip title={object.workspaceType}>
+                            <a href={`/#spec/type/${object.workspaceType}`} target="_blank" rel="noopener noreferrer">{typeName}</a>
+                        </Tooltip>
+                    </div>
+                </div>
+                <div className={styles.CardNameRow}>
+                    <div className={styles.ScientificName}>
+                        <Tooltip title={`Domain: ${object.domain}`}>
+                            {object.scientificName}
+                        </Tooltip>
+                    </div>
+                    <div className={styles.Domain}>
+                        {object.domain}
+                    </div>
+                </div>
+                <div className={styles.CardNameRow}>
+                    <div className={styles.Source}>
+                        <span className={styles.Label}>Source</span>
+                        <span>{object.source}</span>
+                    </div>
+                    <div className={styles.SourceID}>
+                        <span className={styles.Label}>ID</span>
+                        <span>{object.sourceId}</span>
+                    </div>
+                </div>
+                <div className={styles.CardNameRow}>
+                    <div className={styles.KBaseID}>
+                        <span className={styles.Label}>KBase ID</span>
+                        <span>{object.kbaseId}</span>
                     </div>
                 </div>
                 <div className={styles.CardFeaturesRow}>
-                    <div className={styles.ObjectFeatures}>
+                    <span className={styles.Label}>Features</span>
+                    <span>
+
                         {Intl.NumberFormat('en-US', {
                             useGrouping: true
-                        }).format(object.featureCount)} features
-                    </div>
+                        }).format(object.linkedFeatureCount)} <span className={styles.Suffix}>linked, out of</span>
+                        {' '}
+                        {Intl.NumberFormat('en-US', {
+                            useGrouping: true
+                        }).format(object.totalFeatureCount)} <span className={styles.Suffix}>total</span>
+                    </span>
+
                 </div>
-            </div>;
+            </div >;
         });
     }
 
@@ -236,7 +275,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
 
     renderSummary() {
         return <div style={{ marginBottom: '6px', textAlign: 'center', fontStyle: 'italic' }}>
-            {this.props.linkedObjects.length} {this.props.linkedObjects.length === 1 ? 'object' : 'objects'} found
+            {this.props.linkedObjects.length} {this.props.linkedObjects.length === 1 ? 'genome' : 'genomes'} found
         </div>;
     }
 
@@ -272,31 +311,34 @@ export default class LinkedObjects extends React.Component<Props, State> {
         </div>;
     }
 
+    renderToolbar() {
+        const ref = this.props.selectedObject?.ref;
+        return <div>
+            <Button type="text" size="small" onClick={() => {
+                window.open(`/#dataview/${ref}`, "_blank");
+            }}>
+                view
+            </Button>
+        </div>;
+    }
+
     renderLayout() {
         return <div className="Col">
             <div className="Row">
                 <div className="Col" style={{ marginRight: '5px' }}>
-                    <div className="Col Col-auto">
-                        {this.renderColumnHeading('Objects')}
-                    </div>
-                    <div className="Col">
-                        {this.renderLinkedObjects()}
-                    </div>
+                    <Section title="Genomes" fullheight={true}>
+                        <div className="Col">
+                            {this.renderLinkedObjects()}
+                        </div>
+                    </Section>
                 </div>
                 <div className="Col Col-grow-2" style={{ marginLeft: '5px' }}>
-                    <div className="Col Col-auto">
-                        {this.renderColumnHeading('Object Detail')}
-                    </div>
-                    <div className="Col Col-auto">
+                    <Section title="Genome" fullheight={false} renderToolbar={this.renderToolbar.bind(this)}>
                         <ObjectDetail objectInfo={this.state.selectedObjectInfo} />
-
-                    </div>
-                    <div className="Col Col-auto" style={{ marginTop: '20px' }}>
-                        {this.renderColumnHeading('Features')}
-                    </div>
-                    <div className="Col Col scrolling">
+                    </Section>
+                    <Section title="Features" fullheight={true}>
                         {this.renderFeatures()}
-                    </div>
+                    </Section>
                 </div>
             </div>
         </div>;

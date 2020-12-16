@@ -1,0 +1,265 @@
+{
+    "id": "d9ebd0a1-4c5b-4ae2-80fa-76cb93d03bdc",
+    "user": "slebras",
+    "name": "eastfork_2018_sw_27hr_WHONDRS-SW48-000043",
+    "node_tree": [
+        {
+            "id": "WHO000BC7",
+            "type": "BioReplicate",
+            "parent": null,
+            "meta_controlled": {
+                "name": {
+                    "value": "eastfork_2018_sw_27hr_WHONDRS-SW48-000043"
+                },
+                "id": {
+                    "value": "WHO000BC7\u00a0\u00a0"
+                },
+                "biome": {
+                    "value": "ENVO:01000216"
+                },
+                "material": {
+                    "value": "Other"
+                },
+                "field_name_informal_classification": {
+                    "value": "Filter"
+                },
+                "sample_description": {
+                    "value": "27 hour time point. Filter used for filtered surface water samples"
+                },
+                "collection_method_description": {
+                    "value": "0.22 micron filter used to filter water samples"
+                },
+                "purpose": {
+                    "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                },
+                "latitude": {
+                    "units": "degrees",
+                    "value": 35.966194
+                },
+                "longitude": {
+                    "units": "degrees",
+                    "value": -84.358442
+                },
+                "primary_physiographic_feature": {
+                    "value": "Stream"
+                },
+                "name_of_physiographic_feature": {
+                    "value": "East Fork Poplar Creek"
+                },
+                "location_description": {
+                    "value": "Persistently inundated location of the stream near to the shoreline."
+                },
+                "country": {
+                    "value": "United States"
+                },
+                "state_province": {
+                    "value": "Tennessee"
+                },
+                "field_program_cruise": {
+                    "value": "WHONDRS 48hr"
+                },
+                "collector_chief_scientist": {
+                    "value": "Scott Brooks"
+                },
+                "collection_date": {
+                    "value": "2018-08-15"
+                },
+                "collection_time": {
+                    "value": "16:00:00Z"
+                }
+            },
+            "meta_user": {
+                "latitude": {
+                    "units": "degrees",
+                    "value": 35.966194
+                },
+                "collection_date": {
+                    "value": "2018-08-15"
+                },
+                "longitude": {
+                    "units": "degrees",
+                    "value": -84.358442
+                },
+                "primary_physiographic_feature": {
+                    "value": "Stream"
+                },
+                "name_of_physiographic_feature": {
+                    "value": "East Fork Poplar Creek"
+                },
+                "collection_method_description": {
+                    "value": "0.22 micron filter used to filter water samples"
+                },
+                "purpose": {
+                    "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                },
+                "location_description": {
+                    "value": "Persistently inundated location of the stream near to the shoreline."
+                },
+                "material": {
+                    "value": "Other"
+                },
+                "country": {
+                    "value": "United States"
+                },
+                "collection_time": {
+                    "value": "16:00:00Z"
+                },
+                "field_program_cruise": {
+                    "value": "WHONDRS 48hr"
+                },
+                "sample_description": {
+                    "value": "27 hour time point. Filter used for filtered surface water samples"
+                },
+                "field_name_informal_classification": {
+                    "value": "Filter"
+                },
+                "state_province": {
+                    "value": "Tennessee"
+                },
+                "collector_chief_scientist": {
+                    "value": "Scott Brooks"
+                },
+                "biome": {
+                    "value": "ENVO:01000216"
+                }
+            },
+            "source_meta": [
+                {
+                    "key": "name",
+                    "skey": "Sample Name",
+                    "svalue": {
+                        "value": "eastfork_2018_sw_27hr_WHONDRS-SW48-000043"
+                    }
+                },
+                {
+                    "key": "id",
+                    "skey": "IGSN",
+                    "svalue": {
+                        "value": "WHO000BC7\u00a0\u00a0"
+                    }
+                },
+                {
+                    "key": "biome",
+                    "skey": "Biome",
+                    "svalue": {
+                        "value": "ENVO:01000216"
+                    }
+                },
+                {
+                    "key": "material",
+                    "skey": "Material",
+                    "svalue": {
+                        "value": "Other"
+                    }
+                },
+                {
+                    "key": "field_name_informal_classification",
+                    "skey": "Field name (informal classification)",
+                    "svalue": {
+                        "value": "Filter"
+                    }
+                },
+                {
+                    "key": "sample_description",
+                    "skey": "Sample description",
+                    "svalue": {
+                        "value": "27 hour time point. Filter used for filtered surface water samples"
+                    }
+                },
+                {
+                    "key": "collection_method_description",
+                    "skey": "Collection method description",
+                    "svalue": {
+                        "value": "0.22 micron filter used to filter water samples"
+                    }
+                },
+                {
+                    "key": "purpose",
+                    "skey": "Purpose",
+                    "svalue": {
+                        "value": "Microbial analyses (e.g. metagenomics, metatranscriptomics) for 48hr time series (whondrs.pnnl.gov) "
+                    }
+                },
+                {
+                    "key": "latitude",
+                    "skey": "Latitude",
+                    "svalue": {
+                        "value": 35.966194
+                    }
+                },
+                {
+                    "key": "longitude",
+                    "skey": "Longitude",
+                    "svalue": {
+                        "value": -84.358442
+                    }
+                },
+                {
+                    "key": "primary_physiographic_feature",
+                    "skey": "Primary physiographic feature",
+                    "svalue": {
+                        "value": "Stream"
+                    }
+                },
+                {
+                    "key": "name_of_physiographic_feature",
+                    "skey": "Name of physiographic feature",
+                    "svalue": {
+                        "value": "East Fork Poplar Creek"
+                    }
+                },
+                {
+                    "key": "location_description",
+                    "skey": "Location description",
+                    "svalue": {
+                        "value": "Persistently inundated location of the stream near to the shoreline."
+                    }
+                },
+                {
+                    "key": "country",
+                    "skey": "Country",
+                    "svalue": {
+                        "value": "United States"
+                    }
+                },
+                {
+                    "key": "state_province",
+                    "skey": "State/Province",
+                    "svalue": {
+                        "value": "Tennessee"
+                    }
+                },
+                {
+                    "key": "field_program_cruise",
+                    "skey": "Field program/cruise",
+                    "svalue": {
+                        "value": "WHONDRS 48hr"
+                    }
+                },
+                {
+                    "key": "collector_chief_scientist",
+                    "skey": "Collector/Chief Scientist",
+                    "svalue": {
+                        "value": "Scott Brooks"
+                    }
+                },
+                {
+                    "key": "collection_date",
+                    "skey": "Collection date",
+                    "svalue": {
+                        "value": "2018-08-15"
+                    }
+                },
+                {
+                    "key": "collection_time",
+                    "skey": "Collection time",
+                    "svalue": {
+                        "value": "16:00:00Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "save_date": 1607969655030,
+    "version": 1
+}
