@@ -8,7 +8,7 @@ import { OntologyReference } from '../../../../types/ontology';
 import ObjectDetail from './ObjectDetail';
 import { SortKey, SortDirection } from './LinkedObjectsDB';
 import { SelectValue } from 'antd/lib/select';
-import { Section } from '../../../Section';
+import Section from 'ui/Section';
 
 export interface Props {
     linkedObjects: Array<RelatedGenome>;

@@ -3,7 +3,7 @@ import OntologyDB, { OntologyDBStateLoaded } from './OntologyDB';
 import { DBStatus, DBStateError } from '../../../../lib/DB';
 import { AppConfig } from '@kbase/ui-components';
 import View from './view';
-import ErrorView from '../../../ErrorView';
+import ErrorView from 'ui/ErrorView';
 import { OntologyReference } from '../../../../types/ontology';
 import { Spin } from 'antd';
 // import { Navigation } from '../../../../redux/store';

@@ -208,7 +208,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
         </div>;
     }
 
-    renderLinkedObjects() {
+    renderLinkedSamples() {
         return <>
             <div style={{ flex: '0 0 auto' }}>{this.renderControls()}</div>
             <div style={{ flex: '1 1 0px', display: 'flex', flexDirection: 'column', minHeight: '0' }}>
@@ -219,10 +219,10 @@ export default class LinkedSamples extends React.Component<Props, State> {
     renderNone() {
         return (
             <Alert type="info"
-                message="No Linked Genomes"
+                message="No Linked Samples"
                 description={
                     <p>
-                        No data objects have yet been associated with this term
+                        No samples have yet been associated with this term
                     </p>
                 }
                 showIcon
@@ -237,7 +237,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
         if (this.props.linkedSamples.length === 0) {
             return this.renderNone();
         }
-        return this.renderLinkedObjects();
+        return this.renderLinkedSamples();
 
         // return <Empty
         //     image={Empty.PRESENTED_IMAGE_SIMPLE}

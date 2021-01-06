@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppConfig } from '@kbase/ui-components';
 import View from './view';
-import Loading from '../../../../Loading';
+import Loading from 'ui//Loading';
 import { OntologyReference } from '../../../../../types/ontology';
 import { AsyncProcess, AsyncProcessStatus } from '../../../../../lib/processing';
 import OntologyModel, { Feature, RelatedGenome } from '../../lib/model';

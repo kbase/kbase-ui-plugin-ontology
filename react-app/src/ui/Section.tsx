@@ -8,10 +8,9 @@ export interface SectionProps {
 }
 
 interface SectionState {
-
 }
 
-export class Section extends React.Component<SectionProps, SectionState> {
+export default class Section extends React.Component<SectionProps, SectionState> {
     renderToolbar() {
         if (!this.props.renderToolbar) {
             return;
@@ -38,5 +37,4 @@ export class Section extends React.Component<SectionProps, SectionState> {
         </div>;
 
     }
-
 }
