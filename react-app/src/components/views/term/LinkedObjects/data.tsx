@@ -5,8 +5,8 @@ import { DBStatus, DBStateError } from '../../../../lib/DB';
 import { AppConfig } from '@kbase/ui-components';
 import View from './view';
 import { OntologyReference } from '../../../../types/ontology';
-import ErrorView from '../../../ErrorView';
-import Loading from '../../../Loading';
+import ErrorView from 'ui/ErrorView';
+import Loading from 'ui//Loading';
 
 export interface Props {
     token: string;

@@ -28,6 +28,5 @@ export default class SubSection extends React.Component<SubSectionProps, SubSect
                 {this.props.children}
             </div>
         </div>;
-
     }
 }

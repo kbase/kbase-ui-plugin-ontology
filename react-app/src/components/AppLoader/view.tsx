@@ -8,8 +8,8 @@ import { OntologyReference } from '../../types/ontology';
 import { Params } from '../../ui/dispatcher';
 import { ViewRouters } from '../../ui/dispatcher/view';
 import Dispatcher from '../../ui/dispatcher';
-import ErrorView from '../../ui/ErrorView';
-import Loading from '../../ui/Loading';
+import ErrorView from 'ui/ErrorView';
+import Loading from 'ui//Loading';
 import Term from '../views/term';
 
 export interface AppLoaderProps {

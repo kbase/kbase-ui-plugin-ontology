@@ -3,9 +3,10 @@ import AncestorGraphDB, { AncestorGraphDBStateLoaded } from './AncestorGraphDB';
 import { DBStatus, DBStateError } from '../../../../lib/DB';
 import { AppConfig } from '@kbase/ui-components';
 import View from './view';
-import ErrorView from '../../../ErrorView';
+import ErrorView from 'ui/ErrorView';
 import { OntologyReference } from '../../../../types/ontology';
-import Loading from '../../../Loading';
+import Loading from 'ui/Loading';
+
 
 export interface Props {
     token: string;
