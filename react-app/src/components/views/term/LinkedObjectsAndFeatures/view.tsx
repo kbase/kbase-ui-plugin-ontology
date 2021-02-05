@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Table, Alert, Select, Tooltip, Button } from 'antd';
+import { Table, Alert, Select, Tooltip, Button, Empty } from 'antd';
 import { RelatedGenome, ObjectInfo } from '../lib/model';
 import styles from './style.module.css';
 import Features from './Features';
@@ -138,21 +138,9 @@ export default class LinkedObjects extends React.Component<Props, State> {
             // />
     */
     renderNone() {
-        return (
-            <Alert type="info"
-                message="No Linked Genomes"
-                description={
-                    <p>
-                        No data objects have yet been associated with this term
-                    </p>
-                }
-                showIcon
-                style={{
-                    margin: '0 auto',
-                    marginTop: '20px'
-                }}
-            />
-        );
+        return <Empty
+            description="No genome features have yet been associated with this term"
+            image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
 
     selectObject(object: RelatedGenome) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Alert, Tooltip, Input, Select } from 'antd';
+import { Table, Alert, Tooltip, Input, Select, Empty } from 'antd';
 import { RelatedSample } from '../lib/model';
 import './style.css';
 
@@ -32,6 +32,18 @@ export default class LinkedSamples extends React.Component<Props, State> {
             bordered={false}
         >
             <Table.Column
+                dataIndex={"fieldKey"}
+                key="fieldKey"
+                width="12em"
+                title="Sample Field"
+                render={(fieldKey: string, row: RelatedSample) => {
+                    return <span>{fieldKey}</span>;
+                }}
+                sorter={(a: RelatedSample, b: RelatedSample) => {
+                    return a.fieldKey.localeCompare(b.fieldKey);
+                }}
+            />
+            <Table.Column
                 dataIndex={"sample.id"}
                 title="Sample Id"
                 width="15%"
@@ -58,18 +70,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                     return aId.localeCompare(bId);
                 }}
             />
-            <Table.Column
-                dataIndex={"fieldKey"}
-                key="fieldKey"
-                width="12em"
-                title="Field"
-                render={(fieldKey: string, row: RelatedSample) => {
-                    return <span>{fieldKey}</span>;
-                }}
-                sorter={(a: RelatedSample, b: RelatedSample) => {
-                    return a.fieldKey.localeCompare(b.fieldKey);
-                }}
-            />
+
             <Table.Column
                 dataIndex={"sample.name"}
                 title="Sample Name"
@@ -82,6 +83,42 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 }}
                 sorter={(a: RelatedSample, b: RelatedSample) => {
                     return a.sample.name.localeCompare(b.sample.name);
+                }}
+            />
+            <Table.Column
+                dataIndex={"sample.savedAt"}
+                width="8em"
+                title="Saved"
+                render={(savedAt: number, row: RelatedSample) => {
+                    return <span>{Intl.DateTimeFormat('en-US', {}).format(new Date(row.sample.save_date))}</span>;
+                }}
+                defaultSortOrder="descend"
+                sorter={(a: RelatedSample, b: RelatedSample) => {
+                    return a.sample.save_date - b.sample.save_date;
+                }}
+            />
+            <Table.Column
+                dataIndex={"sample.savedBy"}
+                title="Saved by"
+                width="12em"
+                render={(savedBy: number, row: RelatedSample) => {
+                    // TODO: flatten the objects for better table usage?
+                    const hash = [
+                        'user',
+                        row.sample.user
+                    ].join('/');
+                    const url = new URL('', window.location.origin);
+                    url.hash = hash;
+                    return (
+                        <Tooltip title={row.sample.user}>
+                            <a href={url.toString()} target="_blank" rel="noopener noreferrer">
+                                {row.sample.user}
+                            </a>
+                        </Tooltip>
+                    );
+                }}
+                sorter={(a: RelatedSample, b: RelatedSample) => {
+                    return a.sample.user.localeCompare(b.sample.user);
                 }}
             />
 
@@ -142,42 +179,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                     return a.sample.save_date - b.sample.save_date;
                 }}
             /> */}
-            <Table.Column
-                dataIndex={"sample.savedAt"}
-                width="8em"
-                title="Saved"
-                render={(savedAt: number, row: RelatedSample) => {
-                    return <span>{Intl.DateTimeFormat('en-US', {}).format(new Date(row.sample.save_date))}</span>;
-                }}
-                defaultSortOrder="descend"
-                sorter={(a: RelatedSample, b: RelatedSample) => {
-                    return a.sample.save_date - b.sample.save_date;
-                }}
-            />
-            <Table.Column
-                dataIndex={"sample.savedBy"}
-                title="Saved by"
-                width="12em"
-                render={(savedBy: number, row: RelatedSample) => {
-                    // TODO: flatten the objects for better table usage?
-                    const hash = [
-                        'user',
-                        row.sample.user
-                    ].join('/');
-                    const url = new URL('', window.location.origin);
-                    url.hash = hash;
-                    return (
-                        <Tooltip title={row.sample.user}>
-                            <a href={url.toString()} target="_blank" rel="noopener noreferrer">
-                                {row.sample.user}
-                            </a>
-                        </Tooltip>
-                    );
-                }}
-                sorter={(a: RelatedSample, b: RelatedSample) => {
-                    return a.sample.user.localeCompare(b.sample.user);
-                }}
-            />
+
 
 
         </Table>;
@@ -217,21 +219,9 @@ export default class LinkedSamples extends React.Component<Props, State> {
         </>;
     }
     renderNone() {
-        return (
-            <Alert type="info"
-                message="No Linked Samples"
-                description={
-                    <p>
-                        No samples have yet been associated with this term
-                    </p>
-                }
-                showIcon
-                style={{
-                    margin: '0 auto',
-                    marginTop: '20px'
-                }}
-            />
-        );
+        return <Empty
+            description="No samples have yet been associated with this term"
+            image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
     render() {
         if (this.props.linkedSamples.length === 0) {

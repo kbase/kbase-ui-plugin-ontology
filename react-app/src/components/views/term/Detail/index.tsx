@@ -155,7 +155,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
             className="FullHeight-tabs"
             animated={false}
             type="card">
-            <Tabs.TabPane tab="Detail" key="detail" forceRender={false}>
+            <Tabs.TabPane tab="Definition" key="detail" forceRender={false}>
                 <div className="Col" style={{ overflowY: 'auto', paddingTop: '10px' }}>
                     {this.renderDetail()}
                 </div>

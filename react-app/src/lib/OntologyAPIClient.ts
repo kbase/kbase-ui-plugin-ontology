@@ -18,7 +18,6 @@ export interface SourceFieldDefinition {
 }
 
 export interface Source {
-    id: string;
     namespace: string;
     data_url: string;
     home_url: string;
@@ -36,6 +35,7 @@ export interface Source {
     short_title: string;
     fields: Array<SourceFieldDefinition>;
 }
+
 
 // const SOURCES_MAP = SOURCES.reduce<SourceMap>((map, source) => {
 //     map[source.id] = source;
@@ -72,12 +72,6 @@ export interface GetChildrenResult {
     results: Array<RelatedTerm>;
     ns: Namespace;
     ts: number;
-}
-
-export interface Synonym {
-    pred: string;
-    val: string;
-    xrefs: Array<XRef>;
 }
 
 export interface XRef {
@@ -123,6 +117,11 @@ export interface TermNode {
     release_expired: number;
 }
 
+export interface Synonym {
+    pred: string;
+    val: string;
+    xrefs: Array<XRef>;
+}
 
 export type EdgeType = string;
 
@@ -183,6 +182,22 @@ export interface GetHierarchicalAncestorsResult {
     ts: number;
 }
 
+export interface GetAssociatedWSGenomesParams {
+    id: string,
+    ns: Namespace,
+    ts: number,
+    offset: number,
+    limit: number;
+}
+
+export interface GetAssociatedWSGenomesResults {
+    results: Array<RelatedWSObject>;
+    total_count: number;
+    ns: string;
+    ts: number;
+    stats: any;
+}
+
 export interface GetAssociatedWSObjectsParams {
     id: string,
     ns: Namespace,
@@ -241,6 +256,22 @@ export interface GetAssociatedWSFeaturesResults {
     stats: any;
 }
 
+export interface GetAssociatedSamplesParams {
+    id: string,
+    ns: Namespace,
+    ts: number,
+    offset: number,
+    limit: number;
+}
+
+export interface GetAssociatedSamplesResults {
+    results: Array<any>;
+    total_count: number;
+    ns: string;
+    ts: number;
+    stats: any;
+}
+
 export default class OntologyAPIClient extends DynamicServiceClient {
     static module: string = 'OntologyAPI';
 
@@ -279,8 +310,22 @@ export default class OntologyAPIClient extends DynamicServiceClient {
         return result;
     }
 
+    async get_associated_ws_genomes(params: GetAssociatedWSGenomesParams): Promise<GetAssociatedWSGenomesResults> {
+        const [result] = await this.callFunc<[GetAssociatedWSGenomesParams], [GetAssociatedWSGenomesResults]>('get_associated_ws_genomes', [
+            params
+        ]);
+        return result;
+    }
+
     async get_associated_ws_features(params: GetAssociatedWSFeaturesParams): Promise<GetAssociatedWSFeaturesResults> {
         const [result] = await this.callFunc<[GetAssociatedWSFeaturesParams], [GetAssociatedWSFeaturesResults]>('get_associated_ws_features', [
+            params
+        ]);
+        return result;
+    }
+
+    async get_associated_samples(params: GetAssociatedSamplesParams): Promise<GetAssociatedSamplesResults> {
+        const [result] = await this.callFunc<[GetAssociatedSamplesParams], [GetAssociatedSamplesResults]>('get_associated_samples', [
             params
         ]);
         return result;

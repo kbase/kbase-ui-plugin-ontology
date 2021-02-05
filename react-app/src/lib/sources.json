@@ -1,6 +1,5 @@
 [
     {
-        "id": "go",
         "namespace": "go_ontology",
         "title": "Gene Ontology",
         "short_title": "GO",
@@ -27,12 +26,11 @@
         ]
     },
     {
-        "id": "envo",
         "namespace": "envo_ontology",
         "title": "Environmental Ontology",
         "short_title": "ENVO",
         "data_url": "https://github.com/EnvironmentOntology/envo/releases",
-        "home_url": "http://www.obofoundry.org/ontology/envo.html",
+        "home_url": "https://sites.google.com/site/environmentontology/",
         "logo_url": "https://ci.kbase.us/ui-assets/images/third-party-data-sources/envo/logo-119-64.png",
         "license": {
             "url": "https://creativecommons.org/licenses/by/3.0/",
