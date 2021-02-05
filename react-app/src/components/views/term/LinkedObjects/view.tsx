@@ -1,7 +1,6 @@
 import React from 'react';
-import { Table, Alert, Tooltip, Input, Select } from 'antd';
+import { Table, Tooltip, Input, Select, Empty } from 'antd';
 import { RelatedObject } from '../lib/model';
-import { LinkedObject } from '../../../../types/ontology';
 import './style.css';
 
 export interface Props {
@@ -165,21 +164,9 @@ export default class LinkedObjects extends React.Component<Props, State> {
         </>;
     }
     renderNone() {
-        return (
-            <Alert type="info"
-                message="No Linked Genomes"
-                description={
-                    <p>
-                        No data objects have yet been associated with this term
-                    </p>
-                }
-                showIcon
-                style={{
-                    margin: '0 auto',
-                    marginTop: '20px'
-                }}
-            />
-        );
+        return <Empty
+            description="No data objects have yet been associated with this term"
+            image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
     render() {
         if (this.props.linkedObjects.length === 0) {

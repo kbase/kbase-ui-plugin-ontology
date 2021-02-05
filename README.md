@@ -74,3 +74,6 @@ https://narrative.kbase.us#ontology/go_ontology/GO:0008152/1609459200000
 ```
 
 will show the same term effective on January 1, 2021.
+
+## License
+SEE LICENSE IN LICENSE.md

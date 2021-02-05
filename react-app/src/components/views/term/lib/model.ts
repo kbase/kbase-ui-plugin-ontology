@@ -18,7 +18,7 @@ import sample5Data from './data/sample5.json';
 import sample6Data from './data/sample6.json';
 import sample7Data from './data/sample7.json';
 
-import { Sample } from './Sample';
+import { Sample } from '../../../../lib/Sample';
 
 const sample1 = sample1Data as Sample;
 const sample2 = sample2Data as Sample;
@@ -420,22 +420,6 @@ export default class OntologyModel {
             offset, limit
         });
 
-        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
-        //     genomeWithFeatures.features.forEach((feature) => {
-        //         features.push({
-        //             featureID: feature.feature_id,
-        //             relatedAt: feature.updated_at,
-        //             objectName: genomeWithFeatures.ws_obj.name,
-        //             objectRef: {
-        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
-        //                 objectID: genomeWithFeatures.ws_obj.object_id,
-        //                 version: genomeWithFeatures.ws_obj.version
-        //             }
-        //         });
-        //     })
-        //     return features;
-        // }, []: Array<RelatedFeature>);
-
         // Get object info.
         const objectRefs = result.results.map((object) => {
             return {
@@ -504,7 +488,7 @@ export default class OntologyModel {
     }
 
     async getRelatedGenomes({ ref, offset, limit }: GetRelatedGenomesParams): Promise<GetRelatedGenomesResult> {
-        const result = await this.ontologyAPI.get_associated_ws_objects({
+        const result = await this.ontologyAPI.get_associated_ws_genomes({
             ns: this.stringToOntologyNamespace(ref.namespace),
             id: ref.term,
             ts: ref.timestamp || Date.now(),
@@ -804,130 +788,23 @@ export default class OntologyModel {
     }
 
     async getRelatedSamples({ ref, offset, limit }: GetRelatedSamplesParams): Promise<GetRelatedSamplesResult> {
-        // const result = await this.ontologyAPI.get_associated_ws_objects({
-        //     ns: this.stringToOntologyNamespace(ref.namespace),
-        //     id: ref.term,
-        //     ts: ref.timestamp || Date.now(),
-        //     offset, limit
-        // });
+        const result = await this.ontologyAPI.get_associated_samples({
+            ns: this.stringToOntologyNamespace(ref.namespace),
+            id: ref.term,
+            ts: ref.timestamp || Date.now(),
+            offset, limit
+        });
 
-        // const features: Array<RelatedFeature> = result.results.reduce((features, genomeWithFeatures) => {
-        //     genomeWithFeatures.features.forEach((feature) => {
-        //         features.push({
-        //             featureID: feature.feature_id,
-        //             relatedAt: feature.updated_at,
-        //             objectName: genomeWithFeatures.ws_obj.name,
-        //             objectRef: {
-        //                 workspaceID: genomeWithFeatures.ws_obj.workspace_id,
-        //                 objectID: genomeWithFeatures.ws_obj.object_id,
-        //                 version: genomeWithFeatures.ws_obj.version
-        //             }
-        //         });
-        //     })
-        //     return features;
-        // }, []: Array<RelatedFeature>);
-
-        // Get object info.
-        // const objectRefs = result.results.map((object) => {
-        //     return {
-        //         ref: `${object.ws_obj.workspace_id}/${object.ws_obj.object_id}/${object.ws_obj.version}`
-        //     };
-        // });
-
-        // const objectsInfo = await (async () => {
-        //     if (objectRefs.length === 0) {
-        //         return [];
-        //     }
-        //     const wsClient = new GenericClient({
-        //         module: 'Workspace',
-        //         url: this.workspaceURL,
-        //         token: this.token
-        //     });
-
-        //     const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
-        //         objects: objectRefs,
-        //         includeMetadata: 1,
-        //         ignoreErrors: 0
-        //     }]);
-        //     return objectsInfo.infos;
-        // })();
-
-        // const objects = result.results.map((object, index) => {
-        //     const objectInfo = objectsInfo[index];
-        //     const [
-        //         id, /* name */, /* type */, /* savedDate */, version,
-        //         /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
-        //         /* size */, metadata
-        //     ] = objectInfo;
-        //     const ref = `${workspaceId}/${id}/${version}`;
-        //     // console.log('metadata', metadata);
-
-        //     const info: ObjectInfo = (() => {
-        //         const [
-        //             objectId, objectName, workspaceType, savedAtString, objectVersion,
-        //             savedBy, workspaceId, workspaceName, checksum,
-        //             size, metadata
-        //         ] = objectInfo;
-        //         const savedAt = new Date(savedAtString).getTime();
-        //         return {
-        //             objectId, objectName, workspaceType, savedAt, objectVersion,
-        //             savedBy, workspaceId, workspaceName, checksum,
-        //             size, metadata
-        //         };
-        //     })();
-
-        //     return {
-        //         id: object.ws_obj.object_id,
-        //         name: object.ws_obj.name,
-        //         version: object.ws_obj.version,
-        //         workspaceId: object.ws_obj.workspace_id,
-        //         ref,
-        //         workspaceType: objectInfo[2],
-        //         info,
-        //     } as RelatedObject;
-        // });
-
-        // return {
-        //     // features,
-        //     objects,
-        //     totalCount: objects.length
-        // };
-
-        const samples = (samplesMap.get(ref.term) || [])
-            .map((sample) => {
-                return {
-                    fieldKey: 'biome',
-                    sample
-                };
-            });
-
-        // const samples: Array<RelatedSample> = [{
-        //     key: 'biome',
-        //     sample: sample1
-        // }, {
-        //     key: 'biome',
-        //     sample: sample2
-        // }, {
-        //     key: 'biome',
-        //     sample: sample3
-        // }, {
-        //     key: 'biome',
-        //     sample: sample4
-        // }, {
-        //     key: 'biome',
-        //     sample: sample5
-        // }, {
-        //     key: 'biome',
-        //     sample: sample6
-        // }, {
-        //     key: 'biome',
-        //     sample: sample7
-        // }];
+        const samples = result.results.map(({ sample, sample_metadata_key }) => {
+            return {
+                fieldKey: sample_metadata_key,
+                sample
+            };
+        });
 
         return {
             samples,
-            totalCount: 11,
+            totalCount: result.total_count,
         };
     }
-
 }
