@@ -1,4 +1,5 @@
 import { DynamicServiceClient } from "@kbase/ui-lib";
+import { Sample } from "./Sample";
 import sourcesData from './sources.json';
 
 const SOURCES = sourcesData as Array<Source>;
@@ -264,8 +265,14 @@ export interface GetAssociatedSamplesParams {
     limit: number;
 }
 
+export interface SampleResult {
+    sample_metadata_key: string;
+    sample: Sample;
+}
+
 export interface GetAssociatedSamplesResults {
-    results: Array<any>;
+    results: Array<SampleResult>;
+    total_accessible_count: number;
     total_count: number;
     ns: string;
     ts: number;

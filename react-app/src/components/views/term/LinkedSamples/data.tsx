@@ -55,7 +55,7 @@ export default class Data extends React.Component<Props, State> {
     renderLoaded(db: LinkedSamplesDBStateLoaded) {
         return (
             <View
-                linkedSamples={db.linkedSamples} totalCount={db.totalCount}
+                linkedSamples={db.linkedSamples} totalCount={db.totalCount} totalAccessibleCount={db.totalAccessibleCount}
             />
         );
     }
