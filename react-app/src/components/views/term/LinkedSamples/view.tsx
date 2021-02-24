@@ -1,10 +1,11 @@
 import React from 'react';
-import { Table, Alert, Tooltip, Input, Select, Empty } from 'antd';
+import { Table, Tooltip, Input, Select, Empty } from 'antd';
 import { RelatedSample } from '../lib/model';
 import './style.css';
 
 export interface Props {
     linkedSamples: Array<RelatedSample>;
+    totalAccessibleCount: number;
     totalCount: number;
 }
 
@@ -35,6 +36,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 dataIndex={"fieldKey"}
                 key="fieldKey"
                 width="12em"
+                ellipsis={true}
                 title="Sample Field"
                 render={(fieldKey: string, row: RelatedSample) => {
                     return <span>{fieldKey}</span>;
@@ -47,6 +49,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 dataIndex={"sample.id"}
                 title="Sample Id"
                 width="15%"
+                ellipsis={true}
                 render={(_: string, row: RelatedSample) => {
                     const id = row.sample.node_tree[0]!.id;
 
@@ -78,8 +81,13 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 // width="70%"
                 render={(name: string, row: RelatedSample) => {
                     return (
-                        <span>{row.sample.name}</span>
+                        <Tooltip placement="bottomLeft" title={row.sample.name}>
+                            <span>{row.sample.name}</span>
+                        </Tooltip>
                     );
+                }}
+                ellipsis={{
+                    showTitle: false
                 }}
                 sorter={(a: RelatedSample, b: RelatedSample) => {
                     return a.sample.name.localeCompare(b.sample.name);
@@ -88,6 +96,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
             <Table.Column
                 dataIndex={"sample.savedAt"}
                 width="8em"
+                ellipsis={true}
                 title="Saved"
                 render={(savedAt: number, row: RelatedSample) => {
                     return <span>{Intl.DateTimeFormat('en-US', {}).format(new Date(row.sample.save_date))}</span>;
@@ -101,7 +110,9 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 dataIndex={"sample.savedBy"}
                 title="Saved by"
                 width="12em"
+                ellipsis={true}
                 render={(savedBy: number, row: RelatedSample) => {
+                    console.log('hmm', row);
                     // TODO: flatten the objects for better table usage?
                     const hash = [
                         'user',
@@ -126,6 +137,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 // dataIndex={"sample.savedAt"}
                 key="fieldCount"
                 width="7em"
+                ellipsis={true}
                 title="# Fields"
                 render={(_: number, row: RelatedSample) => {
                     const fieldCount = Object.keys(row.sample.node_tree[0]!.meta_controlled).length +
@@ -143,6 +155,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 // dataIndex={"sample.savedAt"}
                 key="fieldCount"
                 width="9em"
+                ellipsis={true}
                 title="# Narratives"
                 render={(_: number, row: RelatedSample) => {
                     return <Tooltip title="The meaning of life">42</Tooltip>;
@@ -156,6 +169,7 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 // dataIndex={"sample.savedAt"}
                 key="fieldCount"
                 width="8em"
+                ellipsis={true}
                 title="# Objects"
                 render={(_: number, row: RelatedSample) => {
                     return <Tooltip title="Life's meaning">420</Tooltip>;
@@ -202,17 +216,30 @@ export default class LinkedSamples extends React.Component<Props, State> {
         </span>;
     }
 
-    renderControls() {
+    renderTotals() {
+        const totalHidden = this.props.totalCount - this.props.totalAccessibleCount;
+        if (totalHidden === 0) {
+            return <span>{this.props.totalAccessibleCount} sample{this.props.totalAccessibleCount !== 1 ? 's': ''}</span>;
+        }
+        return <span>
+            {this.props.totalAccessibleCount} samples shown <i>({totalHidden}) not accessible)</i>
+        </span>
+    }
+
+    renderHeader() {
         return <div>
             <Input.Search placeholder="Search" allowClear style={{ width: '12em', margin: '0 1em' }} />
-
             {this.renderFilterControl()}
+            {' '}
+            {this.renderTotals()}
         </div>;
     }
 
     renderLinkedSamples() {
         return <>
-            <div style={{ flex: '0 0 auto' }}>{this.renderControls()}</div>
+            <div style={{ flex: '0 0 auto' }}>
+                {this.renderHeader()}
+            </div>
             <div style={{ flex: '1 1 0px', display: 'flex', flexDirection: 'column', minHeight: '0' }}>
                 {this.renderTable()}
             </div>

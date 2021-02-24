@@ -285,6 +285,7 @@ export interface GetRelatedSamplesParams {
 
 export interface GetRelatedSamplesResult {
     samples: Array<RelatedSample>;
+    totalAccessibleCount: number;
     totalCount: number;
 }
 
@@ -804,6 +805,7 @@ export default class OntologyModel {
 
         return {
             samples,
+            totalAccessibleCount: result.total_accessible_count,
             totalCount: result.total_count,
         };
     }

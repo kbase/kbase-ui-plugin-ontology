@@ -9,6 +9,7 @@ export type LinkedSamplesDBStateError = DBStateError;
 
 export interface LinkedSamplesDBStateLoaded extends DBStateLoaded {
     linkedSamples: Array<RelatedSample>;
+    totalAccessibleCount: number;
     totalCount: number;
 }
 
@@ -55,6 +56,7 @@ export default class LinkedSamplesDB extends DB<LinkedSamplesDBState> {
                     ...state,
                     status: DBStatus.LOADED,
                     linkedSamples: linkedSamples.samples,
+                    totalAccessibleCount: linkedSamples.totalAccessibleCount,
                     totalCount: linkedSamples.totalCount
                 };
             });
