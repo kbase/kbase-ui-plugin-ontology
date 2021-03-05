@@ -4,8 +4,10 @@ import {
 } from '../lib/model';
 import NetworkGraph, { NetworkData } from './NetworkGraph';
 import { OntologyTermRecord } from '../../../../types/ontology';
+import Children from '../Children';
 import './style.css';
 import { Table } from 'antd';
+import Section from "../../../../ui/Section";
 
 export interface AncestorGraphProps {
     item: OntologyTermRecord;
@@ -68,13 +70,12 @@ export default class AncestorGraph extends React.Component<AncestorGraphProps, A
                 }}
             />
 
-            < Table.Column dataIndex="term"
+            <Table.Column dataIndex="term"
                 sorter={(a: TermsGraphNode, b: TermsGraphNode) => {
                     return a.term.name.localeCompare(b.term.name);
                 }}
                 title="ID"
-                width="15%"
-
+                width="25%"
                 render={(item: OntologyTermRecord) => {
                     const url = [
                         '/#ontology',
@@ -86,13 +87,15 @@ export default class AncestorGraph extends React.Component<AncestorGraphProps, A
                         <a href={url} target="_parent">{item.ref.term}</a>
                     );
                 }} />
-
         </Table>;
     }
     selectNodeID(nodeID: string) {
         this.setState({
             selectedNodeID: nodeID
         });
+    }
+    renderChildren() {
+        return <Children termRef={this.props.item.ref} />
     }
     render() {
         const nodes = this.props.graph.terms.map((termNode) => {
@@ -127,15 +130,26 @@ export default class AncestorGraph extends React.Component<AncestorGraphProps, A
         };
         return (
             <div className="AncestorGraph">
-                <div className="AncestorGraph-graph">
-                    <NetworkGraph
-                        data={data}
-                        height="400px"
-                        selectedNodeID={this.state.selectedNodeID}
-                        selectNodeID={this.selectNodeID.bind(this)} />
-                </div>
-                <div className="AncestorGraph-table">
-                    {this.renderTable()}
+                <div className="AncestorGraph-layout">
+                    <div className="AncestorGraph-graph">
+                        <NetworkGraph
+                            data={data}
+                            height="400px"
+                            selectedNodeID={this.state.selectedNodeID}
+                            selectNodeID={this.selectNodeID.bind(this)} />
+                    </div>
+                    <div className="AncestorGraph-tables">
+                        <Section title="Ancestors" fullheight={true}>
+                            <div className="AncestorGraph-table">
+                                {this.renderTable()}
+                            </div>
+                        </Section>
+                        <Section title="Children" fullheight={true}>
+                            <div className="AncestorGraph-table">
+                                {this.renderChildren()}
+                            </div>
+                        </Section>
+                    </div>
                 </div>
             </div>
         );
