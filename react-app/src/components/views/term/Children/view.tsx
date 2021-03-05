@@ -49,7 +49,7 @@ export default class OntologyList extends React.Component<Props, State> {
                 render={(relation: OntologyRelation) => {
                     return this.renderRelation(relation);
                 }} />
-            <Column dataIndex={['term', 'goID']} title="ID" width="20%"
+            <Column dataIndex={['term', 'goID']} title="ID" width="15em"
                 render={(id: string, term: OntologyRelatedTerm) => {
                     const tooltip = (
                         <div>
