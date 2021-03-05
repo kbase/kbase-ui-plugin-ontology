@@ -1,21 +1,33 @@
 .AncestorGraph {
-    flex: 1 1 0px;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.AncestorGraph-layout {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: row;
+    min-height: 0;
+}
+
+.AncestorGraph-tables {
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
 }
 
 .AncestorGraph-graph {
-    /* border: 1px silver solid; */
-    flex: 1 1 0px;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
 }
 
 .AncestorGraph-table {
-    flex: 1 1 0px;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    /* overflow-y: auto; */
 }

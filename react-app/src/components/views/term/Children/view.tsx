@@ -45,6 +45,10 @@ export default class OntologyList extends React.Component<Props, State> {
                     return a.term.name.localeCompare(b.term.name);
                 }}
             />
+            <Column dataIndex="relation" title="Relation" width="20%"
+                render={(relation: OntologyRelation) => {
+                    return this.renderRelation(relation);
+                }} />
             <Column dataIndex={['term', 'goID']} title="ID" width="20%"
                 render={(id: string, term: OntologyRelatedTerm) => {
                     const tooltip = (
@@ -67,10 +71,7 @@ export default class OntologyList extends React.Component<Props, State> {
                     return a.term.ref.term.localeCompare(b.term.ref.term);
                 }}
             />
-            <Column dataIndex="relation" title="Relation" width="20%"
-                render={(relation: OntologyRelation) => {
-                    return this.renderRelation(relation);
-                }} />
+
         </Table>;
     }
     // renderNoItems() {

@@ -105,7 +105,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
 
         if (metadata.length === 0) {
             return <div style={{ fontStyle: 'italic' }}>
-                No metadata available for {this.props.source.title} taxa
+                No metadata available for {this.props.source.title}
             </div>;
         }
 
@@ -155,13 +155,13 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
             className="FullHeight-tabs"
             animated={false}
             type="card">
+            <Tabs.TabPane tab="Graph" key="graph" forceRender={false}>
+                {this.renderGraph()}
+            </Tabs.TabPane>
             <Tabs.TabPane tab="Definition" key="detail" forceRender={false}>
                 <div className="Col" style={{ overflowY: 'auto', paddingTop: '10px' }}>
                     {this.renderDetail()}
                 </div>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Graph" key="graph" forceRender={false}>
-                {this.renderGraph()}
             </Tabs.TabPane>
             <Tabs.TabPane tab="Children" key="children" forceRender={false}>
                 {this.renderChildren()}
