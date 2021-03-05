@@ -75,7 +75,7 @@ export default class AncestorGraph extends React.Component<AncestorGraphProps, A
                     return a.term.name.localeCompare(b.term.name);
                 }}
                 title="ID"
-                width="25%"
+                width="15em"
                 render={(item: OntologyTermRecord) => {
                     const url = [
                         '/#ontology',
