@@ -2,6 +2,7 @@ import { AppConfig } from '@kbase/ui-components';
 import { StoreState } from '../../../../redux/store';
 import DataComponent from './data';
 import { connect } from 'react-redux';
+import {AuthenticationStatus} from "@kbase/ui-lib";
 
 export interface OwnProps { }
 
@@ -14,14 +15,14 @@ export interface DispatchProps { }
 
 function mapStateToProps(state: StoreState, props: OwnProps): StateProps {
     const {
-        auth: { userAuthorization },
+        authentication,
         app: { config }
     } = state;
-    if (!userAuthorization) {
+    if (authentication.status !== AuthenticationStatus.AUTHENTICATED) {
         throw new Error('Invalid state - no user authorization');
     }
     return {
-        token: userAuthorization.token,
+        token: authentication.userAuthentication.token,
         config
     };
 }

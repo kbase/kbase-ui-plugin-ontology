@@ -41,7 +41,7 @@ export interface GetParentsParams {
     ref: OntologyReference;
 }
 
-// TODO: this should be a "related term", although maybe the relation 
+// TODO: this should be a "related term", although maybe the relation
 // collapses out with ontology - are they all is_a at least for parents, children?
 export interface GetParentsResult {
     terms: Array<OntologyRelatedTerm>;
@@ -51,7 +51,7 @@ export interface GetChildrenParams {
     ref: OntologyReference;
 }
 
-// TODO: this should be a "related term", although maybe the relation 
+// TODO: this should be a "related term", although maybe the relation
 // collapses out with ontology - are they all is_a at least for parents, children?
 export interface GetChildrenResult {
     terms: Array<OntologyRelatedTerm>;
@@ -206,7 +206,7 @@ export type ObjectRefChain = Array<ObjectIdentity>;
 
 export type ObjectPath = string;
 
-export interface ObjectSpecification {
+export interface ObjectSpecificationCore {
     workspace?: string;
     wsid?: number;
     name?: string;
@@ -221,10 +221,13 @@ export interface ObjectSpecification {
     string_arrays?: number;
 }
 
-export interface GetObjects2Params {
+export type ObjectSpecification = Required<Pick<ObjectSpecificationCore, 'ref' | 'included'>>
+
+
+export interface GetObjects2Params extends JSONObject {
     objects: Array<ObjectSpecification>;
-    ignoreErrors?: number;
-    no_data?: number;
+    ignoreErrors: number;
+    no_data: number;
 }
 
 export type ObjectRef = string;
@@ -235,7 +238,7 @@ export type ExtractedId = string;
 
 export type ProvenanceAction = JSONObject;
 
-export interface ObjectData {
+export interface ObjectData extends JSONObject {
     data: JSONObject;
     info: ObjectInfo;
     path: Array<ObjectRef>;
@@ -253,7 +256,7 @@ export interface ObjectData {
 }
 
 
-export interface GetObjects2Result {
+export interface GetObjects2Result extends JSONObject {
     data: Array<ObjectData>;
 }
 
@@ -419,7 +422,8 @@ export default class OntologyModel {
             const wsClient = new GenericClient({
                 module: 'Workspace',
                 url: this.workspaceURL,
-                token: this.token
+                token: this.token,
+                timeout: 60000
             });
 
             console.log('object refs?', objectRefs);
@@ -531,7 +535,8 @@ export default class OntologyModel {
             const wsClient = new GenericClient({
                 module: 'Workspace',
                 url: this.workspaceURL,
-                token: this.token
+                token: this.token,
+                timeout: 60000
             });
 
             const [objectsInfo] = await wsClient.callFunc<[GetObjects2Params], [GetObjects2Result]>('get_objects2', [{

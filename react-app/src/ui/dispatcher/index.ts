@@ -1,9 +1,10 @@
-import { Dispatch } from 'react';
-import { Action } from 'redux';
-import { connect } from 'react-redux';
-import { Dispatcher } from './view';
-import { RootState } from '@kbase/ui-components';
-import { StoreState } from '../../redux/store';
+import {Dispatch} from 'react';
+import {Action} from 'redux';
+import {connect} from 'react-redux';
+import {Dispatcher} from './view';
+import {RootState} from '@kbase/ui-components';
+import {StoreState} from '../../redux/store';
+import {AuthenticationStatus} from "@kbase/ui-components/lib/redux/auth/store";
 
 interface OwnProps { }
 
@@ -23,7 +24,7 @@ interface DispatchProps {
 
 function mapStateToProps(state: StoreState, props: OwnProps): StateProps {
     const {
-        auth: { userAuthorization },
+        authentication,
         root: { state: rootState },
         app: {
             runtime: {
@@ -37,10 +38,10 @@ function mapStateToProps(state: StoreState, props: OwnProps): StateProps {
 
     // Auth integration.
     let token;
-    if (!userAuthorization) {
+    if (authentication.status !== AuthenticationStatus.AUTHENTICATED) {
         token = null;
     } else {
-        token = userAuthorization.token;
+        token = authentication.userAuthentication.token;
     }
 
     const params = {
