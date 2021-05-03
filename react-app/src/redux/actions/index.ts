@@ -1,9 +1,12 @@
-import { AppError } from '@kbase/ui-components';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import OntologyAPIClient, { Source } from '../../lib/OntologyAPIClient';
-import { StoreState } from '../store';
-import { View } from '../store/views';
+import {AppError} from '@kbase/ui-components';
+import {Action} from 'redux';
+import {ThunkDispatch} from 'redux-thunk';
+import OntologyAPIClient, {Source} from '../../lib/OntologyAPIClient';
+import {StoreState} from '../store';
+import {View} from '../store/views';
+import {AuthenticationStatus} from "@kbase/ui-components/lib/redux/auth/store";
+
+export const REQUEST_TIMEOUT = 60000;
 
 export enum AppActions {
     LOAD_DATA = 'OntologyLandingPage$LOAD_DATA',
@@ -54,7 +57,7 @@ export function loadData() {
         dispatch(loadDataStart());
 
         const {
-            auth: { userAuthorization },
+            authentication,
             app: {
                 config: {
                     dynamicServices: {
@@ -73,13 +76,13 @@ export function loadData() {
 
         // Auth integration.
 
-        if (!userAuthorization) {
+        if (authentication.status !== AuthenticationStatus.AUTHENTICATED) {
             throw new Error('No user authorization');
         }
-        const token = userAuthorization.token;
+        const token = authentication.userAuthentication.token;
 
         const client = new OntologyAPIClient({
-            token, url, version
+            token, url, version, timeout: REQUEST_TIMEOUT
         });
 
         const sources = await client.get_sources();

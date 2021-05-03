@@ -151,24 +151,26 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
     }
 
     render() {
+        // <Tabs.TabPane tab="Linked Objects" key="linkedObjects" forceRender={false}>
+        //         {this.renderLinkedObjects()}
+        //     </Tabs.TabPane>
         return <Tabs
             className="FullHeight-tabs"
             animated={false}
             type="card">
-            <Tabs.TabPane tab="Graph" key="graph" forceRender={false}>
-                {this.renderGraph()}
-            </Tabs.TabPane>
             <Tabs.TabPane tab="Definition" key="detail" forceRender={false}>
                 <div className="Col" style={{ overflowY: 'auto', paddingTop: '10px' }}>
                     {this.renderDetail()}
                 </div>
             </Tabs.TabPane>
+            <Tabs.TabPane tab="Graph" key="graph" forceRender={false}>
+                {this.renderGraph()}
+            </Tabs.TabPane>
+
             <Tabs.TabPane tab="Children" key="children" forceRender={false}>
                 {this.renderChildren()}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Linked Objects" key="linkedObjects" forceRender={false}>
-                {this.renderLinkedObjects()}
-            </Tabs.TabPane>
+
             <Tabs.TabPane tab="Linked Genomes" key="linkedGenomes" forceRender={false}>
                 {this.renderLinkedObjectsAndFeatures()}
             </Tabs.TabPane>

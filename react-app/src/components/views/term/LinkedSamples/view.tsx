@@ -112,7 +112,6 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 width="12em"
                 ellipsis={true}
                 render={(savedBy: number, row: RelatedSample) => {
-                    console.log('hmm', row);
                     // TODO: flatten the objects for better table usage?
                     const hash = [
                         'user',
@@ -133,51 +132,51 @@ export default class LinkedSamples extends React.Component<Props, State> {
                 }}
             />
 
-            <Table.Column
-                // dataIndex={"sample.savedAt"}
-                key="fieldCount"
-                width="7em"
-                ellipsis={true}
-                title="# Fields"
-                render={(_: number, row: RelatedSample) => {
-                    const fieldCount = Object.keys(row.sample.node_tree[0]!.meta_controlled).length +
-                        Object.keys(row.sample.node_tree[0]!.meta_user).length;
-                    return <span>{Intl.NumberFormat('en-US', {
-                        useGrouping: true
-                    }).format(fieldCount)}</span>;
-                }}
-                sorter={(a: RelatedSample, b: RelatedSample) => {
-                    return a.sample.save_date - b.sample.save_date;
-                }}
-            />
+            {/*<Table.Column*/}
+            {/*    // dataIndex={"sample.savedAt"}*/}
+            {/*    key="fieldCount"*/}
+            {/*    width="7em"*/}
+            {/*    ellipsis={true}*/}
+            {/*    title="# Fields"*/}
+            {/*    render={(_: number, row: RelatedSample) => {*/}
+            {/*        const fieldCount = Object.keys(row.sample.node_tree[0]!.meta_controlled).length +*/}
+            {/*            Object.keys(row.sample.node_tree[0]!.meta_user).length;*/}
+            {/*        return <span>{Intl.NumberFormat('en-US', {*/}
+            {/*            useGrouping: true*/}
+            {/*        }).format(fieldCount)}</span>;*/}
+            {/*    }}*/}
+            {/*    sorter={(a: RelatedSample, b: RelatedSample) => {*/}
+            {/*        return a.sample.save_date - b.sample.save_date;*/}
+            {/*    }}*/}
+            {/*/>*/}
 
-            <Table.Column
-                // dataIndex={"sample.savedAt"}
-                key="fieldCount"
-                width="9em"
-                ellipsis={true}
-                title="# Narratives"
-                render={(_: number, row: RelatedSample) => {
-                    return <Tooltip title="The meaning of life">42</Tooltip>;
-                }}
-                sorter={(a: RelatedSample, b: RelatedSample) => {
-                    return 42 - 42;
-                }}
-            />
+            {/*<Table.Column*/}
+            {/*    // dataIndex={"sample.savedAt"}*/}
+            {/*    key="fieldCount"*/}
+            {/*    width="9em"*/}
+            {/*    ellipsis={true}*/}
+            {/*    title="# Narratives"*/}
+            {/*    render={(_: number, row: RelatedSample) => {*/}
+            {/*        return <Tooltip title="The meaning of life">42</Tooltip>;*/}
+            {/*    }}*/}
+            {/*    sorter={(a: RelatedSample, b: RelatedSample) => {*/}
+            {/*        return 42 - 42;*/}
+            {/*    }}*/}
+            {/*/>*/}
 
-            <Table.Column
-                // dataIndex={"sample.savedAt"}
-                key="fieldCount"
-                width="8em"
-                ellipsis={true}
-                title="# Objects"
-                render={(_: number, row: RelatedSample) => {
-                    return <Tooltip title="Life's meaning">420</Tooltip>;
-                }}
-                sorter={(a: RelatedSample, b: RelatedSample) => {
-                    return 420 - 420;
-                }}
-            />
+            {/*<Table.Column*/}
+            {/*    // dataIndex={"sample.savedAt"}*/}
+            {/*    key="fieldCount"*/}
+            {/*    width="8em"*/}
+            {/*    ellipsis={true}*/}
+            {/*    title="# Objects"*/}
+            {/*    render={(_: number, row: RelatedSample) => {*/}
+            {/*        return <Tooltip title="Life's meaning">420</Tooltip>;*/}
+            {/*    }}*/}
+            {/*    sorter={(a: RelatedSample, b: RelatedSample) => {*/}
+            {/*        return 420 - 420;*/}
+            {/*    }}*/}
+            {/*/>*/}
 
             {/* <Table.Column
                 // dataIndex={"sample.savedAt"}
@@ -219,7 +218,11 @@ export default class LinkedSamples extends React.Component<Props, State> {
     renderTotals() {
         const totalHidden = this.props.totalCount - this.props.totalAccessibleCount;
         if (totalHidden === 0) {
-            return <span>{this.props.totalAccessibleCount} sample{this.props.totalAccessibleCount !== 1 ? 's': ''}</span>;
+            return <span>
+                <span style={{fontWeight: 'bold'}}>{Intl.NumberFormat('en-US', {useGrouping: true}).format(this.props.totalAccessibleCount)}</span>
+                {' '}
+                sample{this.props.totalAccessibleCount !== 1 ? 's': ''} linked to this term
+            </span>;
         }
         return <span>
             {this.props.totalAccessibleCount} samples shown <i>({totalHidden}) not accessible)</i>
@@ -227,10 +230,10 @@ export default class LinkedSamples extends React.Component<Props, State> {
     }
 
     renderHeader() {
-        return <div>
-            <Input.Search placeholder="Search" allowClear style={{ width: '12em', margin: '0 1em' }} />
-            {this.renderFilterControl()}
-            {' '}
+        return <div style={{marginBottom: '6px'}}>
+            {/*<Input.Search placeholder="Search" allowClear style={{ width: '12em', margin: '0 1em' }} />*/}
+            {/*{this.renderFilterControl()}*/}
+            {/*{' '}*/}
             {this.renderTotals()}
         </div>;
     }

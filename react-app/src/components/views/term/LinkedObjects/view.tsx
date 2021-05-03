@@ -18,9 +18,6 @@ export default class LinkedObjects extends React.Component<Props, State> {
             className="KBaseAntdOverride-remove-table-border ScrollingFlexTable"
             size="small"
             pagination={false}
-            // pagination={{
-            //     pageSize: 20
-            // }}
             scroll={{ y: '100%' }}
             rowKey={(row: RelatedObject) => {
                 return [
@@ -67,7 +64,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                     ].join('/');
                     const url = new URL('', window.location.origin);
                     url.hash = hash;
-                    const [module, name, majorVersion, minorVersion] = workspaceType.split(/[.-]/);
+                    const [, name, , ] = workspaceType.split(/[.-]/);
                     return (
                         <Tooltip title={workspaceType}>
                             <a href={url.toString()} target="_blank" rel="noopener noreferrer">
@@ -119,16 +116,6 @@ export default class LinkedObjects extends React.Component<Props, State> {
 
         </Table>;
     }
-    /*
-                // <Table.Column
-            //     dataIndex={"relatedAt"}
-            //     width="20%"
-            //     title="Linked"
-            //     render={(relatedAt: number) => {
-            //         return Intl.DateTimeFormat('en-US').format(relatedAt);
-            //     }}
-            // />
-    */
 
     renderFilterControl() {
         return <span>
@@ -173,10 +160,5 @@ export default class LinkedObjects extends React.Component<Props, State> {
             return this.renderNone();
         }
         return this.renderLinkedObjects();
-
-        // return <Empty
-        //     image={Empty.PRESENTED_IMAGE_SIMPLE}
-        //     description="Linked Genomes currently disabled - working on a replacement" >
-        // </Empty>;
     }
 }

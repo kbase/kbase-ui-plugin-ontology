@@ -195,12 +195,7 @@ export default class LinkedObjects extends React.Component<Props, State> {
                         <span>{object.sourceId}</span>
                     </div>
                 </div>
-                <div className={styles.CardNameRow}>
-                    <div className={styles.KBaseID}>
-                        <span className={styles.Label}>KBase ID</span>
-                        <span>{object.kbaseId}</span>
-                    </div>
-                </div>
+
                 <div className={styles.CardFeaturesRow}>
                     <span className={styles.Label}>Features</span>
                     <span>
@@ -219,7 +214,10 @@ export default class LinkedObjects extends React.Component<Props, State> {
         });
     }
 
-    handleSortChange(value: SelectValue) {
+    handleSortChange(value?: SelectValue) {
+        if (!value) {
+            return;
+        }
         this.currentSortKey = value.toString() as SortKey;
         this.props.sortObjects(this.currentSortKey, this.currentSortDirection);
     }

@@ -1,3 +1,5 @@
+import {JSONObject, JSONObjectOf} from "@kbase/ui-lib/lib/json";
+
 export type SDKBoolean = 0 | 1;
 
 export type SampleNodeId = string;
@@ -19,15 +21,20 @@ export type WorkspaceUniquePermanentAddress = WSUPA;
 //     [k: string]: MetadataValue;
 // }
 
-export interface MetadataValue {
+export interface MetadataValueWithoutUnits extends JSONObject {
     value: string | number | boolean;
-    units?: string;
 }
 
-
-export interface Metadata {
-    [key: string]: MetadataValue;
+export interface MetadataValueWithUnits extends JSONObject {
+    value: string | number | boolean;
+    units: string;
 }
+
+export type MetadataValue = MetadataValueWithoutUnits | MetadataValueWithUnits;
+
+
+export type Metadata = JSONObjectOf<MetadataValue>;
+
 
 // TODO: interfaces for specific controlled metadata.
 // may not be practical, but consider it.
@@ -37,7 +44,7 @@ export interface Metadata {
 
 export type MetadataSource = Array<MetadataSourceField>;
 
-export interface MetadataSourceField {
+export interface MetadataSourceField extends JSONObject {
     key: string;
     skey: string;
     svalue: {
@@ -45,7 +52,7 @@ export interface MetadataSourceField {
     };
 }
 
-export interface SampleNode {
+export interface SampleNode extends JSONObject {
     id: SampleNodeId;
     parent: SampleNodeId | null;
     type: SampleNodeType;
@@ -54,7 +61,7 @@ export interface SampleNode {
     source_meta: MetadataSource;
 }
 
-export interface Sample {
+export interface Sample  extends JSONObject {
     id: SampleId;
     user: Username;
     node_tree: Array<SampleNode>;

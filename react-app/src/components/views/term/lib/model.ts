@@ -19,6 +19,7 @@ import sample6Data from './data/sample6.json';
 import sample7Data from './data/sample7.json';
 
 import { Sample } from '../../../../lib/Sample';
+import {JSONObject, JSONObjectOf} from "@kbase/ui-lib/lib/json";
 
 const sample1 = sample1Data as Sample;
 const sample2 = sample2Data as Sample;
@@ -76,7 +77,7 @@ export interface GetParentsParams {
     ref: OntologyReference;
 }
 
-// TODO: this should be a "related term", although maybe the relation 
+// TODO: this should be a "related term", although maybe the relation
 // collapses out with ontology - are they all is_a at least for parents, children?
 export interface GetParentsResult {
     terms: Array<OntologyRelatedTerm>;
@@ -86,7 +87,7 @@ export interface GetChildrenParams {
     ref: OntologyReference;
 }
 
-// TODO: this should be a "related term", although maybe the relation 
+// TODO: this should be a "related term", although maybe the relation
 // collapses out with ontology - are they all is_a at least for parents, children?
 export interface GetChildrenResult {
     terms: Array<OntologyRelatedTerm>;
@@ -227,15 +228,13 @@ export interface OntologyModelParams {
     ontologyAPIConfig: DynamicServiceConfig;
 }
 
-export interface GetObjectInfo3Params {
-    objects: Array<any>;
+export interface GetObjectInfo3Params extends JSONObject {
+    objects: Array<JSONObject>;
     includeMetadata: number;
     ignoreErrors: number;
 }
 
-export interface ObjectMetadata {
-    [key: string]: string;
-}
+export type ObjectMetadata = JSONObjectOf<string>;
 
 export type RawObjectInfo = [
     number, // object id
@@ -251,7 +250,7 @@ export type RawObjectInfo = [
     ObjectMetadata, // metadata
 ];
 
-export interface ObjectInfo {
+export interface ObjectInfo extends JSONObject {
     objectId: number,
     objectName: string,
     workspaceType: string,
@@ -265,7 +264,7 @@ export interface ObjectInfo {
     metadata: ObjectMetadata;
 }
 
-export interface GetObjectInfo3Result {
+export interface GetObjectInfo3Result extends JSONObject {
     infos: Array<RawObjectInfo>;
     paths: Array<Array<string>>;
 }
@@ -435,7 +434,8 @@ export default class OntologyModel {
             const wsClient = new GenericClient({
                 module: 'Workspace',
                 url: this.workspaceURL,
-                token: this.token
+                token: this.token,
+                timeout: REQUEST_TIMEOUT
             });
 
             const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
@@ -451,7 +451,7 @@ export default class OntologyModel {
             const [
                 id, /* name */, /* type */, /* savedDate */, version,
                 /* savedBy */, workspaceId, /* workspaceName */, /* checksum */,
-                /* size */, metadata
+                /* size */, /* metadata */
             ] = objectInfo;
             const ref = `${workspaceId}/${id}/${version}`;
             // console.log('metadata', metadata);
@@ -526,7 +526,8 @@ export default class OntologyModel {
             const wsClient = new GenericClient({
                 module: 'Workspace',
                 url: this.workspaceURL,
-                token: this.token
+                token: this.token,
+                timeout: REQUEST_TIMEOUT
             });
 
             const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{
@@ -645,7 +646,8 @@ export default class OntologyModel {
             const wsClient = new GenericClient({
                 module: 'Workspace',
                 url: this.workspaceURL,
-                token: this.token
+                token: this.token,
+                timeout: REQUEST_TIMEOUT
             });
 
             const [objectsInfo] = await wsClient.callFunc<[GetObjectInfo3Params], [GetObjectInfo3Result]>('get_object_info3', [{

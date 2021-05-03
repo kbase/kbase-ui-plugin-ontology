@@ -1,6 +1,7 @@
 import { DynamicServiceClient } from "@kbase/ui-lib";
 import { Sample } from "./Sample";
 import sourcesData from './sources.json';
+import {JSONObject} from "../types/json";
 
 const SOURCES = sourcesData as Array<Source>;
 
@@ -48,7 +49,7 @@ const SOURCES_NAMESPACE_MAP = SOURCES.reduce<Map<string, Source>>((map, source) 
     return map;
 }, new Map());
 
-export interface GetParentsParams {
+export interface GetParentsParams extends JSONObject {
     ns: Namespace;
     id: string;
     ts: number;
@@ -57,25 +58,25 @@ export interface GetParentsParams {
 // TODO: this should not live here, or should just be a string?
 export type Namespace = string;
 
-export interface GetParentsResult {
+export interface GetParentsResult extends JSONObject {
     results: Array<RelatedTerm>;
     ns: Namespace;
     ts: number;
 }
 
-export interface GetChildrenParams {
+export interface GetChildrenParams extends JSONObject {
     ns: Namespace;
     id: string;
     ts: number;
 }
 
-export interface GetChildrenResult {
+export interface GetChildrenResult extends JSONObject {
     results: Array<RelatedTerm>;
     ns: Namespace;
     ts: number;
 }
 
-export interface XRef {
+export interface XRef extends JSONObject {
     val: string;
 }
 
@@ -95,7 +96,7 @@ export interface XRef {
 // doesn't include the underscore fields
 // TODO: the api should not return any underscore
 // fields.
-export interface TermNode {
+export interface TermNode extends JSONObject {
     namespace: string;
     id: string;
     alt_ids: Array<string>;
@@ -118,7 +119,7 @@ export interface TermNode {
     release_expired: number;
 }
 
-export interface Synonym {
+export interface Synonym extends JSONObject {
     pred: string;
     val: string;
     xrefs: Array<XRef>;
@@ -126,7 +127,7 @@ export interface Synonym {
 
 export type EdgeType = string;
 
-export interface TermEdge {
+export interface TermEdge extends JSONObject {
     id: string;
     type: EdgeType;
     created: number;
@@ -139,20 +140,20 @@ export interface TermEdge {
     release_expired: number;
 }
 
-export interface RelatedTerm {
+export interface RelatedTerm extends JSONObject {
     term: TermNode;
     edge: TermEdge;
 }
 
 export type TermBrief = TermNode;
 
-export interface GetTermsParams {
+export interface GetTermsParams extends JSONObject {
     ids: Array<string>;
     ts: number;
     ns: Namespace;
 }
 
-export interface GetTermsResult {
+export interface GetTermsResult extends JSONObject {
     results: Array<TermNode>;
     ts: number;
     ns: string;
@@ -169,7 +170,7 @@ export interface GetRelatedObjectsResult {
 
 }
 
-export interface GetHierarchicalAncestorsParams {
+export interface GetHierarchicalAncestorsParams extends JSONObject {
     ns: Namespace;
     id: string;
     ts: number;
@@ -177,13 +178,13 @@ export interface GetHierarchicalAncestorsParams {
     limit: number;
 }
 
-export interface GetHierarchicalAncestorsResult {
+export interface GetHierarchicalAncestorsResult extends JSONObject {
     results: Array<RelatedTerm>;
     ns: Namespace;
     ts: number;
 }
 
-export interface GetAssociatedWSGenomesParams {
+export interface GetAssociatedWSGenomesParams extends JSONObject {
     id: string,
     ns: Namespace,
     ts: number,
@@ -191,7 +192,7 @@ export interface GetAssociatedWSGenomesParams {
     limit: number;
 }
 
-export interface GetAssociatedWSGenomesResults {
+export interface GetAssociatedWSGenomesResults extends JSONObject {
     results: Array<RelatedWSObject>;
     total_count: number;
     ns: string;
@@ -199,7 +200,7 @@ export interface GetAssociatedWSGenomesResults {
     stats: any;
 }
 
-export interface GetAssociatedWSObjectsParams {
+export interface GetAssociatedWSObjectsParams extends JSONObject {
     id: string,
     ns: Namespace,
     ts: number,
@@ -207,7 +208,7 @@ export interface GetAssociatedWSObjectsParams {
     limit: number;
 }
 
-export interface RelatedWSObject {
+export interface RelatedWSObject extends JSONObject {
     feature_count: number,
     ws_obj: {
         name: string,
@@ -217,7 +218,7 @@ export interface RelatedWSObject {
     };
 }
 
-export interface GetAssociatedWSObjectsResults {
+export interface GetAssociatedWSObjectsResults extends JSONObject {
     results: Array<RelatedWSObject>;
     total_count: number;
     ns: string;
@@ -225,21 +226,21 @@ export interface GetAssociatedWSObjectsResults {
     stats: any;
 }
 
-export interface GetAssociatedWSFeaturesParams {
+export interface GetAssociatedWSFeaturesParams extends JSONObject {
     id: string,
     obj_ref: string;
     ns: Namespace,
-    ts?: number,
-    offset?: number,
-    limit?: number;
+    ts: number,
+    offset: number,
+    limit: number;
 }
 
-export interface RelatedWSFeature {
+export interface RelatedWSFeature extends JSONObject {
     feature_id: string;
     updated_at: number;
 }
 
-export interface RelatedWSObjectFeatures {
+export interface RelatedWSObjectFeatures extends JSONObject {
     ws_obj: {
         name: string,
         workspace_id: number;
@@ -249,7 +250,7 @@ export interface RelatedWSObjectFeatures {
     features: Array<RelatedWSFeature>;
 }
 
-export interface GetAssociatedWSFeaturesResults {
+export interface GetAssociatedWSFeaturesResults extends JSONObject {
     results: Array<RelatedWSObjectFeatures>;
     total_count: number;
     ns: string;
@@ -257,7 +258,7 @@ export interface GetAssociatedWSFeaturesResults {
     stats: any;
 }
 
-export interface GetAssociatedSamplesParams {
+export interface GetAssociatedSamplesParams extends JSONObject {
     id: string,
     ns: Namespace,
     ts: number,
@@ -265,12 +266,12 @@ export interface GetAssociatedSamplesParams {
     limit: number;
 }
 
-export interface SampleResult {
+export interface SampleResult extends JSONObject {
     sample_metadata_key: string;
     sample: Sample;
 }
 
-export interface GetAssociatedSamplesResults {
+export interface GetAssociatedSamplesResults extends JSONObject {
     results: Array<SampleResult>;
     total_accessible_count: number;
     total_count: number;
@@ -280,7 +281,7 @@ export interface GetAssociatedSamplesResults {
 }
 
 export default class OntologyAPIClient extends DynamicServiceClient {
-    static module: string = 'OntologyAPI';
+    module: string = 'OntologyAPI';
 
     async get_parents(params: GetParentsParams): Promise<GetParentsResult> {
         const [result] = await this.callFunc<[GetParentsParams], [GetParentsResult]>('get_parents', [

@@ -9,7 +9,6 @@ import { RouteSpec } from './RouteSpec';
 export interface NavigationListenerProps {
     routes: Array<RouteSpec>;
     rootState: RootState;
-    // navigationView: NavigationView;
     trigger: number;
     navigation: Navigation;
     navigate: (nav: Navigation) => void;
@@ -17,10 +16,6 @@ export interface NavigationListenerProps {
 
 interface NavigationListenerState {
 }
-
-interface Params {
-    [k: string]: string;
-};
 
 export default class NavigationListener extends React.Component<NavigationListenerProps, NavigationListenerState> {
     storeUnsubscribe: Unsubscribe | null;
