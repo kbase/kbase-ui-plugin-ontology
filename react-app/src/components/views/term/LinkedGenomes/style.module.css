@@ -1,0 +1,124 @@
+.Object {
+    border: 1px solid silver;
+    padding: 4px;
+    margin-bottom: 10px;
+}
+
+.SelectedObject {
+    background-color: rgba(200, 200, 200, 0.3);
+}
+
+.CardNameRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.CardNameRow {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.Object:hover {
+    background-color: rgba(200, 200, 200, 0.5);
+    cursor: pointer;
+}
+
+.ObjectName {
+    flex: 1 1 0px;
+}
+
+.ScientificName {
+    flex: 1 1 0px;
+    font-style: italic;
+}
+
+.Domain {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.TotalFeatures {}
+
+.LinkedFeatures {
+    margin-left: 10px;
+}
+
+.Suffix {
+    color: rgba(150, 150, 150, 1);
+    text-transform: lowercase;
+}
+
+
+.Label {
+    font-weight: bold;
+    color: rgba(150, 150, 150, 1);
+    margin-right: 4px;
+    text-transform: lowercase;
+}
+
+.Label::after {
+    content: ':'
+}
+
+.Source {
+    /* flex: 1 1 0px; */
+    /* font-style: italic; */
+}
+
+.SourceID {
+    /* flex: 1 1 0px; */
+    /* text-align: right; */
+    margin-left: 10px;
+}
+
+.KBaseID {
+    flex: 1 1 0px;
+    /* text-align: right; */
+}
+
+
+.ObjectType {
+    flex: 0 0 auto;
+}
+
+.ObjectCount {}
+
+.ColumnTitle {
+    font-weight: bold;
+    text-align: center;
+    color: rgba(150, 150, 150, 1);
+    font-size: 120%;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.5);
+    margin-bottom: 4px;
+}
+
+.ColumnHeading {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 0px;
+    margin-bottom: 10px;
+}
+
+.ColumnHeading>div:nth-child(1),
+.ColumnHeading>div:nth-child(3) {
+    flex: 1 1 0px;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.5);
+}
+
+.ColumnHeading>div:nth-child(2) {
+    flex: 0 0 auto;
+    border-left: 1px solid rgba(150, 150, 150, 0.5);
+    border-top: 1px solid rgba(150, 150, 150, 0.5);
+    border-right: 1px solid rgba(150, 150, 150, 0.5);
+    padding: 6px 18px;
+    border-radius: 6px 6px 0 0;
+    font-weight: bold;
+    text-align: center;
+    /* color: rgba(150, 150, 150, 1); */
+    color: rgba(76, 137, 38, 1);
+    /* background-color: rgba(150, 150, 150, 1);
+    color: rgba(255, 255, 255, 1); */
+}
