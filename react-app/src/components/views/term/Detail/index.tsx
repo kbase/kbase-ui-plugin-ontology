@@ -6,7 +6,8 @@ import LinkedObjects from '../LinkedObjects';
 import Children from '../Children';
 import AncestorGraph from '../AncestorGraph';
 import { Tabs } from 'antd';
-import LinkedObjectsAndFeatures from '../LinkedObjectsAndFeatures';
+import LinkedGenomes from '../LinkedGenomes';
+import LinkedObjectsAndFeatures from '../LinkedObjectsAndFeatures'
 
 import { Synonym } from '../../../../types/metadata';
 import { Source } from '../../../../lib/OntologyAPIClient';
@@ -138,6 +139,12 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
         );
     }
 
+    renderLinkedGenomes() {
+        return (
+            <LinkedGenomes termRef={this.props.item.ref} />
+        );
+    }
+
     renderLinkedSamples() {
         return <LinkedSamples
             termRef={this.props.item.ref}
@@ -170,10 +177,12 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
             <Tabs.TabPane tab="Children" key="children" forceRender={false}>
                 {this.renderChildren()}
             </Tabs.TabPane>
-
             <Tabs.TabPane tab="Linked Genomes" key="linkedGenomes" forceRender={false}>
-                {this.renderLinkedObjectsAndFeatures()}
+                {this.renderLinkedGenomes()}
             </Tabs.TabPane>
+            {/*<Tabs.TabPane tab="Linked Genomes and Features" key="linkedFeatures" forceRender={false}>*/}
+            {/*    {this.renderLinkedObjectsAndFeatures()}*/}
+            {/*</Tabs.TabPane>*/}
             <Tabs.TabPane tab="Linked Samples" key="linkedSamples" forceRender={false}>
                 {this.renderLinkedSamples()}
             </Tabs.TabPane>
