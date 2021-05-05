@@ -15,7 +15,7 @@ _site
 # Don't check in coverage reports
 coverage
 
-# Put stuff in _trash to move it out of the way, and omit it from the repo 
+# Put stuff in _trash to move it out of the way, and omit it from the repo
 # (but keep it locally to support procrastination.)
 _trash
 
@@ -24,6 +24,7 @@ _trash
 
 # IDEs
 .vscode
+.idea
 
 _attic/
 _test_data/

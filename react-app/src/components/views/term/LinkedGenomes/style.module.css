@@ -64,19 +64,14 @@
 }
 
 .Source {
-    /* flex: 1 1 0px; */
-    /* font-style: italic; */
 }
 
 .SourceID {
-    /* flex: 1 1 0px; */
-    /* text-align: right; */
     margin-left: 10px;
 }
 
 .KBaseID {
     flex: 1 1 0px;
-    /* text-align: right; */
 }
 
 
@@ -117,8 +112,5 @@
     border-radius: 6px 6px 0 0;
     font-weight: bold;
     text-align: center;
-    /* color: rgba(150, 150, 150, 1); */
     color: rgba(76, 137, 38, 1);
-    /* background-color: rgba(150, 150, 150, 1);
-    color: rgba(255, 255, 255, 1); */
 }

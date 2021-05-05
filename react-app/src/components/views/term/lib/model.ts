@@ -20,6 +20,7 @@ import sample7Data from './data/sample7.json';
 
 import { Sample } from '../../../../lib/Sample';
 import {JSONObject, JSONObjectOf} from "@kbase/ui-lib/lib/json";
+import {UIException} from "../../../../types/error";
 
 const sample1 = sample1Data as Sample;
 const sample2 = sample2Data as Sample;
@@ -372,6 +373,18 @@ export default class OntologyModel {
             ids: [ref.term],
             ts: ref.timestamp || Date.now()
         });
+
+        if (result.results.length === 0) {
+            // throw new Error(`the term "${ref.term}" was not found in namespace "${ref.namespace}"`)
+             throw new UIException({
+                    message: `the term "${ref.term}" was not found in namespace "${ref.namespace}"`,
+                    code: 'term-not-found',
+                    source: 'OntologyAPI',
+                    data: {
+                        ref
+                    }
+                })
+        }
 
         return {
             term: await this.termNodeToTerm(result.results[0], namespace, result.ts)

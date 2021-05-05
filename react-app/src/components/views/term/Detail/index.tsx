@@ -174,9 +174,9 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
                 {this.renderGraph()}
             </Tabs.TabPane>
 
-            <Tabs.TabPane tab="Children" key="children" forceRender={false}>
-                {this.renderChildren()}
-            </Tabs.TabPane>
+            {/*<Tabs.TabPane tab="Children" key="children" forceRender={false}>*/}
+            {/*    {this.renderChildren()}*/}
+            {/*</Tabs.TabPane>*/}
             <Tabs.TabPane tab="Linked Genomes" key="linkedGenomes" forceRender={false}>
                 {this.renderLinkedGenomes()}
             </Tabs.TabPane>
