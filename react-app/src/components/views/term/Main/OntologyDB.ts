@@ -1,21 +1,27 @@
 import DB, {
     DBProps, DBStatus, DBStateNone, DBStateLoading, DBStateLoaded, DBStateError
 } from '../../../../lib/DB';
-import { OntologyReference, OntologyTermRecord } from '../../../../types/ontology';
-import { AppConfig } from '@kbase/ui-components';
+import {OntologyReference, OntologyTermRecord} from '../../../../types/ontology';
+import {AppConfig} from '@kbase/ui-components';
 import OntologyModel from '../lib/model';
-import { Source } from '../../../../lib/OntologyAPIClient';
+import {Source} from '../../../../lib/OntologyAPIClient';
+import {UIError, UIException} from "../../../../types/error";
 
 export type OntologyDBStateNone = DBStateNone;
 export type OntologyDBStateLoading = DBStateLoading;
 export type OntologyDBStateError = DBStateError;
+
 export interface OntologyDBStateLoaded extends DBStateLoaded {
     targetItem: OntologyTermRecord;
     selectedItem: OntologyTermRecord;
     source: Source;
 }
 
-export type OntologyDBState = OntologyDBStateNone | OntologyDBStateLoading | OntologyDBStateLoaded | OntologyDBStateError;
+export type OntologyDBState =
+    OntologyDBStateNone
+    | OntologyDBStateLoading
+    | OntologyDBStateLoaded
+    | OntologyDBStateError;
 
 export interface OntologyDBProps extends DBProps<OntologyDBState> {
     token: string;
@@ -24,6 +30,7 @@ export interface OntologyDBProps extends DBProps<OntologyDBState> {
 
 export default class OntologyDB extends DB<OntologyDBState> {
     props: OntologyDBProps;
+
     constructor(props: OntologyDBProps) {
         super(props);
         this.props = props;
@@ -51,15 +58,24 @@ export default class OntologyDB extends DB<OntologyDBState> {
         // });
 
         try {
-            const { term } = await client.getTerm({
-                ref: termRef
-            });
-
             const source = await client.getSource(termRef.namespace);
 
             if (source === null) {
-                throw new Error(`Data source not found for namespace ${termRef.namespace}`);
+                console.log('umm');
+                throw new UIException({
+                    message: `data source not found for namespace "${termRef.namespace}"`,
+                    code: 'namespace-not-found',
+                    source: 'OntologyAPI',
+                    data: {
+                        termRef
+                    }
+                })
             }
+
+            const {term} = await client.getTerm({
+                ref: termRef
+            });
+
 
             this.set((state: OntologyDBState) => {
                 return {
@@ -72,13 +88,28 @@ export default class OntologyDB extends DB<OntologyDBState> {
             });
         } catch (ex) {
             console.error('ERROR', ex);
-            this.set((state: OntologyDBState) => {
-                return {
-                    ...state,
-                    status: DBStatus.ERROR,
-                    error: ex.message
-                };
-            });
+            if (ex instanceof UIException) {
+                 this.set((state: OntologyDBState) => {
+                    return {
+                        ...state,
+                        status: DBStatus.ERROR,
+                        error: ex.getError()
+                    };
+                });
+            } else {
+                this.set((state: OntologyDBState) => {
+                    const error: UIError = {
+                        code: 'dberror',
+                        source: 'OntologyDB',
+                        message: ex.message
+                    }
+                    return {
+                        ...state,
+                        status: DBStatus.ERROR,
+                        error
+                    };
+                });
+            }
         }
     }
 
@@ -96,7 +127,7 @@ export default class OntologyDB extends DB<OntologyDBState> {
             ontologyAPIConfig: this.props.config.dynamicServices.OntologyAPI
         });
 
-        const { term } = await client.getTerm({ ref: termRef });
+        const {term} = await client.getTerm({ref: termRef});
 
         this.set((state: OntologyDBState) => {
             return {
