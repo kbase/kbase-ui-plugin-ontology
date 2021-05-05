@@ -125,7 +125,6 @@ export class MetadataFieldView extends React.Component<MetadataFieldViewProps, M
                     title="Value"
                     dataIndex="val"
                     key="val"
-                    width="20em"
                     sorter={synonymValueSorter}
                 />
             </Table>

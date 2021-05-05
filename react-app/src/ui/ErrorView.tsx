@@ -1,8 +1,9 @@
 import React from 'react';
 import {UIError} from "../types/error";
 import {Alert, Collapse} from 'antd';
-import {ExclamationCircleOutlined} from "@ant-design/icons";
-import {isJSONArray, isJSONObject, JSONValue} from "@kbase/ui-lib/lib/json";
+import {CaretRightOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
+import {isJSONArray, isJSONObject, JSONValue} from "lib/json";
+import InfoTable from "../components/InfoTable";
 
 export interface ErrorViewProps {
     title?: string;
@@ -20,8 +21,12 @@ export default class ErrorView extends React.Component<ErrorViewProps, ErrorView
             return;
         }
 
-        const r = (d: JSONValue) => {
+        const r = (d: JSONValue): React.ReactNode => {
             switch (typeof d) {
+                case 'undefined':
+                    // TODO: not possible if actually a JSONValue, but
+                    // this handles optional properties...
+                    return <span style={{fontStyle: 'italic'}}>undefined</span>;
                 case 'string':
                     return <span>{d}</span>;
                 case 'boolean':
@@ -34,32 +39,24 @@ export default class ErrorView extends React.Component<ErrorViewProps, ErrorView
                     } else if (isJSONArray(d)) {
                         return <div>
                             {
-                                d.map((item) => {
-                                    return <div>
+                                d.map((item, index) => {
+                                    return <div key={index}>
                                         {r(item)}
                                     </div>;
                                 }).join('\n')
                             }
                         </div>
-                    } else if (isJSONObject(d)) {
-                        return <div>
-                            {
-                                Object.entries(d).map(([key, value]) => {
-                                    return <table>
-                                        <tr>
-                                            <th>
-                                                {key}
-                                            </th>
-                                            <td>
-                                                {r(value)}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                })
-                            }
-                        </div>
+                    } else if (isJSONObject(d, true)) {
+                        const table = Object.entries(d).map(([label, value]) => {
+                                    return {
+                                        label,
+                                        value: () => r(value)
+                                    }
+                                });
+                        return <InfoTable table={table} bordered={true}/>
                     } else {
-                        return <span>** Not a JSONValue **</span>
+                        console.log('hmm', d);
+                        return <span>** Not a JSONValue ** {typeof d}</span>
                     }
             }
         }
@@ -72,9 +69,17 @@ export default class ErrorView extends React.Component<ErrorViewProps, ErrorView
             return;
         }
 
-        return <Collapse.Panel key="detail" header="Detail" collapsible="header">
-            {this.renderJSON()}
-        </Collapse.Panel>
+        return <Collapse defaultActiveKey={['message', 'code', 'source']}
+                         bordered={false}
+                         collapsible="disabled"
+                         expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
+                         ghost={true}>
+            <Collapse.Panel key="detail"
+                            header="Detail"
+                            collapsible="header">
+                {this.renderJSON()}
+            </Collapse.Panel>
+        </Collapse>
     }
 
     renderTitle() {
@@ -86,13 +91,25 @@ export default class ErrorView extends React.Component<ErrorViewProps, ErrorView
     }
 
     renderBody() {
-        return <Collapse defaultActiveKey={['message', 'code', 'source']} bordered={false} collapsible="disabled"  ghost={true}>
-            <Collapse.Panel key="message" header="Message" showArrow={false}>{this.props.error.message}</Collapse.Panel>
-            <Collapse.Panel key="code" header="Code" showArrow={false}>{this.props.error.code}</Collapse.Panel>
-            <Collapse.Panel key="source" header="Source" showArrow={false}>{this.props.error.source}</Collapse.Panel>
+
+        const table = [
+            {
+                label: 'Code',
+                value: this.props.error.code
+            }, {
+                label: 'Source',
+                value: this.props.error.source
+            }];
+
+        return <div>
+            <p style={{marginTop: '10px'}}>
+                {this.props.error.message}
+            </p>
+
+            <InfoTable table={table}/>
 
             {this.renderDetail()}
-        </Collapse>;
+        </div>;
     }
 
     render() {
