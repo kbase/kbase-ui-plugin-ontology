@@ -42,7 +42,9 @@ export default class ParentsDB extends DB<ParentsDBState> {
         try {
 
             const { terms } = await client.getChildren({
-                ref: termRef
+                ref: termRef,
+                offset: 0,
+                limit: 1000
             });
 
             terms.sort((a: OntologyRelatedTerm, b: OntologyRelatedTerm) => {
@@ -62,7 +64,11 @@ export default class ParentsDB extends DB<ParentsDBState> {
                 return {
                     ...state,
                     status: DBStatus.ERROR,
-                    error: ex.message
+                    error: {
+                        message: ex instanceof Error ? ex.message : 'Unknown error',
+                        code: 'error',
+                        source: 'ParentsDB.getChildrenTerms'
+                    }
                 };
             });
         }

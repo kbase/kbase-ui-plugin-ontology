@@ -82,7 +82,7 @@ export default class LinkedObjectsDB extends DB<LinkedObjectsDBState> {
                     error: {
                         code: 'not-found',
                         source: 'LinkedObjectsDB.getLinkedObjects',
-                        message: ex.message
+                        message: ex instanceof Error ? ex.message : 'Unknown error',
                     }
                 };
             });

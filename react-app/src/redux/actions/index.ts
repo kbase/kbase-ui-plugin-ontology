@@ -91,7 +91,7 @@ export function loadData() {
             dispatch(loadDataSuccess(sources));
         } catch (ex) {
             console.error('ERROR', ex);
-            dispatch(loadDataError('loading-data', ex.message));
+            dispatch(loadDataError('loading-data', ex instanceof Error ? ex.message : 'Unknown error',));
         }
 
     };

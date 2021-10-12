@@ -86,6 +86,8 @@ export interface GetParentsResult {
 
 export interface GetChildrenParams {
     ref: OntologyReference;
+    offset: number;
+    limit: number;
 }
 
 // TODO: this should be a "related term", although maybe the relation
@@ -408,12 +410,13 @@ export default class OntologyModel {
         };
     }
 
-    async getChildren({ ref }: GetChildrenParams): Promise<GetChildrenResult> {
+    async getChildren({ ref, offset, limit }: GetChildrenParams): Promise<GetChildrenResult> {
         const namespace = this.stringToOntologyNamespace(ref.namespace);
         const result = await this.ontologyAPI.get_children({
             ns: namespace,
             id: ref.term,
-            ts: ref.timestamp || Date.now()
+            ts: ref.timestamp || Date.now(),
+            offset, limit
         });
 
         const terms = await Promise.all(result.results.map((item) => {

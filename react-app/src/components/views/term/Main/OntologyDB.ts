@@ -89,11 +89,12 @@ export default class OntologyDB extends DB<OntologyDBState> {
         } catch (ex) {
             console.error('ERROR', ex);
             if (ex instanceof UIException) {
-                 this.set((state: OntologyDBState) => {
+                const error = ex.getError();
+                this.set((state: OntologyDBState) => {
                     return {
                         ...state,
                         status: DBStatus.ERROR,
-                        error: ex.getError()
+                        error
                     };
                 });
             } else {
@@ -101,7 +102,7 @@ export default class OntologyDB extends DB<OntologyDBState> {
                     const error: UIError = {
                         code: 'dberror',
                         source: 'OntologyDB',
-                        message: ex.message
+                        message: ex instanceof Error ? ex.message : 'Unknown error',
                     }
                     return {
                         ...state,

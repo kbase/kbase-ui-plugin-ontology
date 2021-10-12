@@ -67,7 +67,7 @@ export default class LinkedSamplesDB extends DB<LinkedSamplesDBState> {
                     error: {
                         code: 'not-found',
                         source: 'LinkedSamplesDB.getLinkedSamples',
-                        message: ex.message
+                        message: ex instanceof Error ? ex.message : 'Unknown error',
                     }
                 };
             });

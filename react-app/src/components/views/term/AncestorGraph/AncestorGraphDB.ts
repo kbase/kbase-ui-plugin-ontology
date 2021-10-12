@@ -78,7 +78,7 @@ export default class AncestorGraphDB extends DB<AncestorGraphDBState> {
                     error: {
                         code: 'error',
                         source: 'ancestor-graph-data-fetch',
-                        message: ex.message
+                        message: ex instanceof Error ? ex.message : 'Unknown error'
                     }
                 };
             });
