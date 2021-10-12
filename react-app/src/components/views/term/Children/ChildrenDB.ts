@@ -64,7 +64,11 @@ export default class ParentsDB extends DB<ParentsDBState> {
                 return {
                     ...state,
                     status: DBStatus.ERROR,
-                    error: ex.message
+                    error: {
+                        message: ex instanceof Error ? ex.message : 'Unknown error',
+                        code: 'error',
+                        source: 'ParentsDB.getChildrenTerms'
+                    }
                 };
             });
         }

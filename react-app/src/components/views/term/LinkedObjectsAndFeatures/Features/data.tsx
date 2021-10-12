@@ -71,7 +71,7 @@ export default class Data extends React.Component<DataProps, DataState> {
                 process: {
                     status: AsyncProcessStatus.ERROR,
                     error: {
-                        message: ex.message
+                        message: ex instanceof Error ? ex.message : 'Unknown error',
                     }
                 }
             });
