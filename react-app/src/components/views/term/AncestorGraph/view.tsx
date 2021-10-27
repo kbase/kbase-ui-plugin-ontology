@@ -108,16 +108,7 @@ export default class AncestorGraph extends React.Component<AncestorGraphProps, A
                 isSelected: termNode.term.ref.term === this.state.selectedNodeID
             };
         });
-        console.log('nodes?', JSON.stringify(nodes));
-        // Here we add the term of focus to the graph.
-        // TODO: this should be done in the data layer.
-        // nodes.push({
-        //     id: this.props.term.ref.id,
-        //     label: this.props.term.name,
-        //     isTerm: true,
-        //     isRoot: false,
-        //     isSelected: false
-        // })
+        
         const edges = this.props.graph.relations.map((relation) => {
             return {
                 from: relation.from,
