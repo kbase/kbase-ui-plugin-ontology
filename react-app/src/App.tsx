@@ -8,6 +8,7 @@ import Help from "./views/Help";
 import Term from "./views/Term";
 import NotFound from "./views/NotFound";
 import './App.css';
+import ErrorView from 'ui/ErrorView';
 
 
 const store = createReduxStore();
@@ -30,7 +31,14 @@ export default class App<AppProps, AppState> extends React.Component {
                                     <Route path="/ontology/about" children={About}/>
                                     <Route path="/ontology/help" children={Help}/>
                                     <Route path="/ontology/term/:namespace/:id/:ts?" children={Term}/>
-                                    <Route children={NotFound} exact={true}/>
+                                    <Route exact={true} render={(props) => {
+                                        return <ErrorView error={{
+                                            message: `This path is not supported: ${props.location.pathname}`,
+                                            code: 'path-not-found',
+                                            source: 'router'
+                                        }} />
+                                    }}
+                                    />
                                 </Switch>
                             </AuthGate>
                         </AppBase>
