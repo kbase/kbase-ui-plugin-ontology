@@ -15,7 +15,7 @@
         "antd-dayjs-webpack-plugin": "1.0.6",
         "less": "4.1.2",
         "less-loader": "7.3.0",
-        "marked": "3.0.8",
+        "marked": "4.0.10",
         "react": "17.0.2",
         "react-dom": "17.0.2",
         "react-redux": "7.2.6",
